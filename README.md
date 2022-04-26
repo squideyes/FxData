@@ -10,11 +10,11 @@ SquidEyes.FxData includes **DukasFetch**, a rather basic downloader for Dukascop
 
 To run the program, download and compile the source code, then issue a command similar to:
 
-**DukasFetch --conn=UseDevelopmentStorage=true --symbols=EURUSD USDJPY --minyear=2020 --replace=true**
+**DukasFetch --connstring=UseDevelopmentStorage=true --symbols=EURUSD USDJPY --minyear=2020 --replace=true**
 
 |Parameter|Required|Example|Notes|
 |---|---|---|---|
-|--conn|No|UseDevelopmentStorage=true|A connection-string to the Azure-storage account you want to save tick-sets and bundles to.  The data will be saved to an "fxdata" container in the referenced account, using a well-known pathing / naming methodology.|
+|--connstring|No|UseDevelopmentStorage=true|A connection-string to the Azure-storage account you want to save tick-sets and bundles to.  The data will be saved to an "fxdata" container in the referenced account, using a well-known pathing / naming methodology.|
 |--symbols|No|EURUSD&nbsp;USDJPY|A space-separated list of FX symbols to download tick-data files for.  If omitted, EURUSD , GBPUSD, and USDJPY ticks will be downloaded.|
 |--replace|No|Yes|If true, .STS and .STB files will be replaced|
 |--minyear|No|2020|The minimum year to download tick-data for.  Must be greater than or equal to 2016.
