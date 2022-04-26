@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
+	  <AssemblyName>SquidEyes.FxData</AssemblyName>
+	  <RootNamespace>SquidEyes.FxData</RootNamespace>
+	  <Authors>Louis S. Berman</Authors>
+	  <Company>SquidEyes, LLC</Company>
+	  <Product>FxData</Product>
+	  <Description>A set of FX data models, extensions and helpers.</Description>
+	  <Copyright>Copyright 2022 by by SquidEyes, LLC</Copyright>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageTags>forex;fx;trading;tick-data;candlesticks;c#</PackageTags>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageReleaseNotes />
+	  <PackageProjectUrl>https://github.com/squideyes/FxData</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/squideyes/FxData</RepositoryUrl>
+	  <IncludeSymbols>true</IncludeSymbols>
+	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SquidEyes.Basics" Version="1.0.17" />
+  </ItemGroup>
+
+</Project>

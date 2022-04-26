@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "DukasFetch": {
+      "commandName": "Project",
+      "commandLineArgs": "-c UseDevelopmentStorage=true",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true
+    }
+  }
+}
