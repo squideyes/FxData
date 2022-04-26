@@ -1,6 +1,5 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/squideyes/fxdata/Deploy%20to%20NuGet?label=build)
-![NuGet Version](https://img.shields.io/nuget/v/SquidEyes.FxData)
-![Downloads](https://img.shields.io/nuget/dt/squideyes.fxdata)
+![NuGet Version](https://img.shields.io/nuget/v/squidEyes.fxData)
 ![License](https://img.shields.io/github/license/squideyes/FxData)
 
 **SquidEyes.FxData** is an collection of high-performance C#/.NET 6.0 trading-data primatives with a set of full-coverage unit-tests.  This code is a hard-fork of the author's <a href="https://github.com/squideyes/Trading" target="_blank">SquidEyes.Trading</a> library, with the data-oriented classes (i.e. TickSet) tweaked to support day-trading scenarios.  The quote unquote trading code (i.e. indicators, order management objects, etc.) has been removed.
