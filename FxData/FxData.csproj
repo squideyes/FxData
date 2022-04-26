@@ -12,7 +12,7 @@
 	  <Description>A set of FX data models, extensions and helpers.</Description>
 	  <Copyright>Copyright 2022 by by SquidEyes, LLC</Copyright>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-	  <PackageTags>forex;fx;trading;tick-data;candlesticks;c#</PackageTags>
+	  <PackageTags>forex;fx;trading;tick-data;candlesticks;c#;renko</PackageTags>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <PackageReleaseNotes />
 	  <PackageProjectUrl>https://github.com/squideyes/FxData</PackageProjectUrl>
