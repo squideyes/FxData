@@ -7,14 +7,11 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.FxData.Context;
-
-namespace SquidEyes.FxData.DukasFetch;
-
-public class Settings
+namespace SquidEyes.FxData.Models
 {
-    public string? ConnString { get; set; }
-    public List<Symbol>? Symbols { get; set; }
-    public int MinYear { get; set; }
-    public bool Replace { get; set; } = true;
+    public enum Trend
+    {
+        Rising = 1,
+        Falling
+    }
 }

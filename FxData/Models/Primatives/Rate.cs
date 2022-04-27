@@ -1,5 +1,5 @@
 // ********************************************************
-// Copyright (C) 2021 Louis S. Berman (louis@squideyes.com)
+// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
 //
@@ -7,9 +7,9 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.FxData.Shared.Helpers;
+using SquidEyes.FxData.Helpers;
 
-namespace SquidEyes.FxData.FxData;
+namespace SquidEyes.FxData.Models;
 
 public struct Rate : IEquatable<Rate>, IComparable<Rate>
 {
@@ -61,6 +61,9 @@ public struct Rate : IEquatable<Rate>, IComparable<Rate>
         other is Rate rate && Equals(rate);
 
     public override int GetHashCode() => Value.GetHashCode();
+
+    public static Rate Parse(string value, int digits) =>
+        new(float.Parse(value), digits);
 
     public static bool IsRate(float value, int digits)
     {

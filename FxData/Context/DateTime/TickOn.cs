@@ -1,5 +1,5 @@
 // ********************************************************
-// Copyright (C) 2021 Louis S. Berman (louis@squideyes.com)
+// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
 //
@@ -22,15 +22,9 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
         Value = value;
     }
 
-    public TickOn()
-    {
-        throw new InvalidOperationException();
-    }
+    public TickOn() => throw new InvalidOperationException();
 
-    internal TickOn(DateTime value)
-    {
-        Value = value;
-    }
+    internal TickOn(DateTime value) => Value = value;
 
     public DateTime Value { get; private set; }
 
@@ -40,8 +34,7 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     public override string ToString() => Value.ToDateTimeText();
 
-    public int CompareTo(TickOn other) =>
-        Value.CompareTo(other.Value);
+    public int CompareTo(TickOn other) => Value.CompareTo(other.Value);
 
     public bool Equals(TickOn other) => Value.Equals(other.Value);
 
@@ -49,6 +42,9 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
         other is TickOn tickOn && Equals(tickOn);
 
     public override int GetHashCode() => Value.GetHashCode();
+
+    public static TickOn Parse(string value, Session session) =>
+        new(DateTime.Parse(value), session);
 
     public static bool operator ==(TickOn left, TickOn right) =>
         left.Equals(right);

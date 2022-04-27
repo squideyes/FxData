@@ -1,5 +1,5 @@
 // ********************************************************
-// Copyright (C) 2021 Louis S. Berman (louis@squideyes.com)
+// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
 //
@@ -10,7 +10,7 @@
 using FluentAssertions;
 using SquidEyes.Basics;
 using SquidEyes.FxData.Context;
-using SquidEyes.FxData.FxData;
+using SquidEyes.FxData.Models;
 using System;
 using Xunit;
 
@@ -93,15 +93,6 @@ public class TickTests
         GetTick(1, 999999).AsFunc(x => x.ToString()
             .Should().Be("01/04/2016 08:00:00.000,1,999999"));
     }
-
-    ////////////////////////////
-
-    [Theory]
-    [InlineData(1, 2, 1)]
-    [InlineData(1, 3, 2)]
-    [InlineData(1, 4, 2)]
-    public void MidSetCorrectly(int bidValue, int askValue, int result) =>
-        GetTick(bidValue, askValue).Mid.Should().Be(result);
 
     ////////////////////////////
 

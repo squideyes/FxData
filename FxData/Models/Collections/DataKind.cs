@@ -1,5 +1,5 @@
 // ********************************************************
-// Copyright (C) 2021 Louis S. Berman (louis@squideyes.com)
+// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
 //
@@ -7,13 +7,11 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.FxData;
+namespace SquidEyes.FxData.Models;
 
-public enum Source
+[Flags]
+public enum DataKind
 {
-    SquidEyes = 1,
-    Dukascopy,
-    ForexCom,
-    HistData,
-    OandaCorp
+    CSV = 1,
+    STS = 2
 }

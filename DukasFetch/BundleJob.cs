@@ -1,5 +1,5 @@
 // ********************************************************
-// Copyright (C) 2021 Louis S. Berman (louis@squideyes.com)
+// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
 //
@@ -8,7 +8,7 @@
 // ********************************************************
 
 using SquidEyes.FxData.Context;
-using SquidEyes.FxData.FxData;
+using SquidEyes.FxData.Models;
 
 namespace SquidEyes.FxData.DukasFetch;
 

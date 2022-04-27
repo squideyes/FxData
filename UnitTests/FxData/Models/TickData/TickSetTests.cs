@@ -1,5 +1,5 @@
 // ********************************************************
-// Copyright (C) 2021 Louis S. Berman (louis@squideyes.com)
+// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
 //
@@ -10,7 +10,7 @@
 using FluentAssertions;
 using SquidEyes.Basics;
 using SquidEyes.FxData.Context;
-using SquidEyes.FxData.FxData;
+using SquidEyes.FxData.Models;
 using SquidEyes.UnitTests.Testing;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ public class TickSetTests
     [InlineData(DataKind.STS, DataKind.STS)]
     public void RoundtripWorks(DataKind sourceKind, DataKind targetKind)
     {
-        TickSet.Version.Should().Be(new MajorMinor(3, 0));
+        TickSet.Version.Should().Be(new MajorMinor(1, 0));
 
         var source = TestHelper.GetTickSet(4, sourceKind);
 
@@ -53,7 +53,7 @@ public class TickSetTests
     {
         var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
 
-        tickSet.Count.Should().Be(29948);
+        tickSet.Count.Should().Be(39111);
 
         tickSet.Clear();
 

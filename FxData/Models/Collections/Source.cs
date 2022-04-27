@@ -7,14 +7,13 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
-namespace SquidEyes.FxData.DukasFetch;
-
-public class Settings
+public enum Source
 {
-    public string? ConnString { get; set; }
-    public List<Symbol>? Symbols { get; set; }
-    public int MinYear { get; set; }
-    public bool Replace { get; set; } = true;
+    SquidEyes = 1,
+    Dukascopy,
+    ForexCom,
+    HistData,
+    OandaCorp
 }
