@@ -24,10 +24,10 @@ public class TickTests
     ////////////////////////////
 
     [Theory]
-    [InlineData(false, Rate.MinValue, Rate.MaxValue)]
-    [InlineData(true, Rate.MinValue - 1, Rate.MaxValue)]
-    [InlineData(true, Rate.MinValue, Rate.MaxValue + 1)]
-    [InlineData(true, Rate.MinValue + 1, Rate.MinValue)]
+    [InlineData(false, Rate.MIN_VALUE, Rate.MAX_VALUE)]
+    [InlineData(true, Rate.MIN_VALUE - 1, Rate.MAX_VALUE)]
+    [InlineData(true, Rate.MIN_VALUE, Rate.MAX_VALUE + 1)]
+    [InlineData(true, Rate.MIN_VALUE + 1, Rate.MIN_VALUE)]
     public void ConstructWithBadArgs(bool goodTickOn, int bid, int ask)
     {
         TickOn tickOn;
@@ -47,7 +47,7 @@ public class TickTests
     public void ConstructWithDefaultBid()
     {
         FluentActions.Invoking(() => _ = new Tick(GetTickOn(),
-            default, Rate.MinValue)).Should().Throw<ArgumentException>();
+            default, Rate.MIN_VALUE)).Should().Throw<ArgumentException>();
     }
 
     ////////////////////////////
@@ -56,7 +56,7 @@ public class TickTests
     public void ConstructWithDefaultAsk()
     {
         FluentActions.Invoking(() => _ = new Tick(GetTickOn(),
-            Rate.MinValue, default)).Should().Throw<ArgumentException>();
+            Rate.MIN_VALUE, default)).Should().Throw<ArgumentException>();
     }
 
     ////////////////////////////

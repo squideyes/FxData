@@ -15,7 +15,9 @@ using SquidEyes.Trading.FxData;
 using SquidEyes.UnitTests.Testing;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Xunit;
 using static SquidEyes.FxData.Models.Trend;
 using static SquidEyes.UnitTests.Properties.TestData;
@@ -25,16 +27,42 @@ namespace SquidEyes.UnitTests
     public class RenkoFeedTests
     {
         [Theory]
-        [InlineData(4, BidOrAsk.Bid, 930)]
-        [InlineData(5, BidOrAsk.Bid, 488)]
-        [InlineData(6, BidOrAsk.Bid, 1114)]
-        [InlineData(7, BidOrAsk.Bid, 1020)]
-        [InlineData(8, BidOrAsk.Bid, 1986)]
-        [InlineData(4, BidOrAsk.Ask, 942)]
-        [InlineData(5, BidOrAsk.Ask, 487)]
-        [InlineData(6, BidOrAsk.Ask, 1084)]
-        [InlineData(7, BidOrAsk.Ask, 1013)]
-        [InlineData(8, BidOrAsk.Ask, 2014)]
+        [InlineData(false, 5, BidOrAsk.Ask)]
+        [InlineData(true, 4, BidOrAsk.Ask)]
+        [InlineData(true, 5, (BidOrAsk)0)]
+        public void ConstructorWithBadArgs(bool goodSession, int brickTicks, BidOrAsk bidOrAsk)
+        {
+            var session = goodSession ? new Session(Known.MinTradeDate, Market.Combined) : null!;
+
+            FluentActions.Invoking(() => new RenkoFeed(session, brickTicks, bidOrAsk))
+                .Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void OutOfSessionTickDetected()
+        {
+            var session = new Session(Known.MinTradeDate, Market.Combined);
+            
+            var feed = new RenkoFeed(session, 10, BidOrAsk.Bid);
+
+            var tick = new Tick(new TickOn(session.MinTickOn.Value.AddDays(1)),
+                Rate.MIN_VALUE, Rate.MAX_VALUE);
+
+            FluentActions.Invoking(() => feed.HandleTick(tick))
+                .Should().Throw<InvalidOperationException>();
+        }
+
+        [Theory]
+        [InlineData(4, BidOrAsk.Bid, 134)]
+        [InlineData(5, BidOrAsk.Bid, 218)]
+        [InlineData(6, BidOrAsk.Bid, 230)]
+        [InlineData(7, BidOrAsk.Bid, 154)]
+        [InlineData(8, BidOrAsk.Bid, 249)]
+        [InlineData(4, BidOrAsk.Ask, 142)]
+        [InlineData(5, BidOrAsk.Ask, 211)]
+        [InlineData(6, BidOrAsk.Ask, 229)]
+        [InlineData(7, BidOrAsk.Ask, 158)]
+        [InlineData(8, BidOrAsk.Ask, 249)]
         public void GeneratesExpectedBricks(
             int day, BidOrAsk bidOrAsk, int expected)
         {
@@ -53,20 +81,20 @@ namespace SquidEyes.UnitTests
 
             var csv = (day, bidOrAsk) switch
             {
-                (4, BidOrAsk.Bid) => RENKOFEEDTESTS_4_Bid,
-                (5, BidOrAsk.Bid) => RENKOFEEDTESTS_5_Bid,
-                (6, BidOrAsk.Bid) => RENKOFEEDTESTS_6_Bid,
-                (7, BidOrAsk.Bid) => RENKOFEEDTESTS_7_Bid,
-                (8, BidOrAsk.Bid) => RENKOFEEDTESTS_8_Bid,
-                (4, BidOrAsk.Ask) => RENKOFEEDTESTS_4_Ask,
-                (5, BidOrAsk.Ask) => RENKOFEEDTESTS_5_Ask,
-                (6, BidOrAsk.Ask) => RENKOFEEDTESTS_6_Ask,
-                (7, BidOrAsk.Ask) => RENKOFEEDTESTS_7_Ask,
-                (8, BidOrAsk.Ask) => RENKOFEEDTESTS_8_Ask,
+                (4, BidOrAsk.Bid) => RENKOFEEDTESTS_4_BID,
+                (5, BidOrAsk.Bid) => RENKOFEEDTESTS_5_BID,
+                (6, BidOrAsk.Bid) => RENKOFEEDTESTS_6_BID,
+                (7, BidOrAsk.Bid) => RENKOFEEDTESTS_7_BID,
+                (8, BidOrAsk.Bid) => RENKOFEEDTESTS_8_BID,
+                (4, BidOrAsk.Ask) => RENKOFEEDTESTS_4_ASK,
+                (5, BidOrAsk.Ask) => RENKOFEEDTESTS_5_ASK,
+                (6, BidOrAsk.Ask) => RENKOFEEDTESTS_6_ASK,
+                (7, BidOrAsk.Ask) => RENKOFEEDTESTS_7_ASK,
+                (8, BidOrAsk.Ask) => RENKOFEEDTESTS_8_ASK,
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            int index = 0;
+            var index = 0;
 
             Brick lastBrick = null!;
 
@@ -97,7 +125,7 @@ namespace SquidEyes.UnitTests
                             brick.Open.Should().Be(lastBrick.Close);
                             break;
                         case (Rising, Falling):
-                            brick.Open.Should().Be(lastBrick.Open);    
+                            brick.Open.Should().Be(lastBrick.Open);
                             break;
                         case (Falling, Rising):
                             brick.Open.Should().Be(lastBrick.Open);

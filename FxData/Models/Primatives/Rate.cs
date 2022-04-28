@@ -11,19 +11,19 @@ using SquidEyes.FxData.Helpers;
 
 namespace SquidEyes.FxData.Models;
 
-public struct Rate : IEquatable<Rate>, IComparable<Rate>
+public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 {
-    public const int MinValue = 1;
-    public const int MaxValue = 999999;
+    public const int MIN_VALUE = 1;
+    public const int MAX_VALUE = 999999;
 
     public Rate()
-        : this(MinValue)
+        : this(MIN_VALUE)
     {
     }
 
     public Rate(int value)
     {
-        if (value < MinValue || value > MaxValue)
+        if (value < MIN_VALUE || value > MAX_VALUE)
             throw new ArgumentOutOfRangeException(nameof(value));
 
         Value = value;
@@ -71,9 +71,9 @@ public struct Rate : IEquatable<Rate>, IComparable<Rate>
 
         return digits switch
         {
-            5 => value >= 0.00001f && value <= 9.99999f && IsRounded(),
-            3 => value >= 0.001f && value <= 999.999f && IsRounded(),
-            _ => false
+            5 => value is >= 0.00001f and <= 9.99999f && IsRounded(),
+            3 => value is >= 0.001f and <= 999.999f && IsRounded(),
+            _ => throw new ArgumentOutOfRangeException(nameof(digits))
         };
     }
 

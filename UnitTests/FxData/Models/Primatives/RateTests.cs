@@ -63,6 +63,24 @@ public class RateTests
     //////////////////////////
 
     [Fact]
+    public void ToStringWithBadDigitsThrowsError()
+    {
+        FluentActions.Invoking(() => new Rate(Rate.MIN_VALUE).ToString(4))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    //////////////////////////
+
+    [Fact]
+    public void IsRateWithBadDigitsThrowsError()
+    {
+        FluentActions.Invoking(() => Rate.IsRate(1.2345f, 4))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    //////////////////////////
+
+    [Fact]
     public void SetToDefault()
     {
         Rate rate = default;
@@ -76,7 +94,7 @@ public class RateTests
     [Theory]
     [InlineData(0)]
     [InlineData(1000000)]
-    public void IntContructorWithBadArg(int value)
+    public void IntConstructorWithBadArg(int value)
     {
         FluentActions.Invoking(() => _ = new Rate(value))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -89,7 +107,7 @@ public class RateTests
     [InlineData(10.0f, 5)]
     [InlineData(0.00001f, 0)]
     [InlineData(0.001f, 0)]
-    public void FloatContructorWithBadArgs(float value, int digits)
+    public void FloatConstructorWithBadArgs(float value, int digits)
     {
         FluentActions.Invoking(() => _ = new Rate(value, digits))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -225,16 +243,16 @@ public class RateTests
     //////////////////////////
 
     [Theory]
-    [InlineData(Rate.MinValue)]
-    [InlineData(Rate.MaxValue)]
+    [InlineData(Rate.MIN_VALUE)]
+    [InlineData(Rate.MAX_VALUE)]
     public void IntToRateToOperatorWithGoodArg(int value) =>
         ((Rate)value).Value.Should().Be(value);
 
     //////////////////////////
 
     [Theory]
-    [InlineData(Rate.MaxValue + 1)]
-    [InlineData(Rate.MinValue - 1)]
+    [InlineData(Rate.MAX_VALUE + 1)]
+    [InlineData(Rate.MIN_VALUE - 1)]
     public void IntToRateToOperatorWithBadArg(int value)
     {
         FluentActions.Invoking(() => _ = (Rate)value)

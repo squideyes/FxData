@@ -16,22 +16,22 @@ namespace SquidEyes.FxData.Models;
 
 public class TickSet : ListBase<Tick>
 {
-    private const byte MINIFIED = 0b1000_0000;
-    private const byte MINIFIEDTICKONMASK = 0b0111_1111;
-    private const byte PACKED = 0b0000_0000;
-    private const byte TICKON1 = 0b0001_0000;
-    private const byte TICKON2 = 0b0010_0000;
-    private const byte TICKON4 = 0b0011_0000;
-    private const byte BID1 = 0b0000_0100;
-    private const byte BID2 = 0b0000_1000;
-    private const byte BID4 = 0b0000_1100;
-    private const byte ASK1 = 0b0000_0001;
-    private const byte ASK2 = 0b0000_0010;
-    private const byte ASK4 = 0b0000_0011;
+    private const byte Minified = 0b1000_0000;
+    private const byte MinifiedTickOnMask = 0b0111_1111;
+    private const byte Packed = 0b0000_0000;
+    private const byte TickOn1 = 0b0001_0000;
+    private const byte TickOn2 = 0b0010_0000;
+    private const byte TickOn4 = 0b0011_0000;
+    private const byte Bid1 = 0b0000_0100;
+    private const byte Bid2 = 0b0000_1000;
+    private const byte Bid4 = 0b0000_1100;
+    private const byte Ask1 = 0b0000_0001;
+    private const byte Ask2 = 0b0000_0010;
+    private const byte Ask4 = 0b0000_0011;
 
     public static readonly MajorMinor Version = new(1, 0);
 
-    private TickOn? lastTickOn = null;
+    private TickOn? lastTickOn;
 
     public TickSet(Source source, Pair pair, Session session)
     {
@@ -72,8 +72,7 @@ public class TickSet : ListBase<Tick>
         Items.Add(tick);
     }
 
-    public void AddRange(IEnumerable<Tick> ticks) =>
-        ticks.ForEach(tick => Add(tick));
+    public void AddRange(IEnumerable<Tick> ticks) => ticks.ForEach(Add);
 
     public string GetFileName(DataKind dataKind)
     {
@@ -129,14 +128,14 @@ public class TickSet : ListBase<Tick>
     {
         return new Dictionary<string, string>
         {
-            { "Count", Count.ToString() },
-            { "CreatedOn", DateTime.UtcNow.ToString("O") },
-            { "Market", Session.Market.ToString() },
-            { "Pair", Pair.ToString() },
-            { "SaveAs", dataKind.ToString() },
-            { "Source", Source.ToString() },
-            { "TradeDate", Session.TradeDate.ToString() },
-            { "Version", Version.ToString() }
+            {"Count", Count.ToString()},
+            {"CreatedOn", DateTime.UtcNow.ToString("O")},
+            {"Market", Session.Market.ToString()},
+            {"Pair", Pair.ToString()},
+            {"SaveAs", dataKind.ToString()},
+            {"Source", Source.ToString()},
+            {"TradeDate", Session.TradeDate.ToString()},
+            {"Version", Version.ToString()}
         };
     }
 
@@ -160,73 +159,78 @@ public class TickSet : ListBase<Tick>
         {
             var data = new MemoryStream();
 
-            var writer = new BinaryWriter(data);
+            var dataWriter = new BinaryWriter(data);
 
-            Version.Write(writer);
-            writer.Write(DateTime.UtcNow.Ticks);
-            writer.Write(Source.ToString());
-            writer.Write(Pair.ToString());
-            writer.Write(Session.TradeDate.Value.DayNumber);
-            writer.Write(Session.Market.ToString());
-            writer.Write(Count);
+            dataWriter.Write(DateTime.UtcNow.Ticks);
+            dataWriter.Write(Source.ToString());
+            dataWriter.Write(Pair.ToString());
+            dataWriter.Write(Session.TradeDate.Value.DayNumber);
+            dataWriter.Write(Session.Market.ToString());
+            dataWriter.Write(Count);
 
-            var lastTick = First();
-
-            writer.Write(lastTick.TickOn.Value.Ticks);
-            writer.Write(lastTick.Bid.Value);
-            writer.Write(lastTick.Ask.Value);
-
-            foreach (var tick in this.Skip(1))
+            if (Count > 0)
             {
-                var tickOnDelta = (int)(tick.TickOn.Value - lastTick.TickOn.Value).TotalMilliseconds;
-                var bidDelta = tick.Bid.Value - lastTick.Bid.Value;
-                var askDelta = tick.Ask.Value - lastTick.Ask.Value;
+                var lastTick = First();
 
-                if (tickOnDelta <= 64
-                    && bidDelta >= -7 && bidDelta <= 7
-                    && askDelta >= -7 && askDelta <= 7)
+                dataWriter.Write(lastTick.TickOn.Value.Ticks);
+                dataWriter.Write(lastTick.Bid.Value);
+                dataWriter.Write(lastTick.Ask.Value);
+
+                foreach (var tick in this.Skip(1))
                 {
-                    var bidData = (bidDelta >= 0 ?
-                        0b0000_0000 : 0b1000_0000) | (Math.Abs(bidDelta) << 4);
+                    var tickOnDelta = (int) (tick.TickOn.Value - lastTick.TickOn.Value).TotalMilliseconds;
+                    var bidDelta = tick.Bid.Value - lastTick.Bid.Value;
+                    var askDelta = tick.Ask.Value - lastTick.Ask.Value;
 
-                    var askData = (askDelta >= 0 ?
-                        0b0000_0000 : 0b0000_1000) | (Math.Abs(askDelta));
-
-                    writer.Write((byte)(0b1000_0000 | tickOnDelta));
-                    writer.Write((byte)(bidData | askData));
-                }
-                else
-                {
-                    var header = PACKED;
-
-                    if (tickOnDelta != 0)
-                        header |= GetTickOnFlags(tickOnDelta);
-
-                    if (bidDelta != 0)
-                        header |= GetBidFlags(bidDelta);
-
-                    if (askDelta != 0)
-                        header |= GetAskFlags(askDelta);
-
-                    if (tickOnDelta != 0 || bidDelta != 0 || askDelta != 0)
+                    if (tickOnDelta <= 64
+                        && bidDelta is >= -7 and <= 7 && askDelta is >= -7 and <= 7)
                     {
-                        writer.Write(header);
+                        var bidData = (bidDelta >= 0 ? 0b0000_0000 : 0b1000_0000) | (Math.Abs(bidDelta) << 4);
+
+                        var askData = (askDelta >= 0 ? 0b0000_0000 : 0b0000_1000) | (Math.Abs(askDelta));
+
+                        dataWriter.Write((byte) (0b1000_0000 | tickOnDelta));
+                        dataWriter.Write((byte) (bidData | askData));
+                    }
+                    else
+                    {
+                        var header = Packed;
 
                         if (tickOnDelta != 0)
-                            writer.Write(GetBytes(tickOnDelta));
+                            header |= GetTickOnFlags(tickOnDelta);
 
                         if (bidDelta != 0)
-                            writer.Write(GetBytes(bidDelta));
+                            header |= GetBidFlags(bidDelta);
 
                         if (askDelta != 0)
-                            writer.Write(GetBytes(askDelta));
-                    }
-                }
+                            header |= GetAskFlags(askDelta);
 
-                lastTick = tick;
+                        if (tickOnDelta != 0 || bidDelta != 0 || askDelta != 0)
+                        {
+                            dataWriter.Write(header);
+
+                            if (tickOnDelta != 0)
+                                dataWriter.Write(GetBytes(tickOnDelta));
+
+                            if (bidDelta != 0)
+                                dataWriter.Write(GetBytes(bidDelta));
+
+                            if (askDelta != 0)
+                                dataWriter.Write(GetBytes(askDelta));
+                        }
+                    }
+
+                    lastTick = tick;
+                }
             }
 
-            writer.Flush();
+            dataWriter.Flush();
+            
+            var versionWriter = new BinaryWriter(stream);
+            
+            Version.Write(versionWriter);
+
+            versionWriter.Flush();
 
             using GZipStream gzip = new(stream, CompressionLevel.Optimal, true);
 
@@ -260,6 +264,11 @@ public class TickSet : ListBase<Tick>
         }
         else
         {
+            var versionReader = new BinaryReader(stream);
+
+            if (MajorMinor.Read(versionReader) != Version)
+                throw new ArgumentOutOfRangeException(nameof(stream));
+
             using var decompressed = new MemoryStream();
 
             using var gzip = new GZipStream(
@@ -270,9 +279,6 @@ public class TickSet : ListBase<Tick>
             var reader = new BinaryReader(decompressed);
 
             decompressed.Position = 0;
-
-            if (MajorMinor.Read(reader) != Version)
-                throw new ArgumentOutOfRangeException(nameof(stream));
 
             _ = new DateTime(reader.ReadInt64(), DateTimeKind.Utc);
 
@@ -291,8 +297,8 @@ public class TickSet : ListBase<Tick>
 
             var count = reader.ReadInt32();
 
-            if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+            if (count == 0)
+                return;
 
             var tickOn = new TickOn(new DateTime(reader.ReadInt64()));
             var bid = new Rate(reader.ReadInt32());
@@ -308,10 +314,10 @@ public class TickSet : ListBase<Tick>
 
                 Tick tick;
 
-                if ((header & MINIFIED) == MINIFIED)
+                if ((header & Minified) == Minified)
                 {
                     tickOn = new TickOn(lastTick.TickOn.Value
-                        .AddMilliseconds(header & MINIFIEDTICKONMASK));
+                        .AddMilliseconds(header & MinifiedTickOnMask));
 
                     (bid, ask) = ReadMinimizedBidAndAsk(reader, lastTick);
 
@@ -333,13 +339,12 @@ public class TickSet : ListBase<Tick>
         }
     }
 
-    private static int ReadValue(
-        BinaryReader reader, byte header, byte mask, int shift)
+    private static int ReadValue(BinaryReader reader, byte header, byte mask, int shift)
     {
         return ((header & mask) >> shift) switch
         {
             0 => 0,
-            1 => (sbyte)reader.ReadByte(),
+            1 => (sbyte) reader.ReadByte(),
             2 => reader.ReadInt16(),
             _ => reader.ReadInt32(),
         };
@@ -347,8 +352,8 @@ public class TickSet : ListBase<Tick>
 
     private static (Rate, Rate) ReadMinimizedBidAndAsk(BinaryReader reader, Tick lastTick)
     {
-        const int NEGATIVE = 0b000_1000;
-        const int MASK = 0b000_0111;
+        const int negative = 0b000_1000;
+        const int mask = 0b000_0111;
 
         int value = reader.ReadByte();
 
@@ -356,11 +361,9 @@ public class TickSet : ListBase<Tick>
 
         var askData = value & 0b0000_1111;
 
-        var bidDelta = (bidData & MASK) *
-            ((bidData & NEGATIVE) == NEGATIVE ? -1 : 1);
+        var bidDelta = (bidData & mask) * ((bidData & negative) == negative ? -1 : 1);
 
-        var askDelta = (askData & MASK) *
-            ((askData & NEGATIVE) == NEGATIVE ? -1 : 1);
+        var askDelta = (askData & mask) * ((askData & negative) == negative ? -1 : 1);
 
         var bid = new Rate(lastTick.Bid.Value + bidDelta);
 
@@ -382,36 +385,30 @@ public class TickSet : ListBase<Tick>
         new(lastTick.Ask.Value + ReadValue(reader, header, 0b0000_0011, 0));
 
     private static byte GetTickOnFlags(int value) =>
-        GetFlags(value, TICKON1, TICKON2, TICKON4);
+        GetFlags(value, TickOn1, TickOn2, TickOn4);
 
-    private static byte GetBidFlags(int value) =>
-        GetFlags(value, BID1, BID2, BID4);
+    private static byte GetBidFlags(int value) => GetFlags(value, Bid1, Bid2, Bid4);
 
-    private static byte GetAskFlags(int value) =>
-        GetFlags(value, ASK1, ASK2, ASK4);
+    private static byte GetAskFlags(int value) => GetFlags(value, Ask1, Ask2, Ask4);
 
     private static byte[] GetBytes(int value)
     {
-        if (value == 0)
-            return Array.Empty<byte>();
-        else if (value >= sbyte.MinValue && value <= sbyte.MaxValue)
-            return new[] { (byte)value };
-        else if (value >= short.MinValue && value <= short.MaxValue)
-            return BitConverter.GetBytes((short)value);
-        else
-            return BitConverter.GetBytes(value);
+        return value switch
+        {
+            >= sbyte.MinValue and <= sbyte.MaxValue => new[] {(byte) value},
+            >= short.MinValue and <= short.MaxValue => BitConverter.GetBytes((short) value),
+            _ => BitConverter.GetBytes(value)
+        };
     }
 
     private static byte GetFlags(int value, byte flag1, byte flag2, byte flag4)
     {
-        if (value == 0)
-            return 0b0000_0000;
-        else if (value >= sbyte.MinValue && value <= sbyte.MaxValue)
-            return flag1;
-        else if (value >= short.MinValue && value <= short.MaxValue)
-            return flag2;
-        else
-            return flag4;
+        return value switch
+        {
+            >= sbyte.MinValue and <= sbyte.MaxValue => flag1,
+            >= short.MinValue and <= short.MaxValue => flag2,
+            _ => flag4
+        };
     }
 
     public static TickSet Create(string fileName)
@@ -435,7 +432,7 @@ public class TickSet : ListBase<Tick>
         var pair = Known.Pairs[symbol];
 
         var session = new Session(
-            new TradeDate(DateOnly.ParseExact(fields[2], "yyyyMMdd", null)), 
+            new TradeDate(DateOnly.ParseExact(fields[2], "yyyyMMdd", null)),
             fields[3].ToMarket());
 
         if (fields[4] != "EST")

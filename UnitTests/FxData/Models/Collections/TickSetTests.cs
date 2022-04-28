@@ -20,30 +20,135 @@ using Xunit;
 
 namespace SquidEyes.UnitTests.FxData;
 
-public class TickSetTests 
+public class TickSetTests
 {
     [Theory]
     [InlineData(DataKind.CSV, DataKind.CSV)]
     [InlineData(DataKind.CSV, DataKind.STS)]
     [InlineData(DataKind.STS, DataKind.CSV)]
     [InlineData(DataKind.STS, DataKind.STS)]
-    public void RoundtripWorks(DataKind sourceKind, DataKind targetKind)
+    public void SourceMatchesTarget(DataKind sourceKind, DataKind targetKind)
     {
         TickSet.Version.Should().Be(new MajorMinor(1, 0));
 
         var source = TestHelper.GetTickSet(4, sourceKind);
+        var target = TestHelper.GetTickSet(4, targetKind);
+
+        SourceEqualsTarget(source, target);
+    }
+
+    ////////////////////////////
+
+    [Theory]
+    [InlineData(4)]
+    [InlineData(5)]
+    [InlineData(6)]
+    [InlineData(7)]
+    [InlineData(8)]
+    public void FileCsvToGeneratedSts(int day)
+    {
+        var csv = TestHelper.GetTickSet(day, DataKind.CSV);
 
         var stream = new MemoryStream();
 
-        source.SaveToStream(stream, targetKind);
+        csv.SaveToStream(stream, DataKind.STS);
 
         stream.Position = 0;
 
-        var target = TestHelper.GetTickSet(4, targetKind);
+        var sts = TestHelper.GetEmptyTickSet(day);
 
-        target.LoadFromStream(stream, targetKind);
+        sts.LoadFromStream(stream, DataKind.STS);
+
+        SourceEqualsTarget(csv, sts);
+    }
+
+    ////////////////////////////
+
+    [Fact]
+    public void SaveToStreamWithBadDataKindThrowsError()
+    {
+        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+
+        var stream = new MemoryStream();
+
+        FluentActions.Invoking(() => tickSet.SaveToStream(stream, 0))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    ////////////////////////////
+
+    [Fact]
+    public void SaveEmptyTickSetHasCountOfZero()
+    {
+        var tickSet = TestHelper.GetEmptyTickSet(4);
+
+        var stream = new MemoryStream();
+
+        tickSet.SaveToStream(stream, DataKind.STS);
+
+        tickSet.Count.Should().Be(0);
+    }
+
+    ////////////////////////////
+
+    [Fact]
+    public void EmptyTickSetRoundTrips()
+    {
+        var source = TestHelper.GetEmptyTickSet(4);
+
+        var stream = new MemoryStream();
+
+        source.SaveToStream(stream, DataKind.STS);
+
+        stream.Position = 0;
+
+        var target = TestHelper.GetEmptyTickSet(4);
+
+        target.LoadFromStream(stream, DataKind.STS);
 
         SourceEqualsTarget(source, target);
+    }
+
+    ////////////////////////////
+
+    [Fact]
+    public void LoadFromStreamWithBadDataKindThrowsError()
+    {
+        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+
+        var stream = new MemoryStream();
+
+        FluentActions.Invoking(() => tickSet.LoadFromStream(stream, 0))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    ////////////////////////////
+
+    [Theory]
+    [InlineData(Source.ForexCom, Symbol.EURUSD, true)]
+    [InlineData(Source.Dukascopy, Symbol.GBPUSD, true)]
+    [InlineData(Source.Dukascopy, Symbol.EURUSD, false)]
+    public void TickSetMismatchOnLoadThrowsError(Source source, Symbol symbol, bool goodVersion)
+    {
+        var session = new Session(Known.MinTradeDate, Market.Combined);
+        
+        var tickSet = new TickSet(source, Known.Pairs[symbol], session);
+
+        var stream = Properties.TestData.DC_EURUSD_20160104_NYC_EST_STS.ToStream();
+
+        if (!goodVersion)
+        {
+            var writer = new BinaryWriter(stream);
+            
+            new MajorMinor(2, 0).Write(writer);
+            
+            writer.Flush();
+
+            stream.Position = 0;
+        }
+
+        FluentActions.Invoking(() => tickSet.LoadFromStream(stream, DataKind.STS))
+            .Should().Throw<ArgumentOutOfRangeException>();
     }
 
     ////////////////////////////
@@ -53,7 +158,7 @@ public class TickSetTests
     {
         var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
 
-        tickSet.Count.Should().Be(39111);
+        tickSet.Count.Should().Be(29948);
 
         tickSet.Clear();
 
@@ -79,7 +184,7 @@ public class TickSetTests
         var tick2 = GetTick(tickSet, 1);
         var tick3 = GetTick(tickSet, 2);
 
-        tickSet.AddRange(new List<Tick> { tick1, tick2, tick3 });
+        tickSet.AddRange(new List<Tick> {tick1, tick2, tick3});
 
         tickSet.Count.Should().Be(3);
 
@@ -103,6 +208,52 @@ public class TickSetTests
     ////////////////////////////
 
     [Fact]
+    public void AddDefaultTickThrowsError()
+    {
+        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+
+        FluentActions.Invoking(() => tickSet.Add(default))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    ////////////////////////////
+
+    [Fact]
+    public void AddTickOutOfSessionThrowsError()
+    {
+        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+
+        var tickOn = new TickOn(tickSet.First().TickOn.Value.AddDays(1));
+
+        FluentActions.Invoking(() => tickSet.Add(new Tick(tickOn, Rate.MIN_VALUE, Rate.MAX_VALUE)))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    ////////////////////////////
+
+    [Fact]
+    public void GetFolderPathWithBadBasePathThrowsError()
+    {
+        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+
+        FluentActions.Invoking(() => tickSet.GetFullPath("", DataKind.STS))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    ////////////////////////////
+
+    [Fact]
+    public void GetFolderPathWithBadDataKindThrowsError()
+    {
+        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+
+        FluentActions.Invoking(() => tickSet.GetFullPath("C:\\Data", 0))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    ////////////////////////////
+
+    [Fact]
     public void ToStringReturnsGetFileNameResult()
     {
         var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
@@ -117,13 +268,8 @@ public class TickSetTests
     [InlineData(DataKind.STS)]
     public void GetMetadataReturnsExpectedValues(DataKind dataKind)
     {
-        static DateTime ParseCreatedOn(string value)
-        {
-            if (value == null)
-                return default;
-            else
-                return DateTime.Parse(value, null, DateTimeStyles.RoundtripKind);
-        }
+        static DateTime ParseCreatedOn(string? value) =>
+            value == null ? default : DateTime.Parse(value, null, DateTimeStyles.RoundtripKind);
 
         var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
 
@@ -166,6 +312,15 @@ public class TickSetTests
     [InlineData(DataKind.STS, @"C:\DC\TICKSETS\NYC\EURUSD\2016\DC_EURUSD_20160104_NYC_EST.sts")]
     public void GoodFullPathGenerated(DataKind dataKind, string fullPath) =>
         TestHelper.GetTickSet(4, dataKind).GetFullPath("C:\\", dataKind).Should().Be(fullPath);
+
+    ////////////////////////////
+
+    [Fact]
+    public void CreateWithTooManyFileNameFieldsThrowsError()
+    {
+        FluentActions.Invoking(() => TickSet.Create("DC_EURUSD_20160104_NYC_EST_XXX.sts"))
+            .Should().Throw<ArgumentOutOfRangeException>();
+    }
 
     ////////////////////////////
 

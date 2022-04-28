@@ -17,7 +17,7 @@ namespace SquidEyes.FxData.Context;
 public static class Known
 {
     public const int MinYear = 2016;
-    public const int MaxYear = 2030;
+    public const int MaxYear = 2028;
 
     private static readonly HashSet<DateOnly> validTradeDates;
 

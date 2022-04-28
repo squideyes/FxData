@@ -148,34 +148,34 @@
   <data name="DC_EURUSD_20160108_NYC_EST_STS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\ticksets\dc_eurusd_20160108_nyc_est.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="RENKOFEEDTESTS_4_Ask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_4_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_4_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_4_Bid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_4_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_4_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_5_Ask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_5_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_5_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_5_Bid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_5_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_5_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_6_Ask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_6_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_6_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_6_Bid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_6_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_6_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_7_Ask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_7_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_7_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_7_Bid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_7_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_7_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_8_Ask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_8_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_8_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RENKOFEEDTESTS_8_Bid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RENKOFEEDTESTS_8_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\renkofeedtests\renkofeedtests_8_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

@@ -23,7 +23,7 @@ public class KnownTests
     {
         Known.MinYear.Should().Be(2016);
 
-        Known.MaxYear.Should().Be(2030);
+        Known.MaxYear.Should().Be(2028);
 
         foreach (var symbol in Enum.GetValues<Symbol>())
             Known.Pairs.ContainsKey(symbol).Should().BeTrue();
@@ -31,7 +31,7 @@ public class KnownTests
         foreach (var currency in Enum.GetValues<Currency>())
             Known.Currencies.Contains(currency).Should().BeTrue();
 
-        Known.TradeDates!.Count.Should().Be(3889);
+        Known.TradeDates!.Count.Should().Be(3373);
 
         foreach (var pair in Known.Pairs.Values)
             Known.ConvertWith.ContainsKey(pair);
