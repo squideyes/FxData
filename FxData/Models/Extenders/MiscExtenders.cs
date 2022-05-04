@@ -20,4 +20,33 @@ public static class MiscExtenders
             _=> throw new ArgumentOutOfRangeException(nameof(midOrAsk))
         };
     }
+    
+    public static bool IsRateValue(this float value, int digits) =>
+        Rate.IsRate(value, digits);
+    
+    public static string ToCode(this Source value)
+    {
+        return value switch
+        {
+            Source.SquidEyes => "SE",
+            Source.Dukascopy => "DC",
+            Source.HistData => "HD",
+            Source.ForexCom => "FC",
+            Source.OandaCorp => "OC",
+            _ => throw new ArgumentOutOfRangeException(nameof(value))
+        };
+    }
+
+    public static Source ToSource(this string value)
+    {
+        return value switch
+        {
+            "SE" => Source.SquidEyes,
+            "DC" => Source.Dukascopy,
+            "HD" => Source.HistData,
+            "FC" => Source.ForexCom,
+            "OC" => Source.OandaCorp,
+            _ => throw new ArgumentOutOfRangeException(nameof(value))
+        };
+    }    
 }

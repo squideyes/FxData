@@ -22,6 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Light.GuardClauses" Version="10.0.0" />
     <PackageReference Include="SquidEyes.Basics" Version="1.0.17" />
   </ItemGroup>
 

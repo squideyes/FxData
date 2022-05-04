@@ -59,7 +59,10 @@ public struct Tick : IEquatable<Tick>
         if (string.IsNullOrWhiteSpace(value))
             throw new ArgumentNullException(nameof(value));
 
-        if (session == null)
+        if (pair is null)
+            throw new ArgumentNullException(nameof(pair));
+
+        if (session is null)
             throw new ArgumentNullException(nameof(session));
 
         var fields = value.Split(',');
