@@ -1,4 +1,4 @@
-// ********************************************************
+﻿// ********************************************************
 // Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
@@ -9,10 +9,8 @@
 
 namespace SquidEyes.FxData.Context;
 
-public enum Currency
+public enum Side
 {
-    EUR = 1,
-    GBP,
-    JPY,
-    USD
+    Buy = 1,
+    Sell
 }

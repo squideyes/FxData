@@ -7,17 +7,19 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
+using SquidEyes.FxData.Context;
+
 namespace SquidEyes.FxData.Models;
 
 public static class MiscExtenders
 {
-    public static Rate ToRate(this Tick tick, BidOrAsk midOrAsk)
+    public static Rate ToRate(this Tick tick, BidOrAsk bidOrAsk)
     {
-        return midOrAsk switch
+        return bidOrAsk switch
         {
             BidOrAsk.Bid => tick.Bid,
             BidOrAsk.Ask => tick.Ask,
-            _=> throw new ArgumentOutOfRangeException(nameof(midOrAsk))
+            _=> throw new ArgumentOutOfRangeException(nameof(bidOrAsk))
         };
     }
     

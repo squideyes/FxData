@@ -1,4 +1,4 @@
-// ********************************************************
+﻿// ********************************************************
 // Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
@@ -7,10 +7,10 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.Models;
+namespace SquidEyes.FxData.Context;
 
-public enum BidOrAsk
+public interface IMinMargin
 {
-    Bid = 1,
-    Ask
+    double this[Pair pair] { get; }
+    double this[Symbol symbol] { get; }
 }

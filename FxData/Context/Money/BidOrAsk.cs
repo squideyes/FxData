@@ -9,10 +9,8 @@
 
 namespace SquidEyes.FxData.Context;
 
-public enum Currency
+public enum BidOrAsk
 {
-    EUR = 1,
-    GBP,
-    JPY,
-    USD
+    Bid = 1,
+    Ask
 }

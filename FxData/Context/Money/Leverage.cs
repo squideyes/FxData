@@ -9,10 +9,11 @@
 
 namespace SquidEyes.FxData.Context;
 
-public enum Currency
+public enum Leverage
 {
-    EUR = 1,
-    GBP,
-    JPY,
-    USD
+    TenToOne = 10,
+    TwentyToOne = 20,
+    ThirtyToOne = 30,
+    FortyToOne = 40,
+    FiftyToOne = 50
 }
