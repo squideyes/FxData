@@ -19,13 +19,15 @@ public struct Tick : IEquatable<Tick>
         TickOn = tickOn.Validated(nameof(tickOn), v => !v.IsDefaultValue());
 
         Bid = bid.Validated(nameof(bid), v => !v.IsDefaultValue());
-        
+
         Ask = ask.Validated(nameof(ask), v => !v.IsDefaultValue() && v >= bid);
     }
 
     public TickOn TickOn { get; }
     public Rate Bid { get; }
     public Rate Ask { get; }
+
+    public Rate Mid => (Bid.Value + Ask.Value) / 2;
 
     public Rate Spread => new(Ask.Value - Bid.Value);
 
