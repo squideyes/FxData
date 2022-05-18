@@ -203,11 +203,10 @@ public class TickTests
     public void ParseWithBadArgsThrowsError(bool goodValue, bool goodPair, bool goodSession)
     {
         var value = goodValue ? "01/04/2016 03:00:00.000,0.00001,9.99999" : "";
-        var pair = Known.Pairs[goodPair ? Symbol.EURUSD : Symbol.GBPUSD];
+        var pair = goodPair ? Known.Pairs[Symbol.EURUSD] : null!;
         var session = new Session(Known.MinTradeDate, goodSession ? Market.Combined : Market.NewYork);
 
-        FluentActions.Invoking(() => Tick.Parse(value, pair, session))
-            .Should().Throw<ArgumentOutOfRangeException>();
+        FluentActions.Invoking(() => Tick.Parse(value, pair, session)).Should().Throw<Exception>();
     }
 
     ////////////////////////////   

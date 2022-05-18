@@ -26,4 +26,8 @@
     <PackageReference Include="SquidEyes.Basics" Version="1.0.18" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\Data\" />
+  </ItemGroup>
+
 </Project>

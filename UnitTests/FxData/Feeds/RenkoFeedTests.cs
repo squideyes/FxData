@@ -20,7 +20,7 @@ using Xunit;
 using static SquidEyes.FxData.Models.Trend;
 using static SquidEyes.UnitTests.Properties.TestData;
 
-namespace SquidEyes.UnitTests
+namespace SquidEyes.UnitTests.FxData
 {
     public class RenkoFeedTests
     {
