@@ -1,4 +1,4 @@
-// ********************************************************
+﻿// ********************************************************
 // Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
@@ -7,44 +7,63 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-//using SquidEyes.FxData.Context;
-//using System.Text;
-//using SquidEyes.Basics;
-//using static SquidEyes.FxData.Models.Trend;
+using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Models;
 
-//namespace SquidEyes.FxData.Models;
+namespace SquidEyes.FxData.Models;
 
-//public class Brick
-//{
-//    internal Brick(TickOn openOn, Rate open, TickOn closeOn, Rate close)
-//    {
-//        OpenOn = openOn;
-//        Open = open;
-//        CloseOn = closeOn;
-//        Close = close;
-//    }
+public class Brick
+{
+    internal Brick(Tick tick)
+    {
+        OpenOn = tick.TickOn;
+        Open = tick.Mid;
+        CloseOn = tick.TickOn;
+        Close = tick.Mid;
+        IsClosed = false;
+        IsVirtual = false;
+    }
 
-//    public TickOn OpenOn { get; }
-//    public Rate Open { get; }
-//    public TickOn CloseOn { get; set; }
-//    public Rate Close { get; set; }
+    internal Brick(TickOn openOn, Rate open, TickOn closeOn, Rate close, bool isClosed, bool isVirtual)
+    {
+        OpenOn = openOn;
+        Open = open;
+        CloseOn = closeOn;
+        Close = close;
+        IsClosed = isClosed;
+        IsVirtual = isVirtual;
+    }
 
-//    public override string ToString() =>
-//        $"{Open} on {OpenOn} to {Close} on {CloseOn}";
+    public TickOn OpenOn { get; }
+    public Rate Open { get; }
+    public TickOn CloseOn { get; }
+    public Rate Close { get; }
+    public bool IsClosed { get; }
+    public bool IsVirtual { get; }
 
-//    public string ToCsvString(Pair pair)
-//    {
-//        ArgumentNullException.ThrowIfNull(pair);
+    public Trend Trend
+    {
+        get
+        {
+            if (Open < Close)
+                return Trend.Up;
+            else if (Open > Close)
+                return Trend.Down;
+            else
+                return Trend.None;
+        }
+    }
 
-//        var sb = new StringBuilder();
+    public string ToCsvString(Pair pair = null!)
+    {
+        string Formatted(Rate value) => pair.Format(value.AsFloat(pair.Digits));
 
-//        sb.Append(OpenOn);
-//        sb.AppendDelimited(Open.ToString(pair.Digits));
-//        sb.AppendDelimited(CloseOn);
-//        sb.AppendDelimited(Close.ToString(pair.Digits));
+        if (pair == null!)
+            return $"{OpenOn},{Open},{CloseOn},{Close}";
+        else
+            return $"{OpenOn},{Formatted(Open)},{CloseOn},{Formatted(Close)}";
+    }
 
-//        return sb.ToString();
-//    }
-
-//    public Trend Trend => Open < Close ? Rising : Falling;
-//}
+    public override string ToString() =>
+        $"{OpenOn},{Open},{CloseOn},{Close},{(IsClosed ? "CLOSED" : "OPEN")},{(IsVirtual ? "VIRTUAL" : "REAL")}";
+}

@@ -1,24 +1,32 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-DukasFetch-EBFB4BCC-B827-44F3-8AB3-7E4CA8EAC502</UserSecretsId>
-    <AssemblyName>DukasFetch</AssemblyName>
-    <RootNamespace>SquidEyes.FxData.DukasFetch</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>dotnet-DukasFetch-EBFB4BCC-B827-44F3-8AB3-7E4CA8EAC502</UserSecretsId>
+		<AssemblyName>DukasFetch</AssemblyName>
+		<RootNamespace>SquidEyes.FxData.DukasFetch</RootNamespace>
+		<Authors>Louis S. Berman</Authors>
+		<Company>SquidEyes, LLC</Company>
+		<Product>DukasFetch</Product>
+		<Description>Fetches Dukascopy ticks and then saves those ticks .STS blobs.</Description>
+		<Copyright>Copyright 2022 by by SquidEyes, LLC</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>forex;fx;trading;tick-data;candlesticks;c#;renko</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>		
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
-    <PackageReference Include="Be.IO-netstandard" Version="1.0.3" />
-    <PackageReference Include="FluentCommandLineParser-netstandard" Version="1.4.3.13" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    <PackageReference Include="SevenZip" Version="19.0.0" />
-    <PackageReference Include="SquidEyes.Basics" Version="1.0.18" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
+		<PackageReference Include="Be.IO-netstandard" Version="1.0.3" />
+		<PackageReference Include="FluentCommandLineParser-netstandard" Version="1.4.3.13" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+		<PackageReference Include="SevenZip" Version="19.0.0" />
+		<PackageReference Include="SquidEyes.Basics" Version="1.0.18" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FxData\FxData.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\FxData\FxData.csproj" />
+	</ItemGroup>
 </Project>

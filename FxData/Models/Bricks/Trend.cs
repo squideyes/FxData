@@ -7,11 +7,11 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-//namespace SquidEyes.FxData.Models
-//{
-//    public enum Trend
-//    {
-//        Rising = 1,
-//        Falling
-//    }
-//}
+namespace SquidEyes.FxData.Models;
+
+public enum Trend
+{
+    None = 1,
+    Up,
+    Down
+}

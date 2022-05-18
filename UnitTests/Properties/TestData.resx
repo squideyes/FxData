@@ -118,6 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="BRICKFEED_BASELINES_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\testdata\brickfeedtests\brickfeed_baselines_4.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="BRICKFEED_BASELINES_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\testdata\brickfeedtests\brickfeed_baselines_5.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="BRICKFEED_BASELINES_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\testdata\brickfeedtests\brickfeed_baselines_6.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="BRICKFEED_BASELINES_7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\testdata\brickfeedtests\brickfeed_baselines_7.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="BRICKFEED_BASELINES_8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\testdata\brickfeedtests\brickfeed_baselines_8.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="DC_EURUSD_20160104_NYC_EST_CSV" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\ticksets\dc_eurusd_20160104_nyc_est.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -147,35 +162,5 @@
   </data>
   <data name="DC_EURUSD_20160108_NYC_EST_STS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\ticksets\dc_eurusd_20160108_nyc_est.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RENKOFEEDTESTS_4_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_4_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_4_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_4_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_5_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_5_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_5_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_5_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_6_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_6_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_6_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_6_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_7_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_7_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_7_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_7_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_8_ASK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_8_ask.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RENKOFEEDTESTS_8_BID" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\renkofeedtests\renkofeedtests_8_bid.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

@@ -31,7 +31,6 @@ public class BrickFeed
         public Rate Close { get; }
     }
 
-    private readonly Pair pair;
     private readonly Rate ticksPerBrick;
 
     private TickOn? openOn = null;
@@ -40,10 +39,8 @@ public class BrickFeed
 
     public event EventHandler<BrickArgs>? OnBrick;
 
-    public BrickFeed(Pair pair, Rate ticksPerBrick)
+    public BrickFeed(Rate ticksPerBrick)
     {
-        this.pair = pair ?? throw new ArgumentNullException(nameof(pair));
-
         this.ticksPerBrick = ticksPerBrick.Value
             .Validated(nameof(ticksPerBrick), v => v.Between(5, 99));
     }
