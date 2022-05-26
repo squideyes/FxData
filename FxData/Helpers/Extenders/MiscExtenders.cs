@@ -8,8 +8,9 @@
 // ********************************************************
 
 using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Models;
 
-namespace SquidEyes.FxData.Models;
+namespace SquidEyes.FxData.Helpers;
 
 public static class MiscExtenders
 {

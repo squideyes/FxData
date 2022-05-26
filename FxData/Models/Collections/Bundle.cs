@@ -9,6 +9,7 @@
 
 using SquidEyes.Basics;
 using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Helpers;
 using System.IO.Compression;
 using System.Text;
 

@@ -7,19 +7,21 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
+using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Models;
 
-namespace SquidEyes.FxData.Helpers
-{
-    public class BrickArgs
-    {
-        internal BrickArgs(Brick brick, Tick tick)
-        {
-            Brick = brick;
-            Tick = tick;
-        }
+namespace SquidEyes.FxData.Models;
 
-        public Brick Brick { get; }
-        public Tick Tick { get; }
+public class DataPoint
+{
+    internal DataPoint(TickOn tickOn, Rate rate)
+    {
+        TickOn = tickOn;
+        Rate = rate;
     }
+
+    public TickOn TickOn { get; }
+    public Rate Rate { get; }
+
+    public string ToCsvString() => $"{TickOn},{Rate}";
 }

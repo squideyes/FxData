@@ -1,4 +1,4 @@
-// ********************************************************
+﻿// ********************************************************
 // Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
@@ -7,11 +7,13 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.Models;
+using SquidEyes.Basics;
+using SquidEyes.FxData.Models;
 
-public enum Trend
+namespace SquidEyes.FxData.Helpers;
+
+public static class BrickExtenders
 {
-    None = 1,
-    Up,
-    Down
+    public static bool IsTicksPerBrick(this Rate value) => 
+        value.Value.Between(1, 99);
 }

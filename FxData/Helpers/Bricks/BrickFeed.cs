@@ -10,96 +10,78 @@
 using SquidEyes.Basics;
 using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Models;
+using System.Text;
 
 namespace SquidEyes.FxData.Helpers;
 
 public class BrickFeed
 {
-    private class Data
-    {
-        public Data(TickOn openOn, Rate open, TickOn closeOn, Rate close)
-        {
-            OpenOn = openOn;
-            Open = open;
-            CloseOn = closeOn;
-            Close = close;
-        }
-
-        public TickOn OpenOn { get; }
-        public Rate Open { get; }
-        public TickOn CloseOn { get; }
-        public Rate Close { get; }
-    }
-
+    private readonly SlidingBuffer<Brick> bricks;
     private readonly Rate ticksPerBrick;
 
     private TickOn? openOn = null;
-    private Rate lastRate = default;
-    private bool lastBrickWasClosed = false;
+    private Rate? lastRate = null;
 
     public event EventHandler<BrickArgs>? OnBrick;
 
-    public BrickFeed(Rate ticksPerBrick)
+    public BrickFeed(Rate ticksPerBrick, int bufferSize = 10)
     {
-        this.ticksPerBrick = ticksPerBrick.Value
-            .Validated(nameof(ticksPerBrick), v => v.Between(5, 99));
+        this.ticksPerBrick = ticksPerBrick.Validated(
+            nameof(ticksPerBrick), v => v.IsTicksPerBrick());
+
+        bricks = new SlidingBuffer<Brick>(bufferSize, true);
+    }
+
+    public int Count => bricks.Count;
+
+    public Brick this[int index] => bricks[index];
+
+    public string GetPattern()
+    {
+        var sb = new StringBuilder();
+
+        for (int i = Count - 1; i >= 1; i--)
+            sb.Append(this[i].Trend == Trend.Up ? 'U' : 'D');
+
+        return sb.ToString();
     }
 
     public void HandleTick(Tick tick)
     {
-        if (lastRate == default)
+        void AddBrick(Rate closeRate)
+        {
+            var brick = new Brick(new DataPoint(openOn!.Value, lastRate.Value),
+                new DataPoint(tick.TickOn, closeRate));
+
+            bricks.Add(brick);
+
+            OnBrick?.Invoke(this, new BrickArgs(brick, tick));
+        }
+
+        if (!lastRate.HasValue)
         {
             openOn = tick.TickOn;
             lastRate = tick.Mid;
-
-            OnBrick?.Invoke(this, new BrickArgs(new Brick(tick), tick, true));
-
-            return;
         }
-
-        Data GetData(Rate closeRate) =>
-            new(openOn!.Value, lastRate, tick.TickOn, closeRate);
-
-        var datas = new List<Data>();
-
-        while (tick.Mid > lastRate + ticksPerBrick)
+        else
         {
-            datas.Add(GetData(lastRate + ticksPerBrick));
+            Rate rate;
 
-            lastRate += ticksPerBrick;
+            while (tick.Mid > (rate = lastRate.Value + ticksPerBrick))
+            {
+                AddBrick(rate);
 
-            openOn = tick.TickOn;
-        }
+                lastRate = rate;
+                openOn = tick.TickOn;
+            }
 
-        while (tick.Mid < lastRate - ticksPerBrick)
-        {
-            datas.Add(GetData(lastRate - ticksPerBrick));
+            while (tick.Mid < (rate = lastRate.Value - ticksPerBrick))
+            {
+                AddBrick(rate);
 
-            lastRate -= ticksPerBrick;
-
-            openOn = tick.TickOn;
-        }
-
-        void RaiseBrick(Data data, bool isFirstTickOfBar, bool isClosed, bool isVirtual)
-        {
-            if (isClosed)
-                lastBrickWasClosed = true;
-
-            var brick = new Brick(data.OpenOn, data.Open, data.CloseOn, data.Close, true, isVirtual);
-
-            OnBrick?.Invoke(this, new BrickArgs(brick, tick, isFirstTickOfBar));
-        }
-
-        for (int i = 0; i < datas.Count; i++)
-            RaiseBrick(datas[i], false, true, i < datas.Count - 1);
-
-        if (tick.Mid < lastRate || tick.Mid > lastRate || datas.Count == 0)
-        {
-            var brick = new Brick(openOn!.Value, lastRate, tick.TickOn, tick.Mid, false, false);
-
-            OnBrick?.Invoke(this, new BrickArgs(brick, tick, lastBrickWasClosed));
-
-            lastBrickWasClosed = false;
+                lastRate = rate;
+                openOn = tick.TickOn;
+            }
         }
     }
 }

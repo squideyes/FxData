@@ -7,11 +7,12 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using System;
-using Xunit;
 using FluentAssertions;
 using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Helpers;
 using SquidEyes.FxData.Models;
+using System;
+using Xunit;
 
 namespace SquidEyes.UnitTests.FxData;
 
@@ -23,8 +24,8 @@ public class MiscExtendersTests
     [InlineData(Source.HistData, "HD")]
     [InlineData(Source.OandaCorp, "OC")]
     [InlineData(Source.SquidEyes, "SE")]
-    public void ToCodeReturnsExpectedValue(Source source, string expected) =>
-    source.ToCode().Should().Be(expected);
+    public void ToCodeReturnsExpectedValue(Source source, string expected) =>   
+        source.ToCode().Should().Be(expected);
 
     [Theory]
     [InlineData("DC", Source.Dukascopy)]
