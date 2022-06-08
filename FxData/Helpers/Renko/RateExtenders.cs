@@ -12,7 +12,7 @@ using SquidEyes.FxData.Models;
 
 namespace SquidEyes.FxData.Helpers;
 
-public static class BrickExtenders
+public static class RateExtenders
 {
     public static bool IsTicksPerBrick(this Rate value) => 
         value.Value.Between(1, 99);

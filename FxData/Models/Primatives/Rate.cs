@@ -93,6 +93,9 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
     public static Rate operator -(Rate left, Rate right) =>
         new(left.Value - right.Value);
 
+    public static Rate operator % (Rate left, Rate right) =>
+        new(left.Value % right.Value);
+
     public static bool operator ==(Rate left, Rate right) =>
         left.Equals(right);
 

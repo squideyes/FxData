@@ -20,6 +20,8 @@ public class Brick
     public DataPoint Open { get; }
     public DataPoint Close { get; }
 
+    public Rate TicksPerBrick => Math.Abs(Open.Rate.Value - Close.Rate.Value);
+
     public Trend Trend => (Open.Rate < Close.Rate) ? Trend.Up : Trend.Down;
 
     public override string ToString() =>
