@@ -18,7 +18,12 @@ public class Brick
     }
 
     public DataPoint Open { get; }
+
     public DataPoint Close { get; }
+
+    public DataPoint High => Trend == Trend.Up ? Close : Open;
+
+    public DataPoint Low => Trend == Trend.Up ? Open : Close;
 
     public Rate TicksPerBrick => Math.Abs(Open.Rate.Value - Close.Rate.Value);
 

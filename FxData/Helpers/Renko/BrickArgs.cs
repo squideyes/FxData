@@ -13,13 +13,15 @@ namespace SquidEyes.FxData.Helpers
 {
     public class BrickArgs
     {
-        internal BrickArgs(Brick brick, Tick tick)
+        internal BrickArgs(Brick brick, Tick tick, bool isClosed)
         {
             Brick = brick;
             Tick = tick;
+            IsClosed = isClosed;
         }
 
         public Brick Brick { get; }
         public Tick Tick { get; }
+        public bool IsClosed { get; }
     }
 }
