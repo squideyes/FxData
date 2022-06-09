@@ -11,9 +11,9 @@ using SquidEyes.FxData.Context;
 
 namespace SquidEyes.FxData.Models;
 
-public class DataPoint
+public class Point
 {
-    internal DataPoint(TickOn tickOn, Rate rate)
+    internal Point(TickOn tickOn, Rate rate)
     {
         TickOn = tickOn;
         Rate = rate;

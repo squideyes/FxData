@@ -24,6 +24,7 @@ public class RenkoFeedTests
     {
         int closedBrickCount = 0;
         int tickId = 1;
+        var feed = GetFeed(true);
 
         void Validate(int expectedTickId, int expectedClosedBrickCount,
             BrickArgs args, int tickSeconds, Rate tickRate, int openSeconds,
@@ -46,14 +47,8 @@ public class RenkoFeedTests
             args.IsClosed.Should().Be(isClosed);
         }
 
-        var feed = GetFeed();
-
-        var bricks = new List<Brick>();
-
         feed.OnBrick += (s, e) =>
         {
-            bricks.Add(e.Brick);
-
             if (e.IsClosed)
                 closedBrickCount++;
 
@@ -84,8 +79,30 @@ public class RenkoFeedTests
             tickId++;
         };
 
-        foreach (var tick in GetTicks(false))
+        foreach (var tick in GetTicks())
             feed.HandleTick(tick);
+
+        feed.Count.Should().Be(8);
+    }
+
+
+    [Fact]
+    public void OpenBricksNotRaised()
+    {
+        var feed = GetFeed(false);
+
+        var bricks = new List<Brick>();
+
+        feed.OnBrick += (s, e) =>
+        {
+            if (!e.IsClosed)
+                throw new ArgumentOutOfRangeException(nameof(e));
+        };
+
+        foreach (var tick in GetTicks())
+            feed.HandleTick(tick);
+
+        feed.Count.Should().Be(8);
     }
 
     [Fact]
@@ -118,53 +135,48 @@ public class RenkoFeedTests
                 "UUUUDUU"
             };
 
-        var feed = GetFeed();
+        var feed = GetFeed(true);
 
         int tickId = 0;
 
         feed.OnBrick += (s, e) =>
             feed.GetPattern(true).Should().Be(expected[tickId++]);
 
-        foreach (var tick in GetTicks(false))
+        foreach (var tick in GetTicks())
             feed.HandleTick(tick);
     }
 
-    private static RenkoFeed GetFeed()
+    private static RenkoFeed GetFeed(bool raiseOpenBricks)
     {
         var tradeDate = new TradeDate(2022, 5, 2);
 
         var session = new Session(tradeDate, Market.NewYork);
 
-        return new RenkoFeed(session, 20, true);
+        return new RenkoFeed(session, 20, raiseOpenBricks);
     }
 
-    private static List<Tick> GetTicks(bool preSession)
+    private static List<Tick> GetTicks()
     {
         static Tick GetTick(DateTime dateTime, Rate rate) =>
             new(new TickOn(dateTime), rate, rate);
 
-        var ticks = new List<Tick>();
-
-        if (preSession)
+        return new List<Tick>
         {
-        }
-
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 0), 400));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 1), 420));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 2), 421));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 3), 440));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 4), 441));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 5), 460));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 6), 461));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 7), 480));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 8), 481));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 9), 440));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 10), 439));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 11), 500));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 12), 501));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 13), 520));
-        ticks.Add(GetTick(new DateTime(2022, 5, 2, 10, 0, 14), 521));
-
-        return ticks;
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 0), 400),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 1), 420),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 2), 421),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 3), 440),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 4), 441),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 5), 460),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 6), 461),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 7), 480),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 8), 481),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 9), 440),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 10), 439),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 11), 500),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 12), 501),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 13), 520),
+            GetTick(new DateTime(2022, 5, 2, 10, 0, 14), 521)
+        };
     }
 }

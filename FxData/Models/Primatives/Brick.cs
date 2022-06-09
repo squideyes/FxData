@@ -11,19 +11,19 @@ namespace SquidEyes.FxData.Models;
 
 public class Brick
 {
-    internal Brick(DataPoint open, DataPoint close)
+    internal Brick(Point open, Point close)
     {
         Open = open;
         Close = close;
     }
 
-    public DataPoint Open { get; }
+    public Point Open { get; }
 
-    public DataPoint Close { get; }
+    public Point Close { get; }
 
-    public DataPoint High => Trend == Trend.Up ? Close : Open;
+    public Point High => Trend == Trend.Up ? Close : Open;
 
-    public DataPoint Low => Trend == Trend.Up ? Open : Close;
+    public Point Low => Trend == Trend.Up ? Open : Close;
 
     public Rate TicksPerBrick => Math.Abs(Open.Rate.Value - Close.Rate.Value);
 

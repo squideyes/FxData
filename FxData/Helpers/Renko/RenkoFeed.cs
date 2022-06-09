@@ -14,12 +14,12 @@ namespace SquidEyes.FxData.Helpers
         private readonly Rate ticksPerBrick;
         private readonly bool raiseOpenBricks;
 
-        private DataPoint firstDataPoint = null!;
+        private Point firstPoint = null!;
 
         public event EventHandler<BrickArgs>? OnBrick;
 
         public RenkoFeed(Session session,
-            Rate ticksPerBrick, bool raiseOpenBricks, int bufferSize = 100)
+            Rate ticksPerBrick, bool raiseOpenBricks = false, int bufferSize = 100)
         {
             this.session = session ??
                 throw new ArgumentNullException(nameof(session));
@@ -44,7 +44,7 @@ namespace SquidEyes.FxData.Helpers
             if (tick.TickOn.TradeDate != session.TradeDate)
                 throw new ArgumentOutOfRangeException(nameof(tick));
 
-            var dataPoint = new DataPoint(tick.TickOn, tick.Mid);
+            var point = new Point(tick.TickOn, tick.Mid);
 
             Rate GetRate(Rate source, out Rate target) => target = source;
 
@@ -57,32 +57,32 @@ namespace SquidEyes.FxData.Helpers
 
                 while (tick.Mid > GetRate(last.High.Rate + ticksPerBrick, out Rate rate))
                 {
-                    last = AddAndRaiseClosedBrick(new Brick(last.High,
-                        new DataPoint(tick.TickOn, rate)), tick);
+                    last = AddAndRaiseClosedBrick(
+                        new Brick(last.High, new Point(tick.TickOn, rate)), tick);
                 }
 
                 while (tick.Mid < GetRate(last.Low.Rate - ticksPerBrick, out Rate rate))
                 {
-                    last = AddAndRaiseClosedBrick(new Brick(last.Low,
-                        new DataPoint(tick.TickOn, rate)), tick);
+                    last = AddAndRaiseClosedBrick(
+                        new Brick(last.Low, new Point(tick.TickOn, rate)), tick);
                 }
             }
 
-            if (firstDataPoint == default)
+            if (firstPoint == default)
             {
-                firstDataPoint = dataPoint;
+                firstPoint = point;
             }
             else if (Count == 0)
             {
-                if (tick.Mid > GetRate(firstDataPoint.Rate + ticksPerBrick, out Rate rate))
+                if (tick.Mid > GetRate(firstPoint.Rate + ticksPerBrick, out Rate rate))
                 {
-                    AddAndRaiseClosedBrick(new Brick(firstDataPoint,
-                        new DataPoint(tick.TickOn, rate)), tick);
+                    AddAndRaiseClosedBrick(
+                        new Brick(firstPoint, new Point(tick.TickOn, rate)), tick);
                 }
-                else if (tick.Mid < GetRate(firstDataPoint.Rate - ticksPerBrick, out rate))
+                else if (tick.Mid < GetRate(firstPoint.Rate - ticksPerBrick, out rate))
                 {
-                    AddAndRaiseClosedBrick(new Brick(
-                        firstDataPoint, new DataPoint(tick.TickOn, rate)), tick);
+                    AddAndRaiseClosedBrick(
+                        new Brick(firstPoint, new Point(tick.TickOn, rate)), tick);
                 }
 
                 AddClosedBricks();
@@ -92,7 +92,7 @@ namespace SquidEyes.FxData.Helpers
                 AddClosedBricks();
             }
 
-            RaiseOpenBrick(dataPoint, tick);
+            RaiseOpenBrick(point, tick);
         }
 
         public string GetPattern(bool inSession)
@@ -110,19 +110,19 @@ namespace SquidEyes.FxData.Helpers
             return sb.ToString();
         }
 
-        private void RaiseOpenBrick(DataPoint dataPoint, Tick tick)
+        private void RaiseOpenBrick(Point point, Tick tick)
         {
             if (!raiseOpenBricks)
                 return;
 
-            DataPoint open;
+            Point open;
 
             if (bricks.Count == 0)
-                open = firstDataPoint;
+                open = firstPoint;
             else
                 open = bricks[0].Close;
 
-            var brick = new Brick(open, dataPoint);
+            var brick = new Brick(open, point);
 
             OnBrick?.Invoke(this, new BrickArgs(brick, tick, false));
         }
