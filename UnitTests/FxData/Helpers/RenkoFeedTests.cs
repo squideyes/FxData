@@ -19,12 +19,14 @@ namespace SquidEyes.UnitTests.FxData;
 
 public class RenkoFeedTests
 {
-    [Fact]
-    public void BricksFormCorrectly()
+    [Theory]
+    [InlineData(BidOrAsk.Bid)]
+    [InlineData(BidOrAsk.Ask)]
+    public void BricksFormCorrectly(BidOrAsk bidOrAsk)
     {
         int closedBrickCount = 0;
         int tickId = 1;
-        var feed = GetFeed(true);
+        var feed = GetFeed(true, bidOrAsk);
 
         void Validate(int expectedTickId, int expectedClosedBrickCount,
             BrickArgs args, int tickSeconds, Rate tickRate, int openSeconds,
@@ -37,13 +39,17 @@ public class RenkoFeedTests
 
             TickOn GetTickOn(int seconds) => new(minTickOn.AddSeconds(seconds));
 
+            Rate Adjust(Rate value) => bidOrAsk == BidOrAsk.Bid ? value : value + 2;
+
+            var rate = bidOrAsk == BidOrAsk.Bid ? args.Tick.Bid : args.Tick.Ask;
+
             closedBrickCount.Should().Be(expectedClosedBrickCount);
             args.Tick.TickOn.Should().Be(GetTickOn(tickSeconds));
-            args.Tick.Mid.Should().Be(tickRate);
+            rate.Should().Be(Adjust(tickRate));
             args.Brick.Open.TickOn.Should().Be(GetTickOn(openSeconds));
-            args.Brick.Open.Rate.Should().Be(openRate);
+            args.Brick.Open.Rate.Should().Be(Adjust(openRate));
             args.Brick.Close.TickOn.Should().Be(GetTickOn(closeSeconds));
-            args.Brick.Close.Rate.Should().Be(closeRate);
+            args.Brick.Close.Rate.Should().Be(Adjust(closeRate));
             args.IsClosed.Should().Be(isClosed);
         }
 
@@ -85,11 +91,10 @@ public class RenkoFeedTests
         feed.Count.Should().Be(8);
     }
 
-
     [Fact]
     public void OpenBricksNotRaised()
     {
-        var feed = GetFeed(false);
+        var feed = GetFeed(false, BidOrAsk.Bid);
 
         var bricks = new List<Brick>();
 
@@ -135,7 +140,7 @@ public class RenkoFeedTests
                 "UUUUDUU"
             };
 
-        var feed = GetFeed(true);
+        var feed = GetFeed(true, BidOrAsk.Bid);
 
         int tickId = 0;
 
@@ -146,19 +151,19 @@ public class RenkoFeedTests
             feed.HandleTick(tick);
     }
 
-    private static RenkoFeed GetFeed(bool raiseOpenBricks)
+    private static RenkoFeed GetFeed(bool raiseOpenBricks, BidOrAsk bidOrAsk)
     {
         var tradeDate = new TradeDate(2022, 5, 2);
 
         var session = new Session(tradeDate, Market.NewYork);
 
-        return new RenkoFeed(session, 20, raiseOpenBricks);
+        return new RenkoFeed(session, bidOrAsk, 20, raiseOpenBricks);
     }
 
     private static List<Tick> GetTicks()
     {
-        static Tick GetTick(DateTime dateTime, Rate rate) =>
-            new(new TickOn(dateTime), rate, rate);
+        static Tick GetTick(DateTime dateTime, Rate bid) =>
+            new(new TickOn(dateTime), bid, bid + 2);
 
         return new List<Tick>
         {

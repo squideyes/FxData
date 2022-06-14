@@ -1,4 +1,13 @@
-﻿using SquidEyes.Basics;
+﻿// ********************************************************
+// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
+//
+// This file is part of SquidEyes.FxData
+//
+// The use of this source code is licensed under the terms
+// of the MIT License (https://opensource.org/licenses/MIT)
+// ********************************************************
+
+using SquidEyes.Basics;
 using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Models;
 using System.Collections;
@@ -11,6 +20,7 @@ namespace SquidEyes.FxData.Helpers
         private readonly SlidingBuffer<Brick> bricks;
 
         private readonly Session session;
+        private readonly BidOrAsk bidOrAsk;
         private readonly Rate ticksPerBrick;
         private readonly bool raiseOpenBricks;
 
@@ -18,11 +28,13 @@ namespace SquidEyes.FxData.Helpers
 
         public event EventHandler<BrickArgs>? OnBrick;
 
-        public RenkoFeed(Session session,
+        public RenkoFeed(Session session, BidOrAsk bidOrAsk,
             Rate ticksPerBrick, bool raiseOpenBricks = false, int bufferSize = 100)
         {
             this.session = session ??
                 throw new ArgumentNullException(nameof(session));
+
+            this.bidOrAsk = bidOrAsk.Validated(nameof(bidOrAsk), v => v.IsEnumValue());
 
             this.ticksPerBrick = ticksPerBrick
                 .Validated(nameof(ticksPerBrick), v => v.IsTicksPerBrick());
@@ -44,7 +56,9 @@ namespace SquidEyes.FxData.Helpers
             if (tick.TickOn.TradeDate != session.TradeDate)
                 throw new ArgumentOutOfRangeException(nameof(tick));
 
-            var point = new Point(tick.TickOn, tick.Mid);
+            var rate = bidOrAsk == BidOrAsk.Bid ? tick.Bid : tick.Ask;
+
+            var point = new Point(tick.TickOn, rate);
 
             Rate GetRate(Rate source, out Rate target) => target = source;
 
@@ -55,16 +69,16 @@ namespace SquidEyes.FxData.Helpers
 
                 var last = bricks[0];
 
-                while (tick.Mid > GetRate(last.High.Rate + ticksPerBrick, out Rate rate))
+                while (rate > GetRate(last.High.Rate + ticksPerBrick, out Rate closeAt))
                 {
                     last = AddAndRaiseClosedBrick(
-                        new Brick(last.High, new Point(tick.TickOn, rate)), tick);
+                        new Brick(last.High, new Point(tick.TickOn, closeAt)), tick);
                 }
 
-                while (tick.Mid < GetRate(last.Low.Rate - ticksPerBrick, out Rate rate))
+                while (rate < GetRate(last.Low.Rate - ticksPerBrick, out Rate closeAt))
                 {
                     last = AddAndRaiseClosedBrick(
-                        new Brick(last.Low, new Point(tick.TickOn, rate)), tick);
+                        new Brick(last.Low, new Point(tick.TickOn, closeAt)), tick);
                 }
             }
 
@@ -74,15 +88,15 @@ namespace SquidEyes.FxData.Helpers
             }
             else if (Count == 0)
             {
-                if (tick.Mid > GetRate(firstPoint.Rate + ticksPerBrick, out Rate rate))
+                if (rate > GetRate(firstPoint.Rate + ticksPerBrick, out Rate closeAt))
                 {
                     AddAndRaiseClosedBrick(
-                        new Brick(firstPoint, new Point(tick.TickOn, rate)), tick);
+                        new Brick(firstPoint, new Point(tick.TickOn, closeAt)), tick);
                 }
-                else if (tick.Mid < GetRate(firstPoint.Rate - ticksPerBrick, out rate))
+                else if (rate < GetRate(firstPoint.Rate - ticksPerBrick, out closeAt))
                 {
                     AddAndRaiseClosedBrick(
-                        new Brick(firstPoint, new Point(tick.TickOn, rate)), tick);
+                        new Brick(firstPoint, new Point(tick.TickOn, closeAt)), tick);
                 }
 
                 AddClosedBricks();
