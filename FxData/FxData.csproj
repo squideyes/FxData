@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SquidEyes.Basics" Version="1.0.18" />
+    <PackageReference Include="SquidEyes.Basics" Version="1.0.19" />
   </ItemGroup>
 
 </Project>
