@@ -11,11 +11,11 @@ using SquidEyes.Basics;
 
 namespace SquidEyes.FxData.Context;
 
-public class Session
+public class Session : IEquatable<Session>
 {
     public Session(TradeDate tradeDate, Market market)
     {
-        TradeDate = tradeDate.Validated(nameof(tradeDate), v => v != default);
+        TradeDate = tradeDate.Validated(nameof(tradeDate), v => !v.IsDefaultValue());
 
         Market = market.Validated(nameof(market), v => v.IsEnumValue());
 
@@ -41,6 +41,24 @@ public class Session
     public TickOn MinTickOn { get; }
     public TickOn MaxTickOn { get; }
 
+    public bool Equals(Session? other)
+    {
+        if (other is null)
+            return false;
+
+        if (ReferenceEquals(this, other))
+            return true;
+
+        if (GetType() != other.GetType())
+            return false;
+
+        return (TradeDate == other.TradeDate) && (Market == other.Market);
+    }
+
+    public override bool Equals(object? other) => Equals(other as Session);
+
+    public override int GetHashCode() => (TradeDate, Market).GetHashCode();
+
     public bool InSession(DateTime value)
     {
         if (value.Kind != DateTimeKind.Unspecified)
@@ -64,4 +82,20 @@ public class Session
 
         return $"{TradeDate} ({Market}: {minTickOn} to {maxTickOn})";
     }
+
+    public static bool operator ==(Session lhs, Session rhs)
+    {
+        if (lhs is null)
+        {
+            if (rhs is null)
+                return true;
+
+            return false;
+        }
+
+        return lhs.Equals(rhs);
+    }
+
+    public static bool operator !=(Session lhs, Session rhs) =>
+        !(lhs == rhs);
 }

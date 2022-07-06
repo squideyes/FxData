@@ -45,14 +45,20 @@ public struct Tick : IEquatable<Tick>
     public string ToCsvString(int digits) =>
         $"{TickOn},{Bid.ToString(digits)},{Ask.ToString(digits)}";
 
-    public bool Equals(Tick other) => TickOn.Equals(other.TickOn)
-        && Bid.Equals(other.Bid) && Ask.Equals(other.Ask);
+    public bool Equals(Tick other) => TickOn == other.TickOn
+        && Bid == other.Bid && Ask == other.Ask;
 
     public override bool Equals(object? other) =>
         other is Tick tick && Equals(tick);
 
     public override int GetHashCode() =>
-        HashCode.Combine(TickOn, Bid, Ask);
+        (TickOn, Bid, Ask).GetHashCode();
+
+    public static bool operator ==(Tick lhs, Tick rhs) =>
+        lhs.Equals(rhs);
+
+    public static bool operator !=(Tick lhs, Tick rhs) =>
+        !(lhs == rhs);
 
     public static Tick Parse(string value, Pair pair, Session session)
     {
@@ -76,10 +82,4 @@ public struct Tick : IEquatable<Tick>
 
         return new Tick(tickOn, bid, ask);
     }
-
-    public static bool operator ==(Tick left, Tick right) =>
-        left.Equals(right);
-
-    public static bool operator !=(Tick left, Tick right) =>
-        !(left == right);
 }

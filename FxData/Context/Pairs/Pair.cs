@@ -41,7 +41,24 @@ public class Pair : IEquatable<Pair>
 
     public float MinValue => OneTick;
 
-    // TODO: improve this
+    public bool Equals(Pair? other)
+    {
+        if (other is null)
+            return false;
+
+        if (ReferenceEquals(this, other))
+            return true;
+
+        if (GetType() != other.GetType())
+            return false;
+
+        return Symbol == other.Symbol;
+    }
+
+    public override bool Equals(object? other) => Equals(other as Session);
+
+    public override int GetHashCode() => Symbol.GetHashCode();
+
     public bool IsRate(float value)
     {
         if (value != Round(value))
@@ -56,19 +73,19 @@ public class Pair : IEquatable<Pair>
 
     public float Round(float value) => MathF.Round(value, Digits);
 
-    public bool Equals(Pair? other)
+    public static bool operator ==(Pair lhs, Pair rhs)
     {
-        if (Equals(other, null))
-            return false;
+        if (lhs is null)
+        {
+            if (rhs is null)
+                return true;
 
-        return Symbol.Equals(other.Symbol);
+            return false;
+        }
+
+        return lhs.Equals(rhs);
     }
 
-    public override bool Equals(object? other) => Equals(other as Pair);
-
-    public override int GetHashCode() => Symbol.GetHashCode();
-
-    public static bool operator ==(Pair left, Pair right) => left.Equals(right);
-
-    public static bool operator !=(Pair left, Pair right) => !(left == right);
+    public static bool operator !=(Pair lhs, Pair rhs) =>
+        !(lhs == rhs);
 }

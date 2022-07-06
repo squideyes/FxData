@@ -40,7 +40,7 @@ public struct TradeDate : IEquatable<TradeDate>, IComparable<TradeDate>
 
     public int CompareTo(TradeDate other) => Value.CompareTo(other.Value);
 
-    public bool Equals(TradeDate other) => Value.Equals(other.Value);
+    public bool Equals(TradeDate other) => Value == other.Value;
 
     public override bool Equals(object? other) =>
         other is TradeDate tradeDate && Equals(tradeDate);
@@ -71,21 +71,21 @@ public struct TradeDate : IEquatable<TradeDate>, IComparable<TradeDate>
         return new TradeDate(value);
     }
 
-    public static bool operator ==(TradeDate left, TradeDate right) =>
-        left.Equals(right);
+    public static bool operator ==(TradeDate lhs, TradeDate rhs) =>
+        lhs.Equals(rhs);
 
-    public static bool operator !=(TradeDate left, TradeDate right) =>
-        !(left == right);
+    public static bool operator !=(TradeDate lhs, TradeDate rhs) =>
+        !(lhs == rhs);
 
-    public static bool operator <(TradeDate left, TradeDate right) =>
-        left.CompareTo(right) < 0;
+    public static bool operator <(TradeDate lhs, TradeDate rhs) =>
+        lhs.CompareTo(rhs) < 0;
 
-    public static bool operator <=(TradeDate left, TradeDate right) =>
-        left.CompareTo(right) <= 0;
+    public static bool operator <=(TradeDate lhs, TradeDate rhs) =>
+        lhs.CompareTo(rhs) <= 0;
 
-    public static bool operator >(TradeDate left, TradeDate right) =>
-        left.CompareTo(right) > 0;
+    public static bool operator >(TradeDate lhs, TradeDate rhs) =>
+        lhs.CompareTo(rhs) > 0;
 
-    public static bool operator >=(TradeDate left, TradeDate right) =>
-        left.CompareTo(right) >= 0;
+    public static bool operator >=(TradeDate lhs, TradeDate rhs) =>
+        lhs.CompareTo(rhs) >= 0;
 }

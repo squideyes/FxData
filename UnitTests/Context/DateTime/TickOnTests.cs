@@ -101,10 +101,10 @@ public class TickOnTests
     [InlineData(Market.Combined)]
     public void GetHashCodeReturnsExpectedResult(Market market)
     {
-        var (left, right) = GetTicksOns(market, 1, 2);
+        var (lhs, rhs) = GetTicksOns(market, 1, 2);
 
-        left.GetHashCode().Should().Be(left.GetHashCode());
-        right.GetHashCode().Should().NotBe(left.GetHashCode());
+        lhs.GetHashCode().Should().Be(lhs.GetHashCode());
+        rhs.GetHashCode().Should().NotBe(lhs.GetHashCode());
     }
 
     ////////////////////////////
@@ -118,9 +118,9 @@ public class TickOnTests
     [InlineData(Market.Combined, false)]
     public void GenericEquals(Market market, bool result)
     {
-        var (left, right) = GetTicksOns(market, 1, 2);
+        var (lhs, rhs) = GetTicksOns(market, 1, 2);
 
-        left.Equals(result ? left : right).Should().Be(result);
+        lhs.Equals(result ? lhs : rhs).Should().Be(result);
     }
 
     ////////////////////////////
@@ -134,9 +134,9 @@ public class TickOnTests
     [InlineData(Market.Combined, false)]
     public void ObjectEquals(Market market, bool result)
     {
-        var (left, right) = GetTicksOns(market, 1, 2);
+        var (lhs, rhs) = GetTicksOns(market, 1, 2);
 
-        left.Equals((object)(result ? left : right)).Should().Be(result);
+        lhs.Equals((object)(result ? lhs : rhs)).Should().Be(result);
     }
 
     ////////////////////////////
@@ -150,9 +150,9 @@ public class TickOnTests
     [InlineData(Market.Combined, false)]
     public void EqualsOperator(Market market, bool result)
     {
-        var (left, right) = GetTicksOns(market, 1, 2);
+        var (lhs, rhs) = GetTicksOns(market, 1, 2);
 
-        (left == (result ? left : right)).Should().Be(result);
+        (lhs == (result ? lhs : rhs)).Should().Be(result);
     }
 
     ////////////////////////////
@@ -166,9 +166,9 @@ public class TickOnTests
     [InlineData(Market.Combined, false)]
     public void NotEqualsOperator(Market market, bool result)
     {
-        var (left, right) = GetTicksOns(market, 1, 2);
+        var (lhs, rhs) = GetTicksOns(market, 1, 2);
 
-        (left != (result ? right : left)).Should().Be(result);
+        (lhs != (result ? rhs : lhs)).Should().Be(result);
     }
 
     ////////////////////////////
@@ -185,9 +185,9 @@ public class TickOnTests
     [InlineData(Market.Combined, 1, 3, true)]
     public void LessThanOperator(Market market, int v1, int v2, bool result)
     {
-        var (left, right) = GetTicksOns(market, v1, v2);
+        var (lhs, rhs) = GetTicksOns(market, v1, v2);
 
-        (left < right).Should().Be(result);
+        (lhs < rhs).Should().Be(result);
     }
 
     ////////////////////////////
@@ -204,9 +204,9 @@ public class TickOnTests
     [InlineData(Market.Combined, 3, 1, true)]
     public void GreaterThanOperator(Market market, int v1, int v2, bool result)
     {
-        var (left, right) = GetTicksOns(market, v1, v2);
+        var (lhs, rhs) = GetTicksOns(market, v1, v2);
 
-        (left > right).Should().Be(result);
+        (lhs > rhs).Should().Be(result);
     }
 
     ////////////////////////////
@@ -226,9 +226,9 @@ public class TickOnTests
     [InlineData(Market.Combined, 2, 1, false)]
     public void LessThanOrEqualToOperator(Market market, int v1, int v2, bool result)
     {
-        var (left, right) = GetTicksOns(market, v1, v2);
+        var (lhs, rhs) = GetTicksOns(market, v1, v2);
 
-        (left <= right).Should().Be(result);
+        (lhs <= rhs).Should().Be(result);
     }
 
     ////////////////////////////
@@ -248,9 +248,9 @@ public class TickOnTests
     [InlineData(Market.Combined, 1, 2, false)]
     public void GreaterThanOrEqualToOperator(Market market, int v1, int v2, bool result)
     {
-        var (left, right) = GetTicksOns(market, v1, v2);
+        var (lhs, rhs) = GetTicksOns(market, v1, v2);
 
-        (left >= right).Should().Be(result);
+        (lhs >= rhs).Should().Be(result);
     }
 
     ////////////////////////////
@@ -267,17 +267,17 @@ public class TickOnTests
     [InlineData(Market.Combined, 3, 2, 1)]
     public void CompareToWithMixedArgs(Market market, int v1, int v2, int result)
     {
-        var (left, right) = GetTicksOns(market, v1, v2);
+        var (lhs, rhs) = GetTicksOns(market, v1, v2);
 
-        left.CompareTo(right).Should().Be(result);
+        lhs.CompareTo(rhs).Should().Be(result);
     }
 
     ////////////////////////////
 
-    private static (TickOn Left, TickOn right) GetTicksOns(
-        Market market, int left, int right)
+    private static (TickOn Left, TickOn rhs) GetTicksOns(
+        Market market, int lhs, int rhs)
     {
-        return (GetTickOn(market, left), GetTickOn(market, right));
+        return (GetTickOn(market, lhs), GetTickOn(market, rhs));
     }
 
     private static TickOn GetTickOn(Market market, int days)

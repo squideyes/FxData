@@ -53,14 +53,14 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
     public float AsFloat(int digits) =>
         FastMath.Round(Value / GetFactor(digits), digits);
 
-    public bool Equals(Rate other) => Value.Equals(other.Value);
-
-    public int CompareTo(Rate other) => Value.CompareTo(other.Value);
+    public bool Equals(Rate other) => Value == other.Value;
 
     public override bool Equals(object? other) =>
         other is Rate rate && Equals(rate);
 
     public override int GetHashCode() => Value.GetHashCode();
+
+    public int CompareTo(Rate other) => Value.CompareTo(other.Value);
 
     public static Rate Parse(string value, int digits) =>
         new(float.Parse(value), digits);
@@ -87,32 +87,32 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
         };
     }
 
-    public static Rate operator +(Rate left, Rate right) =>
-        new(left.Value + right.Value);
+    public static Rate operator +(Rate lhs, Rate rhs) =>
+        new(lhs.Value + rhs.Value);
 
-    public static Rate operator -(Rate left, Rate right) =>
-        new(left.Value - right.Value);
+    public static Rate operator -(Rate lhs, Rate rhs) =>
+        new(lhs.Value - rhs.Value);
 
-    public static Rate operator % (Rate left, Rate right) =>
-        new(left.Value % right.Value);
+    public static Rate operator %(Rate lhs, Rate rhs) =>
+        new(lhs.Value % rhs.Value);
 
-    public static bool operator ==(Rate left, Rate right) =>
-        left.Equals(right);
+    public static bool operator ==(Rate lhs, Rate rhs) =>
+        lhs.Equals(rhs);
 
-    public static bool operator !=(Rate left, Rate right) =>
-        !(left == right);
+    public static bool operator !=(Rate lhs, Rate rhs) =>
+        !(lhs == rhs);
 
-    public static bool operator <(Rate left, Rate right) =>
-        left.CompareTo(right) < 0;
+    public static bool operator <(Rate lhs, Rate rhs) =>
+        lhs.CompareTo(rhs) < 0;
 
-    public static bool operator <=(Rate left, Rate right) =>
-        left.CompareTo(right) <= 0;
+    public static bool operator <=(Rate lhs, Rate rhs) =>
+        lhs.CompareTo(rhs) <= 0;
 
-    public static bool operator >(Rate left, Rate right) =>
-        left.CompareTo(right) > 0;
+    public static bool operator >(Rate lhs, Rate rhs) =>
+        lhs.CompareTo(rhs) > 0;
 
-    public static bool operator >=(Rate left, Rate right) =>
-        left.CompareTo(right) >= 0;
+    public static bool operator >=(Rate lhs, Rate rhs) =>
+        lhs.CompareTo(rhs) >= 0;
 
     public static implicit operator Rate(int value) => new(value);
 }

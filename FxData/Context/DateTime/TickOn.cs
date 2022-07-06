@@ -36,7 +36,7 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     public int CompareTo(TickOn other) => Value.CompareTo(other.Value);
 
-    public bool Equals(TickOn other) => Value.Equals(other.Value);
+    public bool Equals(TickOn other) => Value == other.Value;
 
     public override bool Equals(object? other) =>
         other is TickOn tickOn && Equals(tickOn);
@@ -46,21 +46,21 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
     public static TickOn Parse(string value, Session session) =>
         new(DateTime.Parse(value), session);
 
-    public static bool operator ==(TickOn left, TickOn right) =>
-        left.Equals(right);
+    public static bool operator ==(TickOn lhs, TickOn rhs) =>
+        lhs.Equals(rhs);
 
-    public static bool operator !=(TickOn left, TickOn right) =>
-        !(left == right);
+    public static bool operator !=(TickOn lhs, TickOn rhs) =>
+        !(lhs == rhs);
 
-    public static bool operator <(TickOn left, TickOn right) =>
-        left.CompareTo(right) < 0;
+    public static bool operator <(TickOn lhs, TickOn rhs) =>
+        lhs.CompareTo(rhs) < 0;
 
-    public static bool operator <=(TickOn left, TickOn right) =>
-        left.CompareTo(right) <= 0;
+    public static bool operator <=(TickOn lhs, TickOn rhs) =>
+        lhs.CompareTo(rhs) <= 0;
 
-    public static bool operator >(TickOn left, TickOn right) =>
-        left.CompareTo(right) > 0;
+    public static bool operator >(TickOn lhs, TickOn rhs) =>
+        lhs.CompareTo(rhs) > 0;
 
-    public static bool operator >=(TickOn left, TickOn right) =>
-        left.CompareTo(right) >= 0;
+    public static bool operator >=(TickOn lhs, TickOn rhs) =>
+        lhs.CompareTo(rhs) >= 0;
 }
