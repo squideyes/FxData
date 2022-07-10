@@ -50,7 +50,7 @@ namespace SquidEyes.FxData.Helpers
 
         public void HandleTick(Tick tick)
         {
-            if (tick == default)
+            if (tick.IsDefaultValue())
                 throw new ArgumentNullException(nameof(tick));
 
             if (tick.TickOn.TradeDate != session.TradeDate)
@@ -82,7 +82,7 @@ namespace SquidEyes.FxData.Helpers
                 }
             }
 
-            if (firstPoint == default)
+            if (firstPoint.IsDefaultValue())
             {
                 firstPoint = point;
             }

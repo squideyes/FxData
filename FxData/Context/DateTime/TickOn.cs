@@ -7,13 +7,15 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
+using SquidEyes.Basics;
+
 namespace SquidEyes.FxData.Context;
 
 public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 {
     public TickOn(DateTime value, Session session)
     {
-        if (session == null)
+        if (session.IsDefaultValue())
             throw new ArgumentNullException(nameof(session));
 
         if (!session.InSession(value))
@@ -28,7 +30,7 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     public DateTime Value { get; private set; }
 
-    public bool IsEmpty => Value == default;
+    public bool IsEmpty => Value.IsDefaultValue();
 
     public TradeDate TradeDate => new(DateOnly.FromDateTime(Value.Date));
 

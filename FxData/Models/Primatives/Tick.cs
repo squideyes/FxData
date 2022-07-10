@@ -29,7 +29,7 @@ public struct Tick : IEquatable<Tick>
 
     public Rate Spread => new(Ask.Value - Bid.Value);
 
-    public bool IsEmpty => TickOn == default;
+    public bool IsEmpty => TickOn.IsDefaultValue();
 
     public bool InSession(Session session) => session.InSession(TickOn);
 

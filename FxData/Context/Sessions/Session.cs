@@ -69,7 +69,7 @@ public class Session : IEquatable<Session>
 
     public bool InSession(TickOn tickOn)
     {
-        if (tickOn == default)
+        if (tickOn.IsDefaultValue())
             throw new ArgumentOutOfRangeException(nameof(tickOn));
 
         return tickOn >= MinTickOn && tickOn <= MaxTickOn;

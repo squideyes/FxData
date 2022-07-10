@@ -59,7 +59,7 @@ public class TickSet : ListBase<Tick>
 
     public void Add(Tick tick)
     {
-        if (tick == default)
+        if (tick.IsDefaultValue())
             throw new ArgumentOutOfRangeException(nameof(tick));
 
         if (!Session.InSession(tick.TickOn))

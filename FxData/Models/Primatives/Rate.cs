@@ -7,6 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
+using SquidEyes.Basics;
 using SquidEyes.FxData.Helpers;
 
 namespace SquidEyes.FxData.Models;
@@ -36,7 +37,7 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 
     public int Value { get; }
 
-    public bool IsEmpty => Value == default;
+    public bool IsEmpty => Value.IsDefaultValue();
 
     public override string ToString() => Value.ToString();
 
