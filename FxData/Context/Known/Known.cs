@@ -16,6 +16,13 @@ namespace SquidEyes.FxData.Context;
 
 public static class Known
 {
+    public static class UnitsPerLot
+    {
+        public const int Standard = 100000;
+        public const int Mini = 10000;
+        public const int Micro = 1000;
+    }
+
     public const int MinYear = 2016;
     public const int MaxYear = 2028;
 
