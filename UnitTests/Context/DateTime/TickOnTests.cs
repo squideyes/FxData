@@ -9,11 +9,11 @@
 
 using FluentAssertions;
 using SquidEyes.Basics;
-using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Models;
 using System;
 using Xunit;
 
-namespace SquidEyes.UnitTests.Context;
+namespace SquidEyes.UnitTests;
 
 public class TickOnTests
 {

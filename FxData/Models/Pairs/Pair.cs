@@ -9,7 +9,7 @@
 
 using SquidEyes.Basics;
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
 public class Pair : IEquatable<Pair>
 {
@@ -55,7 +55,8 @@ public class Pair : IEquatable<Pair>
         return Symbol == other.Symbol;
     }
 
-    public override bool Equals(object? other) => Equals(other as Session);
+    public override bool Equals(object? other) => 
+        Equals(other as Pair);
 
     public override int GetHashCode() => Symbol.GetHashCode();
 

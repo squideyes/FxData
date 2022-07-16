@@ -8,12 +8,12 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Models;
 using System;
 using Xunit;
-using static SquidEyes.FxData.Context.Market;
+using static SquidEyes.FxData.Models.Market;
 
-namespace SquidEyes.UnitTests.Context;
+namespace SquidEyes.UnitTests;
 
 public class SessionTests
 {

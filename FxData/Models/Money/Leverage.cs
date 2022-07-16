@@ -1,4 +1,4 @@
-﻿// ********************************************************
+// ********************************************************
 // Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
 //
 // This file is part of SquidEyes.FxData
@@ -7,10 +7,13 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
-public enum Side
+public enum Leverage
 {
-    Buy = 1,
-    Sell
+    TenToOne = 10,
+    TwentyToOne = 20,
+    ThirtyToOne = 30,
+    FortyToOne = 40,
+    FiftyToOne = 50
 }

@@ -9,26 +9,25 @@
 
 using FluentAssertions;
 using SquidEyes.Basics;
-using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Models;
 using System;
-using System.Security.Principal;
 using Xunit;
 
-namespace SquidEyes.UnitTests.FxData;
+namespace SquidEyes.UnitTests;
 
 public class TickTests
 {
     [Fact]
-    public void ConstructWithGoodArgs() => _ = new Tick(GetTickOn(), 1, 2);
+    public void ConstructWithGoodArgs() => 
+        _ = new Tick(GetTickOn(), Rate.From(1), Rate.From(2));
 
     ////////////////////////////
 
     [Theory]
-    [InlineData(false, Rate.MIN_VALUE, Rate.MAX_VALUE)]
-    [InlineData(true, Rate.MIN_VALUE - 1, Rate.MAX_VALUE)]
-    [InlineData(true, Rate.MIN_VALUE, Rate.MAX_VALUE + 1)]
-    [InlineData(true, Rate.MIN_VALUE + 1, Rate.MIN_VALUE)]
+    [InlineData(false, Rate.Minimum, Rate.Maximum)]
+    [InlineData(true, Rate.Minimum - 1, Rate.Maximum)]
+    [InlineData(true, Rate.Minimum, Rate.Maximum + 1)]
+    [InlineData(true, Rate.Minimum + 1, Rate.Minimum)]
     public void ConstructWithBadArgs(bool goodTickOn, int bid, int ask)
     {
         TickOn tickOn;
@@ -38,8 +37,9 @@ public class TickTests
         else
             tickOn = default;
 
-        FluentActions.Invoking(() => _ = new Tick(tickOn,
-            bid, ask)).Should().Throw<ArgumentException>();
+        FluentActions.Invoking(() => _ = new Tick(tickOn, 
+            Rate.From(bid), Rate.From(ask)))
+                .Should().Throw<ArgumentException>();
     }
 
     ////////////////////////////
@@ -48,7 +48,8 @@ public class TickTests
     public void ConstructWithDefaultBid()
     {
         FluentActions.Invoking(() => _ = new Tick(GetTickOn(),
-            default, Rate.MIN_VALUE)).Should().Throw<ArgumentException>();
+            default, Rate.From(Rate.Minimum)))
+                .Should().Throw<ArgumentException>();
     }
 
     ////////////////////////////
@@ -57,7 +58,8 @@ public class TickTests
     public void ConstructWithDefaultAsk()
     {
         FluentActions.Invoking(() => _ = new Tick(GetTickOn(),
-            Rate.MIN_VALUE, default)).Should().Throw<ArgumentException>();
+            Rate.From(Rate.Minimum), default))
+                .Should().Throw<ArgumentException>();
     }
 
     ////////////////////////////
@@ -103,7 +105,7 @@ public class TickTests
     public void SpreadSetCorrectly(int bidValue, int askValue, int result)
     {
         GetTick(bidValue, askValue)
-            .AsFunc(x => x.Spread.Should().Be(result));
+            .AsFunc(x => x.Spread.Should().Be(Rate.From(result)));
     }
 
     ////////////////////////////
@@ -190,8 +192,8 @@ public class TickTests
             "01/04/2016 03:00:00.000,0.00001,9.99999", Known.Pairs[Symbol.EURUSD], session);
 
         tick.TickOn.Should().Be(new TickOn(new DateTime(2016, 1, 4, 3, 0, 0, 0), session));
-        tick.Bid.Should().Be(1);
-        tick.Ask.Should().Be(999999);
+        tick.Bid.Should().Be(Rate.From(1));
+        tick.Ask.Should().Be(Rate.From(999999));
     }
 
     ////////////////////////////   
@@ -231,5 +233,5 @@ public class TickTests
         new Session(Known.MinTradeDate, Market.NewYork).MinTickOn;
 
     private static Tick GetTick(int bidValue, int askValue) =>
-        new(GetTickOn(), bidValue, askValue);
+        new(GetTickOn(), Rate.From(bidValue), Rate.From(askValue));
 }

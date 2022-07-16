@@ -7,12 +7,12 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.Context
+namespace SquidEyes.FxData.Models;
+
+public enum Currency
 {
-    public enum Market
-    {
-        NewYork = 1,
-        London, 
-        Combined
-    }
+    EUR = 1,
+    GBP,
+    JPY,
+    USD
 }

@@ -8,13 +8,13 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace SquidEyes.UnitTests.Context;
+namespace SquidEyes.UnitTests;
 
 public class KnownTests
 {

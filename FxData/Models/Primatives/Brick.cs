@@ -25,12 +25,15 @@ public class Brick
 
     public Point Low => Trend == Trend.Up ? Open : Close;
 
-    public Rate TicksPerBrick => Math.Abs(Open.Rate.Value - Close.Rate.Value);
+    public Rate TicksPerBrick =>
+        Rate.From(Math.Abs((int)Open.Rate - (int)Close.Rate));
 
-    public Trend Trend => (Open.Rate < Close.Rate) ? Trend.Up : Trend.Down;
+    public Trend Trend => 
+        (Open.Rate < Close.Rate) ? Trend.Up : Trend.Down;
+
+    public string ToCsvString() => 
+        $"{Open.ToCsvString()},{Close.ToCsvString()}";
 
     public override string ToString() =>
         $"{Open.Rate} to {Close.Rate} ({Open.TickOn} to {Close.TickOn})";
-
-    public string ToCsvString() => $"{Open.ToCsvString()},{Close.ToCsvString()}";
 }

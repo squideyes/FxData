@@ -9,10 +9,10 @@
 
 using SquidEyes.Basics;
 using System.Collections.Immutable;
-using static SquidEyes.FxData.Context.Symbol;
+using static SquidEyes.FxData.Models.Symbol;
 using static System.DayOfWeek;
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
 public static class Known
 {

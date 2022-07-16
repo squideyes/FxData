@@ -14,28 +14,14 @@ namespace SquidEyes.FxData.Models;
 
 public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 {
-    public const int MIN_VALUE = 1;
-    public const int MAX_VALUE = 999999;
+    public const int Minimum = 1;
+    public const int Maximum = 999999;
 
-    public Rate()
-        : this(MIN_VALUE)
-    {
-    }
+    public Rate() => Value = Minimum;
 
-    public Rate(int value)
-    {
-        if (value < MIN_VALUE || value > MAX_VALUE)
-            throw new ArgumentOutOfRangeException(nameof(value));
+    private Rate(int value) => Value = value;
 
-        Value = value;
-    }
-
-    public Rate(float value, int digits)
-        : this((int)FastMath.Round(value * GetFactor(digits)))
-    {
-    }
-
-    public int Value { get; }
+    internal int Value { get; }
 
     public bool IsEmpty => Value.IsDefaultValue();
 
@@ -63,8 +49,19 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 
     public int CompareTo(Rate other) => Value.CompareTo(other.Value);
 
+    public static Rate From(int value)
+    {
+        if (value < Minimum || value > Maximum)
+            throw new ArgumentOutOfRangeException(nameof(value));
+
+        return new Rate(value);
+    }
+
+    public static Rate From(float value, int digits) =>
+        From((int)FastMath.Round(value * GetFactor(digits)));
+
     public static Rate Parse(string value, int digits) =>
-        new(float.Parse(value), digits);
+        From(float.Parse(value), digits);
 
     public static bool IsRate(float value, int digits)
     {
@@ -115,5 +112,5 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
     public static bool operator >=(Rate lhs, Rate rhs) =>
         lhs.CompareTo(rhs) >= 0;
 
-    public static implicit operator Rate(int value) => new(value);
+    public static implicit operator int(Rate rate) => rate.Value;
 }

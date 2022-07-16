@@ -7,11 +7,11 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Helpers;
 using SquidEyes.FxData.Models;
 using System.Collections.Generic;
 
-namespace SquidEyes.UnitTests.Context;
+namespace SquidEyes.UnitTests;
 
 internal static class MoneyData
 {
@@ -23,10 +23,12 @@ internal static class MoneyData
         {
             var usdValueOf = new UsdValueOf(bidOrAsk);
 
-            var session = new Session(new TradeDate(2020, 1, 6), Market.NewYork);
+            var session = new Session(
+                new TradeDate(2020, 1, 6), Market.NewYork);
 
             void Update(Pair pair, int bid, int ask) =>
-                usdValueOf!.Update(pair, new Tick(session.MinTickOn, bid, ask));
+                usdValueOf!.Update(pair, new Tick(
+                    session.MinTickOn, Rate.From(bid), Rate.From(ask)));
 
             Update(Known.Pairs[Symbol.EURUSD], 113460, 113480);
             Update(Known.Pairs[Symbol.GBPUSD], 135370, 135380);

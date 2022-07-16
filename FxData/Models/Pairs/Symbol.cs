@@ -7,13 +7,11 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
-public enum Leverage
+public enum Symbol
 {
-    TenToOne = 10,
-    TwentyToOne = 20,
-    ThirtyToOne = 30,
-    FortyToOne = 40,
-    FiftyToOne = 50
+    EURUSD = 1,
+    GBPUSD,
+    USDJPY
 }

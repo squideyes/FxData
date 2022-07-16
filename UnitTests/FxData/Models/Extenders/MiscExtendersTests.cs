@@ -8,13 +8,12 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Helpers;
 using SquidEyes.FxData.Models;
 using System;
 using Xunit;
 
-namespace SquidEyes.UnitTests.FxData;
+namespace SquidEyes.UnitTests;
 
 public class MiscExtendersTests
 {
@@ -55,7 +54,7 @@ public class MiscExtendersTests
     {
         var session = new Session(Known.MinTradeDate, Market.Combined);
 
-        var tick = new Tick(session.MinTickOn, 1, 2);
+        var tick = new Tick(session.MinTickOn, Rate.From(1), Rate.From(2));
 
         FluentActions.Invoking(() => tick.ToRate(0))
             .Should().Throw<ArgumentOutOfRangeException>();

@@ -9,12 +9,12 @@
 
 using FluentAssertions;
 using SquidEyes.Basics;
-using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Models;
 using System;
 using Xunit;
-using static SquidEyes.FxData.Context.Symbol;
+using static SquidEyes.FxData.Models.Symbol;
 
-namespace SquidEyes.UnitTests.Context;
+namespace SquidEyes.UnitTests;
 
 public class PairTests
 {

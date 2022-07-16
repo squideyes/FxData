@@ -8,7 +8,6 @@
 // ********************************************************
 
 using SquidEyes.Basics;
-using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Helpers;
 using System.IO.Compression;
 using System.Text;
@@ -257,8 +256,8 @@ public class TickSet : ListBase<Tick>
             foreach (var fields in new CsvEnumerator(stream, 3))
             {
                 var tickOn = new TickOn(DateTime.Parse(fields[0]), Session);
-                var bid = new Rate(float.Parse(fields[1]), Pair.Digits);
-                var ask = new Rate(float.Parse(fields[2]), Pair.Digits);
+                var bid = Rate.From(float.Parse(fields[1]), Pair.Digits);
+                var ask = Rate.From(float.Parse(fields[2]), Pair.Digits);
 
                 Add(new Tick(tickOn, bid, ask));
             }
@@ -302,8 +301,8 @@ public class TickSet : ListBase<Tick>
                 return;
 
             var tickOn = new TickOn(new DateTime(reader.ReadInt64()));
-            var bid = new Rate(reader.ReadInt32());
-            var ask = new Rate(reader.ReadInt32());
+            var bid = Rate.From(reader.ReadInt32());
+            var ask = Rate.From(reader.ReadInt32());
 
             var lastTick = new Tick(tickOn, bid, ask);
 
@@ -366,9 +365,9 @@ public class TickSet : ListBase<Tick>
 
         var askDelta = (askData & mask) * ((askData & negative) == negative ? -1 : 1);
 
-        var bid = new Rate(lastTick.Bid.Value + bidDelta);
+        var bid = Rate.From(lastTick.Bid.Value + bidDelta);
 
-        var ask = new Rate(lastTick.Ask.Value + askDelta);
+        var ask = Rate.From(lastTick.Ask.Value + askDelta);
 
         return (bid, ask);
     }
@@ -380,10 +379,10 @@ public class TickSet : ListBase<Tick>
     }
 
     private static Rate ReadBid(BinaryReader reader, byte header, Tick lastTick) =>
-        new(lastTick.Bid.Value + ReadValue(reader, header, 0b0000_1100, 2));
+        Rate.From(lastTick.Bid.Value + ReadValue(reader, header, 0b0000_1100, 2));
 
     private static Rate ReadAsk(BinaryReader reader, byte header, Tick lastTick) =>
-        new(lastTick.Ask.Value + ReadValue(reader, header, 0b0000_0011, 0));
+        Rate.From(lastTick.Ask.Value + ReadValue(reader, header, 0b0000_0011, 0));
 
     private static byte GetTickOnFlags(int value) =>
         GetFlags(value, TickOn1, TickOn2, TickOn4);

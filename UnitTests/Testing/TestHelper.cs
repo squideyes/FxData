@@ -8,7 +8,6 @@
 // ********************************************************
 
 using SquidEyes.Basics;
-using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Models;
 using System;
 using static SquidEyes.UnitTests.Properties.TestData;
@@ -51,8 +50,8 @@ internal static class TestHelper
             foreach (var fields in new CsvEnumerator(csv.ToStream(), 3))
             {
                 var tickOn = new TickOn(DateTime.Parse(fields[0]), tickSet.Session);
-                var bid = new Rate(float.Parse(fields[1]), pair.Digits);
-                var ask = new Rate(float.Parse(fields[2]), pair.Digits);
+                var bid = Rate.From(float.Parse(fields[1]), pair.Digits);
+                var ask = Rate.From(float.Parse(fields[2]), pair.Digits);
 
                 tickSet.Add(new Tick(tickOn, bid, ask));
             }

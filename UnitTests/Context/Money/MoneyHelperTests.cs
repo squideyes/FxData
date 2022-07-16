@@ -8,11 +8,12 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Helpers;
+using SquidEyes.FxData.Models;
 using System.Collections.Generic;
 using Xunit;
 
-namespace SquidEyes.UnitTests.Context;
+namespace SquidEyes.UnitTests;
 
 public class MoneyHelperTests
 {
@@ -42,8 +43,8 @@ public class MoneyHelperTests
         var helper = new MoneyHelper(
             MoneyData.GetUsdValueOf(BidOrAsk.Ask), new MinMargin());
 
-        var actual = helper.GetPNL(
-            Known.Pairs[symbol], side, 100000, entry, exit);
+        var actual = helper.GetPNL(Known.Pairs[symbol], side, 
+            100000, Rate.From(entry), Rate.From(exit));
 
         actual.Should().Be(expected);
     }

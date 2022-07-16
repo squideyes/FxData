@@ -10,7 +10,7 @@
 using Fclp;
 using SquidEyes.Basics;
 using SquidEyes.FxData.DukasFetch;
-using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Models;
 
 if (!TryGetSettings(out Settings? settings))
     return;

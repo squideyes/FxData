@@ -12,7 +12,7 @@ using SquidEyes.FxData.Models;
 using System;
 using Xunit;
 
-namespace SquidEyes.UnitTests.FxData;
+namespace SquidEyes.UnitTests;
 
 public class RateTests
 {
@@ -23,7 +23,7 @@ public class RateTests
     [InlineData(3, 999999, 999.999f)]
     public void IntConstructorWithGoodArg(int digits, int intValue, float floatValue)
     {
-        var rate = new Rate(intValue);
+        var rate = Rate.From(intValue);
 
         rate.Value.Should().Be(intValue);
         rate.AsFloat(digits).Should().Be(floatValue);
@@ -40,7 +40,7 @@ public class RateTests
     [InlineData(3, 999999, 999.999f)]
     public void FloatConstructorWithGoodArgs(int digits, int intValue, float floatValue)
     {
-        var rate = new Rate(floatValue, digits);
+        var rate = Rate.From(floatValue, digits);
 
         rate.Value.Should().Be(intValue);
         rate.AsFloat(digits).Should().Be(floatValue);
@@ -55,7 +55,7 @@ public class RateTests
     {
         var rate = new Rate();
 
-        rate.Should().Be(new Rate(1));
+        rate.Should().Be(Rate.From(1));
         rate.Value.Should().Be(1);
         rate.IsEmpty.Should().Be(false);
     }
@@ -65,7 +65,7 @@ public class RateTests
     [Fact]
     public void ToStringWithBadDigitsThrowsError()
     {
-        FluentActions.Invoking(() => new Rate(Rate.MIN_VALUE).ToString(4))
+        FluentActions.Invoking(() => Rate.From(Rate.Minimum).ToString(4))
             .Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -96,7 +96,7 @@ public class RateTests
     [InlineData(1000000)]
     public void IntConstructorWithBadArg(int value)
     {
-        FluentActions.Invoking(() => _ = new Rate(value))
+        FluentActions.Invoking(() => _ = Rate.From(value))
             .Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -109,7 +109,7 @@ public class RateTests
     [InlineData(0.001f, 0)]
     public void FloatConstructorWithBadArgs(float value, int digits)
     {
-        FluentActions.Invoking(() => _ = new Rate(value, digits))
+        FluentActions.Invoking(() => _ = Rate.From(value, digits))
             .Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -131,16 +131,16 @@ public class RateTests
 
     [Fact]
     public void RateNotEqualToNullRate() =>
-          new Rate(1).Equals(null).Should().BeFalse();
+          Rate.From(1).Equals(null).Should().BeFalse();
 
     //////////////////////////
 
     [Fact]
     public void GetHashCodeReturnsExpectedResult()
     {
-        new Rate(1).GetHashCode().Should().Be(new Rate(1).GetHashCode());
+        Rate.From(1).GetHashCode().Should().Be(Rate.From(1).GetHashCode());
 
-        new Rate(1).GetHashCode().Should().NotBe(new Rate(2).GetHashCode());
+        Rate.From(1).GetHashCode().Should().NotBe(Rate.From(2).GetHashCode());
     }
 
     //////////////////////////
@@ -148,38 +148,38 @@ public class RateTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void GenericEquals(bool result) => new Rate(1)
-        .Equals(result ? new Rate(1) : new Rate(2)).Should().Be(result);
+    public void GenericEquals(bool result) => Rate.From(1)
+        .Equals(result ? Rate.From(1) : Rate.From(2)).Should().Be(result);
 
     //////////////////////////
 
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void ObjectEqualsWithGoodRates(bool result) => new Rate(1)
-        .Equals(result ? new Rate(1) : new Rate(2)).Should().Be(result);
+    public void ObjectEqualsWithGoodRates(bool result) => Rate.From(1)
+        .Equals(result ? Rate.From(1) : Rate.From(2)).Should().Be(result);
 
     //////////////////////////
 
     [Fact]
     public void ObjectEqualsWithNullRate() =>
-        new Rate(1).Equals(null).Should().BeFalse();
+        Rate.From(1).Equals(null).Should().BeFalse();
 
     //////////////////////////
 
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void EqualsOperator(bool result) => (new Rate(1)
-        == (result ? new Rate(1) : new Rate(2))).Should().Be(result);
+    public void EqualsOperator(bool result) => (Rate.From(1)
+        == (result ? Rate.From(1) : Rate.From(2))).Should().Be(result);
 
     //////////////////////////
 
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void NotEqualsOperator(bool result) => (new Rate(1)
-        != (result ? new Rate(2) : new Rate(1))).Should().Be(result);
+    public void NotEqualsOperator(bool result) => (Rate.From(1)
+        != (result ? Rate.From(2) : Rate.From(1))).Should().Be(result);
 
     //////////////////////////
 
@@ -188,19 +188,19 @@ public class RateTests
     [InlineData(2, 2, 0)]
     [InlineData(3, 2, 1)]
     public void CompareToWithMixedArgs(int v1, int v2, int result) =>
-        new Rate(v1).CompareTo(new Rate(v2)).Should().Be(result);
+        Rate.From(v1).CompareTo(Rate.From(v2)).Should().Be(result);
 
     //////////////////////////
 
     [Fact]
     public void AddOperator() =>
-        (new Rate(1) + new Rate(2)).Should().Be(new Rate(3));
+        (Rate.From(1) + Rate.From(2)).Should().Be(Rate.From(3));
 
     //////////////////////////
 
     [Fact]
     public void SubtractOperator() =>
-        (new Rate(3) - new Rate(2)).Should().Be(new Rate(1));
+        (Rate.From(3) - Rate.From(2)).Should().Be(Rate.From(1));
 
     //////////////////////////
 
@@ -209,7 +209,7 @@ public class RateTests
     [InlineData(2, 3, true)]
     [InlineData(1, 3, true)]
     public void LessThanOperator(int v1, int v2, bool result) =>
-        (new Rate(v1) < new Rate(v2)).Should().Be(result);
+        (Rate.From(v1) < Rate.From(v2)).Should().Be(result);
 
     //////////////////////////
 
@@ -218,7 +218,7 @@ public class RateTests
     [InlineData(2, 1, true)]
     [InlineData(3, 1, true)]
     public void GreaterThanOperator(int v1, int v2, bool result) =>
-        (new Rate(v1) > new Rate(v2)).Should().Be(result);
+        (Rate.From(v1) > Rate.From(v2)).Should().Be(result);
 
     //////////////////////////
 
@@ -228,7 +228,7 @@ public class RateTests
     [InlineData(2, 2, true)]
     [InlineData(2, 1, false)]
     public void LessThanOrEqualToOperator(int v1, int v2, bool result) =>
-        (new Rate(v1) <= new Rate(v2)).Should().Be(result);
+        (Rate.From(v1) <= Rate.From(v2)).Should().Be(result);
 
     //////////////////////////
 
@@ -238,24 +238,24 @@ public class RateTests
     [InlineData(2, 2, true)]
     [InlineData(1, 2, false)]
     public void GreaterThanOrEqualToOperator(int v1, int v2, bool result) =>
-        (new Rate(v1) >= new Rate(v2)).Should().Be(result);
+        (Rate.From(v1) >= Rate.From(v2)).Should().Be(result);
 
     //////////////////////////
 
     [Theory]
-    [InlineData(Rate.MIN_VALUE)]
-    [InlineData(Rate.MAX_VALUE)]
+    [InlineData(Rate.Minimum)]
+    [InlineData(Rate.Maximum)]
     public void IntToRateToOperatorWithGoodArg(int value) =>
-        ((Rate)value).Value.Should().Be(value);
+        Rate.From(value).Value.Should().Be(value);
 
     //////////////////////////
 
     [Theory]
-    [InlineData(Rate.MAX_VALUE + 1)]
-    [InlineData(Rate.MIN_VALUE - 1)]
+    [InlineData(Rate.Maximum + 1)]
+    [InlineData(Rate.Minimum - 1)]
     public void IntToRateToOperatorWithBadArg(int value)
     {
-        FluentActions.Invoking(() => _ = (Rate)value)
+        FluentActions.Invoking(() => _ = Rate.From(value))
             .Should().Throw<ArgumentOutOfRangeException>();
     }
 }

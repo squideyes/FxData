@@ -7,11 +7,10 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
-public enum Symbol
+public enum BidOrAsk
 {
-    EURUSD = 1,
-    GBPUSD,
-    USDJPY
+    Bid = 1,
+    Ask
 }

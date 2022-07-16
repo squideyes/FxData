@@ -8,14 +8,13 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Helpers;
 using SquidEyes.FxData.Models;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace SquidEyes.UnitTests.FxData;
+namespace SquidEyes.UnitTests;
 
 public class RenkoFeedTests
 {
@@ -29,8 +28,8 @@ public class RenkoFeedTests
         var feed = GetFeed(true, bidOrAsk);
 
         void Validate(int expectedTickId, int expectedClosedBrickCount,
-            BrickArgs args, int tickSeconds, Rate tickRate, int openSeconds,
-            Rate openRate, int closeSeconds, Rate closeRate, bool isClosed)
+            BrickArgs args, int tickSeconds, int tickRate, int openSeconds,
+            int openRate, int closeSeconds, int closeRate, bool isClosed)
         {
             if (tickId != expectedTickId)
                 return;
@@ -39,17 +38,18 @@ public class RenkoFeedTests
 
             TickOn GetTickOn(int seconds) => new(minTickOn.AddSeconds(seconds));
 
-            Rate Adjust(Rate value) => bidOrAsk == BidOrAsk.Bid ? value : value + 2;
+            Rate Adjust(Rate value) => 
+                bidOrAsk == BidOrAsk.Bid ? value : value + Rate.From(2);
 
             var rate = bidOrAsk == BidOrAsk.Bid ? args.Tick.Bid : args.Tick.Ask;
 
             closedBrickCount.Should().Be(expectedClosedBrickCount);
             args.Tick.TickOn.Should().Be(GetTickOn(tickSeconds));
-            rate.Should().Be(Adjust(tickRate));
+            rate.Should().Be(Adjust(Rate.From(tickRate)));
             args.Brick.Open.TickOn.Should().Be(GetTickOn(openSeconds));
-            args.Brick.Open.Rate.Should().Be(Adjust(openRate));
+            args.Brick.Open.Rate.Should().Be(Adjust(Rate.From(openRate)));
             args.Brick.Close.TickOn.Should().Be(GetTickOn(closeSeconds));
-            args.Brick.Close.Rate.Should().Be(Adjust(closeRate));
+            args.Brick.Close.Rate.Should().Be(Adjust(Rate.From(closeRate)));
             args.IsClosed.Should().Be(isClosed);
         }
 
@@ -157,13 +157,14 @@ public class RenkoFeedTests
 
         var session = new Session(tradeDate, Market.NewYork);
 
-        return new RenkoFeed(session, bidOrAsk, 20, raiseOpenBricks);
+        return new RenkoFeed(
+            session, bidOrAsk, Rate.From(20), raiseOpenBricks);
     }
 
     private static List<Tick> GetTicks()
     {
-        static Tick GetTick(DateTime dateTime, Rate bid) =>
-            new(new TickOn(dateTime), bid, bid + 2);
+        static Tick GetTick(DateTime dateTime, int bid) =>
+            new(new TickOn(dateTime), Rate.From(bid), Rate.From(bid + 2));
 
         return new List<Tick>
         {

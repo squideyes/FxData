@@ -9,7 +9,7 @@
 
 using SquidEyes.Basics;
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
 public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 {

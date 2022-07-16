@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
 public static class MarketExtenders
 {

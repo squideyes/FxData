@@ -10,7 +10,7 @@
 using SquidEyes.Basics;
 using SquidEyes.FxData.Models;
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Helpers;
 
 public class MoneyHelper
 {
@@ -82,6 +82,6 @@ public class MoneyHelper
         if (pair.Base != Currency.USD && pair.Quote == Currency.JPY)
             margin /= 100.0;
 
-        return Math.Round(margin + (margin * cushion), 2);
+        return Math.Round(margin + margin * cushion, 2);
     }
 }

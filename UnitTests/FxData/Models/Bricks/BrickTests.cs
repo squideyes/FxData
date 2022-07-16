@@ -14,7 +14,7 @@
 //using FluentAssertions;
 //using SquidEyes.Basics;
 
-//namespace SquidEyes.UnitTests.FxData;
+//namespace SquidEyes.UnitTests;
 
 //public class BrickTests
 //{

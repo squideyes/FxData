@@ -8,10 +8,10 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.FxData.Context;
+using SquidEyes.FxData.Models;
 using Xunit;
 
-namespace SquidEyes.UnitTests.Context;
+namespace SquidEyes.UnitTests;
 
 public class UsdValueOfTests
 {
@@ -29,6 +29,6 @@ public class UsdValueOfTests
     {
         var usdValueOf = MoneyData.GetUsdValueOf(bidOrAsk);
 
-        usdValueOf.GetRateInUsd(currency).Should().Be(rate);
+        ((int)usdValueOf.GetRateInUsd(currency)).Should().Be(rate);
     }
 }

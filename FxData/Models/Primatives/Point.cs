@@ -7,8 +7,6 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.FxData.Context;
-
 namespace SquidEyes.FxData.Models;
 
 public class Point

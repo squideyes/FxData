@@ -9,7 +9,6 @@
 
 using Be.IO;
 using SquidEyes.Basics;
-using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Models;
 using System.Text;
 
@@ -29,7 +28,7 @@ internal class Fetcher
     public async Task<(bool Success, List<Tick> Ticks)> GetTicksAsync(
         int hour, CancellationToken cancellationToken)
     {
-        Rate ToRate(int value) => new(MathF.Round(
+        Rate ToRate(int value) => Rate.From(MathF.Round(
             value / TickSet.Pair.Factor, TickSet.Pair.Digits), TickSet.Pair.Digits);
 
         var response = await client.GetAsync(GetUri(hour), cancellationToken);

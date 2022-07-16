@@ -9,7 +9,7 @@
 
 using SquidEyes.Basics;
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
 public class Session : IEquatable<Session>
 {

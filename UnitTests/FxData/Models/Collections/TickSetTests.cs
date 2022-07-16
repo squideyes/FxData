@@ -9,7 +9,6 @@
 
 using FluentAssertions;
 using SquidEyes.Basics;
-using SquidEyes.FxData.Context;
 using SquidEyes.FxData.Models;
 using SquidEyes.UnitTests.Testing;
 using System;
@@ -18,10 +17,17 @@ using System.Globalization;
 using System.IO;
 using Xunit;
 
-namespace SquidEyes.UnitTests.FxData;
+namespace SquidEyes.UnitTests;
 
-public class TickSetTests
+public class TickSetTests : IClassFixture<TickSetFixture>
 {
+    private readonly TickSetFixture fixture;
+
+    public TickSetTests(TickSetFixture fixture)
+    {
+        this.fixture = fixture;
+    }
+
     [Theory]
     [InlineData(DataKind.CSV, DataKind.CSV)]
     [InlineData(DataKind.CSV, DataKind.STS)]
@@ -31,8 +37,8 @@ public class TickSetTests
     {
         TickSet.Version.Should().Be(new MajorMinor(1, 0));
 
-        var source = TestHelper.GetTickSet(4, sourceKind);
-        var target = TestHelper.GetTickSet(4, targetKind);
+        var source = fixture.TickSets[(4, sourceKind)];
+        var target = fixture.TickSets[(4, targetKind)];
 
         SourceEqualsTarget(source, target);
     }
@@ -47,7 +53,7 @@ public class TickSetTests
     [InlineData(8)]
     public void FileCsvToGeneratedSts(int day)
     {
-        var csv = TestHelper.GetTickSet(day, DataKind.CSV);
+        var csv = fixture.TickSets[(day, DataKind.CSV)];
 
         var stream = new MemoryStream();
 
@@ -67,7 +73,7 @@ public class TickSetTests
     [Fact]
     public void SaveToStreamWithBadDataKindThrowsError()
     {
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         var stream = new MemoryStream();
 
@@ -114,7 +120,7 @@ public class TickSetTests
     [Fact]
     public void LoadFromStreamWithBadDataKindThrowsError()
     {
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         var stream = new MemoryStream();
 
@@ -156,7 +162,7 @@ public class TickSetTests
     [Fact]
     public void ClearDoesIndeedClear()
     {
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         tickSet.Count.Should().Be(29948);
 
@@ -210,7 +216,7 @@ public class TickSetTests
     [Fact]
     public void AddDefaultTickThrowsError()
     {
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         FluentActions.Invoking(() => tickSet.Add(default))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -221,12 +227,13 @@ public class TickSetTests
     [Fact]
     public void AddTickOutOfSessionThrowsError()
     {
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         var tickOn = new TickOn(tickSet.First().TickOn.Value.AddDays(1));
 
-        FluentActions.Invoking(() => tickSet.Add(new Tick(tickOn, Rate.MIN_VALUE, Rate.MAX_VALUE)))
-            .Should().Throw<ArgumentOutOfRangeException>();
+        FluentActions.Invoking(() => tickSet.Add(new Tick(
+            tickOn, Rate.From(Rate.Minimum), Rate.From(Rate.Maximum))))
+                .Should().Throw<ArgumentOutOfRangeException>();
     }
 
     ////////////////////////////
@@ -234,7 +241,7 @@ public class TickSetTests
     [Fact]
     public void GetFolderPathWithBadBasePathThrowsError()
     {
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         FluentActions.Invoking(() => tickSet.GetFullPath("", DataKind.STS))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -245,7 +252,7 @@ public class TickSetTests
     [Fact]
     public void GetFolderPathWithBadDataKindThrowsError()
     {
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         FluentActions.Invoking(() => tickSet.GetFullPath("C:\\Data", 0))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -256,7 +263,7 @@ public class TickSetTests
     [Fact]
     public void ToStringReturnsGetFileNameResult()
     {
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         tickSet.ToString().Should().Be(tickSet.GetFileName(DataKind.STS));
     }
@@ -271,7 +278,7 @@ public class TickSetTests
         static DateTime ParseCreatedOn(string? value) =>
             value == null ? default : DateTime.Parse(value, null, DateTimeStyles.RoundtripKind);
 
-        var tickSet = TestHelper.GetTickSet(4, DataKind.STS);
+        var tickSet = fixture.TickSets[(4, DataKind.STS)];
 
         var metaData = tickSet.GetMetadata(dataKind);
 
@@ -295,7 +302,7 @@ public class TickSetTests
     [InlineData(DataKind.CSV, "DC_EURUSD_20160104_NYC_EST.csv")]
     [InlineData(DataKind.STS, "DC_EURUSD_20160104_NYC_EST.sts")]
     public void GoodFileNameGenerated(DataKind dataKind, string fileName) =>
-        TestHelper.GetTickSet(4, dataKind).GetFileName(dataKind).Should().Be(fileName);
+        fixture.TickSets[(4, dataKind)].GetFileName(dataKind).Should().Be(fileName);
 
     ////////////////////////////
 
@@ -303,7 +310,7 @@ public class TickSetTests
     [InlineData(DataKind.CSV, "DC/TICKSETS/NYC/EURUSD/2016/DC_EURUSD_20160104_NYC_EST.csv")]
     [InlineData(DataKind.STS, "DC/TICKSETS/NYC/EURUSD/2016/DC_EURUSD_20160104_NYC_EST.sts")]
     public void GoodBlobNameGenerated(DataKind dataKind, string blobName) =>
-        TestHelper.GetTickSet(4, dataKind).GetBlobName(dataKind).Should().Be(blobName);
+        fixture.TickSets[(4, dataKind)].GetBlobName(dataKind).Should().Be(blobName);
 
     ////////////////////////////
 
@@ -311,7 +318,7 @@ public class TickSetTests
     [InlineData(DataKind.CSV, @"C:\DC\TICKSETS\NYC\EURUSD\2016\DC_EURUSD_20160104_NYC_EST.csv")]
     [InlineData(DataKind.STS, @"C:\DC\TICKSETS\NYC\EURUSD\2016\DC_EURUSD_20160104_NYC_EST.sts")]
     public void GoodFullPathGenerated(DataKind dataKind, string fullPath) =>
-        TestHelper.GetTickSet(4, dataKind).GetFullPath("C:\\", dataKind).Should().Be(fullPath);
+        fixture.TickSets[(4, dataKind)].GetFullPath("C:\\", dataKind).Should().Be(fullPath);
 
     ////////////////////////////
 
@@ -369,7 +376,8 @@ public class TickSetTests
         var (pair, session) = TestHelper.GetPairAndSession(4);
 
         Tick GetTick(int seconds, int bid, int ask) => new(new TickOn(
-            session!.MinTickOn.Value.AddSeconds(seconds)), bid, ask);
+            session!.MinTickOn.Value.AddSeconds(seconds)), 
+                Rate.From(bid), Rate.From(ask));
 
         var tickSet = new TickSet(Source.Dukascopy, pair, session)
         {
@@ -387,9 +395,9 @@ public class TickSetTests
         var tickOn = new TickOn(
             tickSet.Session.MinTickOn.Value.AddMilliseconds(msOffset));
 
-        var bid = new Rate(tickSet.Pair.MinValue, 5);
+        var bid = Rate.From(tickSet.Pair.MinValue, 5);
 
-        var ask = new Rate(tickSet.Pair.MaxValue, 5);
+        var ask = Rate.From(tickSet.Pair.MaxValue, 5);
 
         return new Tick(tickOn, bid, ask);
     }

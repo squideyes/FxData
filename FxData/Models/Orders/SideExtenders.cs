@@ -7,10 +7,14 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Models;
 
-public interface IMinMargin
+public static class SideExtenders
 {
-    double this[Pair pair] { get; }
-    double this[Symbol symbol] { get; }
+    public static bool IsBuy(this Side value) => value == Side.Buy;
+
+    public static bool IsSell(this Side value) => value == Side.Sell;
+
+    public static Side Flipped(this Side value) =>
+        value.IsBuy() ? Side.Sell : Side.Buy;
 }

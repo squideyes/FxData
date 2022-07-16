@@ -11,7 +11,7 @@ using SquidEyes.Basics;
 using SquidEyes.FxData.Models;
 using System.Collections.Concurrent;
 
-namespace SquidEyes.FxData.Context;
+namespace SquidEyes.FxData.Helpers;
 
 public class UsdValueOf
 {
@@ -44,14 +44,14 @@ public class UsdValueOf
         Rate GetRate(Symbol symbol) => rates.GetOrAdd(Known.Pairs[symbol], p => default);
 
         Rate GetReciprocal(Symbol symbol) => Known.Pairs[symbol].AsFunc(
-            p => new Rate(1.0f / GetRate(symbol).AsFloat(p.Digits), p.Digits));
+            p => Rate.From(1.0f / GetRate(symbol).AsFloat(p.Digits), p.Digits));
 
         return currency switch
         {
             Currency.JPY => GetReciprocal(Symbol.USDJPY),
             Currency.EUR => GetRate(Symbol.EURUSD),
             Currency.GBP => GetRate(Symbol.GBPUSD),
-            Currency.USD => new Rate(100000),
+            Currency.USD => Rate.From(100000),
             _ => throw new ArgumentOutOfRangeException(nameof(currency))
         };
     }

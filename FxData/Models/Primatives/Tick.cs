@@ -8,7 +8,6 @@
 // ********************************************************
 
 using SquidEyes.Basics;
-using SquidEyes.FxData.Context;
 
 namespace SquidEyes.FxData.Models;
 
@@ -27,7 +26,7 @@ public struct Tick : IEquatable<Tick>
     public Rate Bid { get; }
     public Rate Ask { get; }
 
-    public Rate Spread => new(Ask.Value - Bid.Value);
+    public Rate Spread => Rate.From(Ask.Value - Bid.Value);
 
     public bool IsEmpty => TickOn.IsDefaultValue();
 
@@ -77,8 +76,8 @@ public struct Tick : IEquatable<Tick>
             throw new ArgumentOutOfRangeException(nameof(value));
 
         var tickOn = TickOn.Parse(fields[0], session);
-        var bid = new Rate(float.Parse(fields[1]), pair.Digits);
-        var ask = new Rate(float.Parse(fields[2]), pair.Digits);
+        var bid = Rate.From(float.Parse(fields[1]), pair.Digits);
+        var ask = Rate.From(float.Parse(fields[2]), pair.Digits);
 
         return new Tick(tickOn, bid, ask);
     }
