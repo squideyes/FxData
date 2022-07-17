@@ -11,6 +11,15 @@ namespace SquidEyes.FxData.Models;
 
 public static class DateTimeExtenders
 {
+    public static DateOnly AsDateOnly(this TickOn tickOn) => 
+        DateOnly.FromDateTime(tickOn.Value);
+    
+    public static DateTime AsDateTime(this TickOn tickOn)=>
+        tickOn.Value;
+    
+    public static TimeOnly AsTimeOnly(this TickOn tickOn) => 
+        TimeOnly.FromDateTime(tickOn.Value);
+
     internal static bool IsTickOnValue(this DateTime value, Session session)
     {
         if (value.Kind != DateTimeKind.Unspecified)

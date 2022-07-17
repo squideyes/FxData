@@ -30,7 +30,6 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     internal DateTime Value { get; private set; }
 
-    public DateOnly Date => DateOnly.FromDateTime(Value);
     public int Day => Value.Day;
     public DayOfWeek DayOfWeek => Value.DayOfWeek;
     public int DayOfYear => Value.DayOfYear;
