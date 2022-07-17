@@ -28,7 +28,20 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     internal TickOn(DateTime value) => Value = value;
 
-    public DateTime Value { get; private set; }
+    internal DateTime Value { get; private set; }
+
+    public DateOnly Date => DateOnly.FromDateTime(Value);
+    public int Day => Value.Day;
+    public DayOfWeek DayOfWeek => Value.DayOfWeek;
+    public int DayOfYear => Value.DayOfYear;
+    public int Hour => Value.Hour;
+    public int Millisecond => Value.Millisecond;
+    public int Minute => Value.Minute;
+    public int Month => Value.Month;
+    public int Second => Value.Second;
+    public long Ticks => Value.Ticks;
+    public TimeSpan TimeOfDay => Value.TimeOfDay;
+    public int Year => Value.Year; 
 
     public bool IsEmpty => Value.IsDefaultValue();
 

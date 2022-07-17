@@ -43,8 +43,8 @@ internal class FetchJob
 
         var fetcher = new Fetcher(combined);
 
-        var minHour = session.MinTickOn.Value.Hour;
-        var maxHour = session.MaxTickOn.Value.Hour;
+        var minHour = session.MinTickOn.Hour;
+        var maxHour = session.MaxTickOn.Hour;
 
         for (var hour = minHour; hour <= maxHour; hour++)
         {
