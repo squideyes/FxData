@@ -13,17 +13,6 @@ namespace SquidEyes.FxData.Models;
 
 public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 {
-    public TickOn(DateTime value, Session session)
-    {
-        if (session.IsDefaultValue())
-            throw new ArgumentNullException(nameof(session));
-
-        if (!session.InSession(value))
-            throw new ArgumentOutOfRangeException(nameof(value));
-
-        Value = value;
-    }
-
     public TickOn() => throw new InvalidOperationException();
 
     internal TickOn(DateTime value) => Value = value;
@@ -40,7 +29,7 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
     public int Second => Value.Second;
     public long Ticks => Value.Ticks;
     public TimeSpan TimeOfDay => Value.TimeOfDay;
-    public int Year => Value.Year; 
+    public int Year => Value.Year;
 
     public bool IsEmpty => Value.IsDefaultValue();
 
@@ -57,8 +46,19 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     public override int GetHashCode() => Value.GetHashCode();
 
+    public static TickOn From(DateTime value, Session session)
+    {
+        if (session.IsDefaultValue())
+            throw new ArgumentNullException(nameof(session));
+
+        if (!session.InSession(value))
+            throw new ArgumentOutOfRangeException(nameof(value));
+
+        return new TickOn(value);
+    }
+
     public static TickOn Parse(string value, Session session) =>
-        new(DateTime.Parse(value), session);
+        From(DateTime.Parse(value), session);
 
     public static bool operator ==(TickOn lhs, TickOn rhs) =>
         lhs.Equals(rhs);

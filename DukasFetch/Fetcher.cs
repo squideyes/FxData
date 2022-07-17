@@ -64,7 +64,7 @@ internal class Fetcher
             _ = reader.ReadSingle();
             _ = reader.ReadSingle();
 
-            var tickOn = new TickOn(minTickOn.AddHours(hour)
+            var tickOn = TickOn.From(minTickOn.AddHours(hour)
                 .AddMilliseconds(ms), TickSet.Session);
 
             ticks.Add(new Tick(tickOn, bid, ask));

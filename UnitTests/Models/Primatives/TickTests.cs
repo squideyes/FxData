@@ -191,7 +191,7 @@ public class TickTests
         var tick = Tick.Parse(
             "01/04/2016 03:00:00.000,0.00001,9.99999", Known.Pairs[Symbol.EURUSD], session);
 
-        tick.TickOn.Should().Be(new TickOn(new DateTime(2016, 1, 4, 3, 0, 0, 0), session));
+        tick.TickOn.Should().Be(TickOn.From(new DateTime(2016, 1, 4, 3, 0, 0, 0), session));
         tick.Bid.Should().Be(Rate.From(1));
         tick.Ask.Should().Be(Rate.From(999999));
     }

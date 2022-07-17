@@ -29,7 +29,7 @@ public class TickOnTests
 
             void Validate(DateTime value)
             {
-                var tickOn = new TickOn(value, session);
+                var tickOn = TickOn.From(value, session);
 
                 tickOn.Value.Should().Be(value);
                 tickOn.TradeDate.Should().Be(tradeDate);
@@ -75,7 +75,7 @@ public class TickOnTests
 
         var value = Known.MinTradeDate.Value.ToDateTime(new TimeOnly());
 
-        FluentActions.Invoking(() => _ = new TickOn(value, session))
+        FluentActions.Invoking(() => _ = TickOn.From(value, session))
             .Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -89,7 +89,7 @@ public class TickOnTests
     {
         var session = new Session(Known.MinTradeDate, market);
 
-        FluentActions.Invoking(() => _ = new TickOn(session.MinTickOn.Value, null!))
+        FluentActions.Invoking(() => _ = TickOn.From(session.MinTickOn.Value, null!))
             .Should().Throw<ArgumentNullException>();
     }
 
@@ -283,6 +283,6 @@ public class TickOnTests
     private static TickOn GetTickOn(Market market, int days)
     {
         return new Session(new TradeDate(Known.MinTradeDate.Value.AddDays(days)), market)
-            .AsFunc(s => new TickOn(s.MinTickOn.Value, s));
+            .AsFunc(s => TickOn.From(s.MinTickOn.Value, s));
     }
 }

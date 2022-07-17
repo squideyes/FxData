@@ -255,7 +255,7 @@ public class TickSet : ListBase<Tick>
         {
             foreach (var fields in new CsvEnumerator(stream, 3))
             {
-                var tickOn = new TickOn(DateTime.Parse(fields[0]), Session);
+                var tickOn = TickOn.From(DateTime.Parse(fields[0]), Session);
                 var bid = Rate.From(float.Parse(fields[1]), Pair.Digits);
                 var ask = Rate.From(float.Parse(fields[2]), Pair.Digits);
 

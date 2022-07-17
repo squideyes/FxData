@@ -28,8 +28,8 @@ public class SessionTests
 
         var session = new Session(tradeDate, market);
 
-        var minTickOn = new TickOn(DateTime.Parse(minTickOnString), session);
-        var maxTickOn = new TickOn(DateTime.Parse(maxTickOnString), session);
+        var minTickOn = TickOn.From(DateTime.Parse(minTickOnString), session);
+        var maxTickOn = TickOn.From(DateTime.Parse(maxTickOnString), session);
 
         session.TradeDate.Should().Be(tradeDate);
         session.Market.Should().Be(market);
