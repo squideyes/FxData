@@ -33,7 +33,13 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     public bool IsEmpty => Value.IsDefaultValue();
 
-    public TradeDate TradeDate => new(DateOnly.FromDateTime(Value.Date));
+    public DateTime ToDateTime() => Value;
+
+    public DateOnly ToDateOnly() => DateOnly.FromDateTime(Value);
+
+    public TimeOnly ToTimeOnly() => TimeOnly.FromDateTime(Value);
+
+    public TradeDate ToTradeDate() => new(ToDateOnly());
 
     public override string ToString() => Value.ToDateTimeText();
 

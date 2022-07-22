@@ -9,7 +9,16 @@ public class UnitsTests
     [Theory]
     [InlineData(1000)]
     [InlineData(1000000)]
-    public void ConstructorWithGoodArg(int units) => _ = Units.From(units);
+    public void ConstructorWithGoodArg(int value) =>
+        Units.From(value).Value.Should().Be(value);
+
+    ////////////////////////////
+
+    [Theory]
+    [InlineData("1000")]
+    [InlineData("1000000")]
+    public void ParseWithGoodArg(string value) =>
+        Units.Parse(value).Value.Should().Be(int.Parse(value));
 
     ////////////////////////////
 
@@ -20,7 +29,6 @@ public class UnitsTests
 
         units.Should().Be(Units.From(Units.Minimum));
         units.Value.Should().Be(Units.Minimum);
-        //units.IsEmpty.Should().Be(false);
     }
 
     ////////////////////////////

@@ -26,9 +26,11 @@ internal class AzureClient
         container = new BlobContainerClient(setting.ConnString, "fxdata");
     }
 
-    public async Task LoadFromBlobAsync(TickSet tickSet, CancellationToken cancellationToken)
+    public async Task LoadFromBlobAsync(
+        TickSet tickSet, CancellationToken cancellationToken)
     {
-        var blob = container.GetBlobClient(tickSet.GetBlobName(DataKind.STS));
+        var blob = container.GetBlobClient(
+            tickSet.GetBlobName(DataKind.STS));
 
         var result = await blob.DownloadStreamingAsync(
             cancellationToken: cancellationToken);
@@ -39,7 +41,8 @@ internal class AzureClient
         tickSet.LoadFromStream(result.Value.Content, DataKind.STS);
     }
 
-    public async Task UploadAsync(Bundle bundle, CancellationToken cancellationToken)
+    public async Task UploadAsync(
+        Bundle bundle, CancellationToken cancellationToken)
     {
         using var stream = new MemoryStream();
 
@@ -52,7 +55,10 @@ internal class AzureClient
         var options = new BlobUploadOptions()
         {
             Metadata = bundle.GetMetadata(),
-            HttpHeaders = new BlobHttpHeaders() { ContentType = "application/tickset-bundle" }
+            HttpHeaders = new BlobHttpHeaders() 
+            { 
+                ContentType = "application/tickset-bundle" 
+            }
         };
 
         var blob = container.GetBlobClient(blobName);
@@ -60,10 +66,11 @@ internal class AzureClient
         if (cancellationToken.IsCancellationRequested)
             return;
 
-        var response = await blob.UploadAsync(stream, options);
+        _ = await blob.UploadAsync(stream, options, cancellationToken);
     }
 
-    public async Task UploadAsync(TickSet tickSet, CancellationToken cancellationToken)
+    public async Task UploadAsync(
+        TickSet tickSet, CancellationToken cancellationToken)
     {
         using var stream = new MemoryStream();
 
@@ -76,7 +83,10 @@ internal class AzureClient
         var options = new BlobUploadOptions()
         {
             Metadata = tickSet.GetMetadata(DataKind.STS),
-            HttpHeaders = new BlobHttpHeaders() { ContentType = "application/tickset" }
+            HttpHeaders = new BlobHttpHeaders() 
+            { 
+                ContentType = "application/tickset" 
+            }
         };
 
         var blob = container.GetBlobClient(blobName);
@@ -84,7 +94,7 @@ internal class AzureClient
         if (cancellationToken.IsCancellationRequested)
             return;
 
-        var response = await blob.UploadAsync(stream, options);
+        _ = await blob.UploadAsync(stream, options, cancellationToken);
     }
 
     public async Task<HashSet<string>> GetBlobNamesAsync(

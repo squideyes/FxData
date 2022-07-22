@@ -45,6 +45,8 @@ public struct Units : IEquatable<Units>, IComparable<Units>
         return new Units(value);
     }
 
+    public static Units Parse(string value) => From(int.Parse(value));
+
     public static bool IsValue(int value) =>
         value.Between(Minimum, Maximum) && value % Step == 0;
 

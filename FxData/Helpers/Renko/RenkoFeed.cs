@@ -52,7 +52,7 @@ namespace SquidEyes.FxData.Helpers
             if (tick.IsDefaultValue())
                 throw new ArgumentNullException(nameof(tick));
 
-            if (tick.TickOn.TradeDate != session.TradeDate)
+            if (tick.TickOn.ToTradeDate() != session.TradeDate)
                 throw new ArgumentOutOfRangeException(nameof(tick));
 
             var rate = bidOrAsk == BidOrAsk.Bid ? tick.Bid : tick.Ask;

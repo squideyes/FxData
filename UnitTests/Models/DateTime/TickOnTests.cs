@@ -32,7 +32,7 @@ public class TickOnTests
                 var tickOn = TickOn.From(value, session);
 
                 tickOn.Value.Should().Be(value);
-                tickOn.TradeDate.Should().Be(tradeDate);
+                tickOn.ToTradeDate().Should().Be(tradeDate);
                 tickOn.ToString().Should().Be(value.ToDateTimeText());
             }
 
