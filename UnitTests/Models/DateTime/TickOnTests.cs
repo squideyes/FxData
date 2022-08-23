@@ -157,6 +157,17 @@ public class TickOnTests
 
     ////////////////////////////
 
+    [Fact]
+    public void EqualsOperatorWithDefault()
+    {
+        TickOn lhs = default;
+        TickOn rhs = default;
+
+        (lhs == rhs).Should().BeTrue();
+    }
+
+    //////////////////////////
+
     [Theory]
     [InlineData(Market.NewYork, true)]
     [InlineData(Market.London, true)]
@@ -172,6 +183,21 @@ public class TickOnTests
     }
 
     ////////////////////////////
+
+    [Theory]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    public void NotEqualsOperatorWithDefault(bool lhsIsDefault, bool rhsIsDefault)
+    {
+        var session = new Session(Known.MinTradeDate, Market.NewYork);
+
+        TickOn lhs = lhsIsDefault ? default : session.MinTickOn;
+        TickOn rhs = rhsIsDefault ? default : session.MaxTickOn;
+
+        (lhs != rhs).Should().BeTrue();
+    }
+
+    //////////////////////////
 
     [Theory]
     [InlineData(Market.NewYork, 3, 3, false)]
