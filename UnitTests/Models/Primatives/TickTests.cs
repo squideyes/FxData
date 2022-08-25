@@ -186,7 +186,7 @@ public class TickTests
     [Fact]
     public void ParseReturnsExpectedValue()
     {
-        var session = new Session(Known.MinTradeDate, Market.Combined);
+        var session = new Session(TradeDate.MinValue, Market.Combined);
 
         var tick = Tick.Parse(
             "01/04/2016 03:00:00.000,0.00001,9.99999", Known.Pairs[Symbol.EURUSD], session);
@@ -206,7 +206,7 @@ public class TickTests
     {
         var value = goodValue ? "01/04/2016 03:00:00.000,0.00001,9.99999" : "";
         var pair = goodPair ? Known.Pairs[Symbol.EURUSD] : null!;
-        var session = new Session(Known.MinTradeDate, goodSession ? Market.Combined : Market.NewYork);
+        var session = new Session(TradeDate.MinValue, goodSession ? Market.Combined : Market.NewYork);
 
         FluentActions.Invoking(() => Tick.Parse(value, pair, session)).Should().Throw<Exception>();
     }
@@ -220,7 +220,7 @@ public class TickTests
     {
         var tick = GetTick(1, 2);
 
-        var tradeDate = new TradeDate(Known.MinTradeDate.Value.AddDays(days));
+        var tradeDate = new TradeDate(TradeDate.MinValue.Value.AddDays(days));
 
         var session = new Session(tradeDate, Market.NewYork);
 
@@ -230,7 +230,7 @@ public class TickTests
     ////////////////////////////
 
     private static TickOn GetTickOn() =>
-        new Session(Known.MinTradeDate, Market.NewYork).MinTickOn;
+        new Session(TradeDate.MinValue, Market.NewYork).MinTickOn;
 
     private static Tick GetTick(int bidValue, int askValue) =>
         new(GetTickOn(), Rate.From(bidValue), Rate.From(askValue));

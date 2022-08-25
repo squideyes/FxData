@@ -26,11 +26,11 @@ public struct Tick : IEquatable<Tick>
     public Rate Bid { get; }
     public Rate Ask { get; }
 
-    public Rate Spread => Rate.From(Ask.Value - Bid.Value);
+    public Rate Spread => Rate.From(Ask.AsInt32() - Bid.AsInt32());
 
     public bool IsEmpty => TickOn.IsDefaultValue();
 
-    public bool InSession(Session session) => session.InSession(TickOn);
+    public bool InSession(Session session) => session.InSession(TickOn.AsDateTime());
 
     public override string ToString() => $"{TickOn},{Bid},{Ask}";
 

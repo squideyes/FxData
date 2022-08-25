@@ -8,9 +8,10 @@
 // ********************************************************
 
 using SquidEyes.Basics;
+using System;
 using System.Collections.Immutable;
 using static SquidEyes.FxData.Models.Symbol;
-using static System.DayOfWeek;
+using ISD = System.Collections.Immutable.ImmutableSortedDictionary<SquidEyes.FxData.Models.TradeDate, SquidEyes.FxData.Models.Session>;
 
 namespace SquidEyes.FxData.Models;
 
@@ -23,100 +24,33 @@ public static class Known
         public const int Micro = 1000;
     }
 
-    public const int MinYear = 2016;
-    public const int MaxYear = 2028;
-
-    private static readonly HashSet<DateOnly> validTradeDates;
-
     static Known()
     {
-        validTradeDates = GetValidTradeDates();
+        var tradeDates = GetTradeDates();
 
+        TradeDates = tradeDates.ToImmutableSortedSet();
+        Sessions = GetSessions(tradeDates);
         Pairs = GetPairs();
         ConvertWith = GetConvertWith();
-        TradeDates = validTradeDates.Select(d => new TradeDate(d)).ToImmutableSortedSet();
-        MinTradeDate = TradeDates.First();
-        MaxTradeDate = TradeDates.Last();
         Currencies = ImmutableSortedSet.CreateRange(EnumList.FromAll<Currency>());
     }
 
+    public static ImmutableDictionary<Market, ISD> Sessions { get; }
     public static IReadOnlyDictionary<Symbol, Pair> Pairs { get; }
-    public static IReadOnlyDictionary<Pair, (Pair Base, Pair Quote)> ConvertWith { get; }
-    public static ImmutableSortedSet<TradeDate>? TradeDates { get; }
-    public static TradeDate MinTradeDate { get; }
-    public static TradeDate MaxTradeDate { get; }
     public static ImmutableSortedSet<Currency> Currencies { get; }
+    public static ImmutableSortedSet<TradeDate> TradeDates { get; }
+    public static IReadOnlyDictionary<Pair, (Pair Base, Pair Quote)> ConvertWith { get; }
 
-    public static bool IsTradeDate(DateOnly value) => validTradeDates.Contains(value);
-
-    public static HashSet<TradeDate> GetTradeDates(int year, int month)
+    public static SortedSet<TradeDate> GetTradeDates(int year, int month)
     {
-        if (!year.Between(MinYear, MaxYear))
+        if (!year.Between(TradeDate.MinValue.Year, TradeDate.MaxValue.Year))
             throw new ArgumentOutOfRangeException(nameof(year));
 
         if (!month.Between(1, 12))
             throw new ArgumentOutOfRangeException(nameof(month));
 
-        var minDate = new DateOnly(year, month, 1);
-
-        while (!IsTradeDate(minDate))
-            minDate = minDate.AddDays(1);
-
-        var maxDate = new DateOnly(year, month, DateTime.DaysInMonth(year, month));
-
-        while (!IsTradeDate(maxDate))
-            maxDate = maxDate.AddDays(-1);
-
-        var tradeDates = new HashSet<TradeDate>();
-
-        for (var date = minDate; date <= maxDate; date = date.AddDays(1))
-        {
-            if (date.IsWeekday() && !IsHoliday(date))
-                tradeDates.Add(new TradeDate(date));
-        }
-
-        return tradeDates;
-    }
-
-    private static bool IsHoliday(DateOnly value)
-    {
-        return (value.Month, value.Day, value.DayOfWeek) switch
-        {
-            (1, 1, Monday) => true,
-            (1, 1, Tuesday) => true,
-            (1, 1, Wednesday) => true,
-            (1, 1, Thursday) => true,
-            (1, 1, Friday) => true,
-            (12, 25, Monday) => true,
-            (12, 25, Tuesday) => true,
-            (12, 25, Wednesday) => true,
-            (12, 25, Thursday) => true,
-            (12, 25, Friday) => true,
-            _ => false,
-        };
-    }
-
-    private static HashSet<DateOnly> GetValidTradeDates()
-    {
-        var minDate = new DateOnly(MinYear, 1, 1);
-
-        while (minDate.DayOfWeek != Monday || IsHoliday(minDate))
-            minDate = minDate.AddDays(1);
-
-        var maxDate = new DateOnly(MaxYear, 12, 31);
-
-        while (maxDate.DayOfWeek != Friday || IsHoliday(minDate))
-            maxDate = maxDate.AddDays(-1);
-
-        var tradeDates = new HashSet<DateOnly>();
-
-        for (var date = minDate; date <= maxDate; date = date.AddDays(1))
-        {
-            if (date.IsWeekday() && !IsHoliday(date))
-                tradeDates.Add(date);
-        }
-
-        return tradeDates;
+        return new SortedSet<TradeDate>(
+            TradeDates.Where(d => d.Year == year && d.Month == month));
     }
 
     private static IReadOnlyDictionary<Symbol, Pair> GetPairs()
@@ -145,5 +79,41 @@ public static class Known
         AddLookups(USDJPY, Pairs[USDJPY], Pairs[USDJPY]);
 
         return convertWith;
+    }
+
+    private static SortedSet<TradeDate> GetTradeDates()
+    {
+        var tradeDates = new SortedSet<TradeDate>();
+
+        for (var date = TradeDate.MinDateOnly;
+            date <= TradeDate.MaxDateOnly; date = date.AddDays(1))
+        {
+            if (TradeDate.IsTradeDate(date))
+                tradeDates.Add(TradeDate.From(date));
+        }
+
+        return tradeDates;
+    }
+
+    private static ImmutableDictionary<Market, ISD> GetSessions(SortedSet<TradeDate> tradeDates)
+    {
+        var dict = new Dictionary<Market, ISD>
+        {
+            { Market.NewYork, GetSessionsForMarket(tradeDates, Market.NewYork) },
+            { Market.London, GetSessionsForMarket(tradeDates, Market.London) },
+            { Market.Combined, GetSessionsForMarket(tradeDates, Market.Combined) }
+        };
+
+        return dict.ToImmutableDictionary();
+    }
+
+    private static ISD GetSessionsForMarket(SortedSet<TradeDate> tradeDates, Market market)
+    {
+        var dict = new Dictionary<TradeDate, Session>();
+
+        foreach (var tradeDate in tradeDates)
+            dict.Add(tradeDate, new Session(tradeDate, market));
+
+        return dict.ToImmutableSortedDictionary();
     }
 }

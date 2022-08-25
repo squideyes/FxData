@@ -7,17 +7,14 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
+using SquidEyes.Basics;
+
 namespace SquidEyes.FxData.Models;
 
 public static class DateTimeExtenders
 {
-    internal static bool IsTickOnValue(this DateTime value, Session session)
-    {
-        if (value.Kind != DateTimeKind.Unspecified)
-            return false;
-
-        return session.InSession(value);
-    }
+    public static DateTime ToDateTime(this TradeDate value) =>
+        value.AsFunc(v => new DateTime(v.Year, v.Month, v.Day));
 
     internal static string ToDateTimeText(this DateTime value) =>
         value.ToString("MM/dd/yyyy HH:mm:ss.fff");

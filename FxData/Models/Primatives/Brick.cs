@@ -26,7 +26,7 @@ public class Brick
     public Point Low => Trend == Trend.Up ? Open : Close;
 
     public Rate TicksPerBrick =>
-        Rate.From(Math.Abs((int)Open.Rate - (int)Close.Rate));
+        Rate.From(Math.Abs(Open.Rate.AsInt32() - Close.Rate.AsInt32()));
 
     public Trend Trend => 
         (Open.Rate < Close.Rate) ? Trend.Up : Trend.Down;

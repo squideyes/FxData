@@ -24,7 +24,7 @@ internal static class MoneyData
             var usdValueOf = new UsdValueOf(bidOrAsk);
 
             var session = new Session(
-                new TradeDate(2020, 1, 6), Market.NewYork);
+                TradeDate.From(2020, 1, 6), Market.NewYork);
 
             void Update(Pair pair, int bid, int ask) =>
                 usdValueOf!.Update(pair, new Tick(

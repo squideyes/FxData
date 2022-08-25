@@ -44,7 +44,7 @@ public class UsdValueOf
         Rate GetRate(Symbol symbol) => rates.GetOrAdd(Known.Pairs[symbol], p => default);
 
         Rate GetReciprocal(Symbol symbol) => Known.Pairs[symbol].AsFunc(
-            p => Rate.From(1.0f / GetRate(symbol).AsFloat(p.Digits), p.Digits));
+            p => Rate.From(1.0f / GetRate(symbol).ToFloat(p.Digits), p.Digits));
 
         return currency switch
         {

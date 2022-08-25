@@ -15,25 +15,17 @@ public class Session : IEquatable<Session>
 {
     public Session(TradeDate tradeDate, Market market)
     {
-        TradeDate = tradeDate.Validated(nameof(tradeDate), v => !v.IsDefaultValue());
+        TradeDate = tradeDate.Validated(
+            nameof(tradeDate), v => !v.IsDefaultValue());
 
-        Market = market.Validated(nameof(market), v => v.IsEnumValue());
+        Market = market.Validated(
+            nameof(market), v => v.IsEnumValue());
 
-        (TickOn, TickOn) GetMinMax(int start, int hours)
-        {
-            var minTickOn = new TickOn(tradeDate.Value.ToDateTime(
-                new TimeOnly(start, 0), DateTimeKind.Utc).ToEasternFromUtc());
+        var (minDateTime, maxDateTime) =
+            DateTimeHelper.GetMinAndMaxDateTimes(tradeDate, market);
 
-            return (minTickOn, new TickOn(minTickOn.Value.AddHours(hours, true)));
-        }
-
-        (MinTickOn, MaxTickOn) = market switch
-        {
-            Market.NewYork => GetMinMax(13, 9),
-            Market.London => GetMinMax(8, 9),
-            Market.Combined => GetMinMax(8, 14),
-            _ => throw new ArgumentNullException(nameof(market))
-        };
+        MinTickOn = new TickOn(minDateTime);
+        MaxTickOn = new TickOn(maxDateTime);
     }
 
     public TradeDate TradeDate { get; }
@@ -46,18 +38,15 @@ public class Session : IEquatable<Session>
         if (other is null)
             return false;
 
-        if (ReferenceEquals(this, other))
-            return true;
-
-        if (GetType() != other.GetType())
-            return false;
-
-        return (TradeDate == other.TradeDate) && (Market == other.Market);
+        return (TradeDate == other.TradeDate)
+            && (Market == other.Market);
     }
 
-    public override bool Equals(object? other) => Equals(other as Session);
+    public override bool Equals(object? other) =>
+        other is Session session && Equals(session);
 
-    public override int GetHashCode() => (TradeDate, Market).GetHashCode();
+    public override int GetHashCode() =>
+        HashCode.Combine(TradeDate, Market);
 
     public bool InSession(DateTime value)
     {
@@ -67,31 +56,18 @@ public class Session : IEquatable<Session>
         return value >= MinTickOn.Value && value <= MaxTickOn.Value;
     }
 
-    public bool InSession(TickOn tickOn)
-    {
-        if (tickOn.IsDefaultValue())
-            throw new ArgumentOutOfRangeException(nameof(tickOn));
-
-        return tickOn >= MinTickOn && tickOn <= MaxTickOn;
-    }
-
     public override string ToString()
     {
-        var minTickOn = MinTickOn.Value.ToTimeText(false);
-        var maxTickOn = MaxTickOn.Value.ToTimeText(true);
+        var min = MinTickOn.Value.ToTimeText(true);
+        var max = MaxTickOn.Value.ToTimeText(true);
 
-        return $"{TradeDate} ({Market}: {minTickOn} to {maxTickOn})";
+        return $"{TradeDate} ({Market}: {min} to {max})";
     }
 
     public static bool operator ==(Session lhs, Session rhs)
     {
         if (lhs is null)
-        {
-            if (rhs is null)
-                return true;
-
-            return false;
-        }
+            return rhs is null;
 
         return lhs.Equals(rhs);
     }

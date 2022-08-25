@@ -26,7 +26,7 @@ internal static class TestHelper
     public static (Pair, Session) GetPairAndSession(int day)
     {
         return (Known.Pairs[Symbol.EURUSD], new Session(
-            new TradeDate(2016, 1, day), Market.NewYork));
+            TradeDate.From(2016, 1, day), Market.NewYork));
     }
 
     public static TickSet GetTickSet(int day, DataKind dataKind)

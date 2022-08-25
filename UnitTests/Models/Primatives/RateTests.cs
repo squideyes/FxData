@@ -25,8 +25,8 @@ public class RateTests
     {
         var rate = Rate.From(intValue);
 
-        rate.Value.Should().Be(intValue);
-        rate.AsFloat(digits).Should().Be(floatValue);
+        rate.AsInt32().Should().Be(intValue);
+        rate.ToFloat(digits).Should().Be(floatValue);
         rate.ToString().Should().Be(intValue.ToString());
         rate.ToString(digits).Should().Be(floatValue.ToString("N" + digits));
     }
@@ -42,8 +42,8 @@ public class RateTests
     {
         var rate = Rate.From(floatValue, digits);
 
-        rate.Value.Should().Be(intValue);
-        rate.AsFloat(digits).Should().Be(floatValue);
+        rate.AsInt32().Should().Be(intValue);
+        rate.ToFloat(digits).Should().Be(floatValue);
         rate.ToString().Should().Be(intValue.ToString());
         rate.ToString(digits).Should().Be(floatValue.ToString("N" + digits));
     }
@@ -56,8 +56,7 @@ public class RateTests
         var rate = new Rate();
 
         rate.Should().Be(Rate.From(1));
-        rate.Value.Should().Be(1);
-        rate.IsEmpty.Should().Be(false);
+        rate.AsInt32().Should().Be(1);
     }
 
     //////////////////////////
@@ -85,8 +84,7 @@ public class RateTests
     {
         Rate rate = default;
 
-        rate.Value.Should().Be(0);
-        rate.IsEmpty.Should().Be(true);
+        rate.AsInt32().Should().Be(0);
     }
 
     //////////////////////////
@@ -246,7 +244,7 @@ public class RateTests
     [InlineData(Rate.Minimum)]
     [InlineData(Rate.Maximum)]
     public void IntToRateToOperatorWithGoodArg(int value) =>
-        Rate.From(value).Value.Should().Be(value);
+        Rate.From(value).AsInt32().Should().Be(value);
 
     //////////////////////////
 

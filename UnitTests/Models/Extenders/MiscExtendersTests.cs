@@ -52,7 +52,7 @@ public class MiscExtendersTests
     [Fact]
     public void ToRateWithBadMidOrAskThrowsException()
     {
-        var session = new Session(Known.MinTradeDate, Market.Combined);
+        var session = new Session(TradeDate.MinValue, Market.Combined);
 
         var tick = new Tick(session.MinTickOn, Rate.From(1), Rate.From(2));
 

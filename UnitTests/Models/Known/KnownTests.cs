@@ -21,28 +21,24 @@ public class KnownTests
     [Fact]
     public void KnownBaselineUnchanged()
     {
-        Known.MinYear.Should().Be(2016);
-
-        Known.MaxYear.Should().Be(2028);
-
         foreach (var symbol in Enum.GetValues<Symbol>())
             Known.Pairs.ContainsKey(symbol).Should().BeTrue();
 
         foreach (var currency in Enum.GetValues<Currency>())
             Known.Currencies.Contains(currency).Should().BeTrue();
 
-        Known.TradeDates!.Count.Should().Be(3373);
+        Known.TradeDates!.Count.Should().Be(4147);
 
         foreach (var pair in Known.Pairs.Values)
             Known.ConvertWith.ContainsKey(pair);
 
-        Known.MinTradeDate.Should().Be(Known.TradeDates.First());
+        TradeDate.MinValue.Should().Be(Known.TradeDates.First());
 
-        Known.MinTradeDate.Value.DayOfWeek.Should().Be(DayOfWeek.Monday);
+        TradeDate.MinValue.Value.DayOfWeek.Should().Be(DayOfWeek.Monday);
 
-        Known.MaxTradeDate.Should().Be(Known.TradeDates.Last());
+        TradeDate.MaxValue.Should().Be(Known.TradeDates.Last());
 
-        Known.MaxTradeDate.Value.DayOfWeek.Should().Be(DayOfWeek.Friday);  
+        TradeDate.MaxValue.Value.DayOfWeek.Should().Be(DayOfWeek.Friday);  
     }
 
     [Fact]
@@ -60,7 +56,7 @@ public class KnownTests
             byMonth[key].Add(tradeDate);
         }
 
-        for (var year = Known.MinYear; year <= Known.MaxYear; year++)
+        for (var year = TradeDate.MinValue.Year; year <= TradeDate.MaxValue.Year; year++)
         {
             for (var month = 1; month < 12; month++)
             {

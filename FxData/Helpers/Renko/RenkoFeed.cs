@@ -52,7 +52,7 @@ namespace SquidEyes.FxData.Helpers
             if (tick.IsDefaultValue())
                 throw new ArgumentNullException(nameof(tick));
 
-            if (tick.TickOn.ToTradeDate() != session.TradeDate)
+            if (!session.InSession(tick.TickOn.AsDateTime()))
                 throw new ArgumentOutOfRangeException(nameof(tick));
 
             var rate = bidOrAsk == BidOrAsk.Bid ? tick.Bid : tick.Ask;
@@ -114,7 +114,7 @@ namespace SquidEyes.FxData.Helpers
 
             for (int i = Count - 1; i >= 1; i--)
             {
-                if (inSession && !session.InSession(this[i].Open.TickOn))
+                if (inSession && !session.InSession(this[i].Open.TickOn.AsDateTime()))
                     continue;
 
                 sb.Append(this[i].Trend == Trend.Up ? 'U' : 'D');

@@ -29,6 +29,6 @@ public class UsdValueOfTests
     {
         var usdValueOf = MoneyData.GetUsdValueOf(bidOrAsk);
 
-        ((int)usdValueOf.GetRateInUsd(currency)).Should().Be(rate);
+        usdValueOf.GetRateInUsd(currency).AsInt32().Should().Be(rate);
     }
 }

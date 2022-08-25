@@ -73,7 +73,7 @@ internal class FetchJob
 
             foreach (var tick in combined!)
             {
-                if (session.InSession(tick.TickOn))
+                if (session.InSession(tick.TickOn.AsDateTime()))
                     tickSet.Add(tick);
             }
 

@@ -136,7 +136,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [InlineData(Source.Dukascopy, Symbol.EURUSD, false)]
     public void TickSetMismatchOnLoadThrowsError(Source source, Symbol symbol, bool goodVersion)
     {
-        var session = new Session(Known.MinTradeDate, Market.Combined);
+        var session = new Session(TradeDate.MinValue, Market.Combined);
         
         var tickSet = new TickSet(source, Known.Pairs[symbol], session);
 
@@ -340,7 +340,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
 
         tickSet.Count.Should().Be(0);
         tickSet.Pair.Should().Be(Known.Pairs[Symbol.EURUSD]);
-        tickSet.Session.TradeDate.Should().Be(new TradeDate(2016, 1, 4));
+        tickSet.Session.TradeDate.Should().Be(TradeDate.From(2016, 1, 4));
         tickSet.Source.Should().Be(Source.Dukascopy);
     }
 
@@ -355,6 +355,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [InlineData("DC_XXXXXX_20160104_NYC_EST.sts")]
     [InlineData("DC__20160104_NYC_EST.sts")]
     [InlineData("DC_EURUSD_20160103_NYC_EST.sts")]
+    [InlineData("DC_EURUSD_20320101_NYC_EST.sts")]
     [InlineData("DC_EURUSD__NYC_EST.sts")]
     [InlineData("DC_EURUSD_20160104_XXX_EST.sts")]
     [InlineData("DC_EURUSD_20160104__EST.sts")]

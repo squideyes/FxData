@@ -34,7 +34,7 @@ public class RenkoFeedTests
             if (tickId != expectedTickId)
                 return;
 
-            var minTickOn = new DateTime(2022, 5, 2, 10, 0, 0);
+            var minTickOn = new DateTime(2022, 8, 1, 10, 0, 0);
 
             TickOn GetTickOn(int seconds) => new(minTickOn.AddSeconds(seconds));
 
@@ -153,36 +153,39 @@ public class RenkoFeedTests
 
     private static RenkoFeed GetFeed(bool raiseOpenBricks, BidOrAsk bidOrAsk)
     {
-        var tradeDate = new TradeDate(2022, 5, 2);
+        var tradeDate = TradeDate.From(2022, 8, 1);
 
         var session = new Session(tradeDate, Market.NewYork);
 
-        return new RenkoFeed(
-            session, bidOrAsk, Rate.From(20), raiseOpenBricks);
+        return new RenkoFeed(session, bidOrAsk, Rate.From(20), raiseOpenBricks);
     }
 
     private static List<Tick> GetTicks()
     {
-        static Tick GetTick(DateTime dateTime, int bid) =>
-            new(new TickOn(dateTime), Rate.From(bid), Rate.From(bid + 2));
+        var tradeDate = TradeDate.From(2022, 8, 1);
+
+        var session = new Session(tradeDate, Market.NewYork);
+
+        Tick GetTick(DateTime dateTime, int bid) =>
+            new(TickOn.From(dateTime, session), Rate.From(bid), Rate.From(bid + 2));
 
         return new List<Tick>
         {
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 0), 400),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 1), 420),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 2), 421),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 3), 440),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 4), 441),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 5), 460),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 6), 461),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 7), 480),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 8), 481),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 9), 440),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 10), 439),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 11), 500),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 12), 501),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 13), 520),
-            GetTick(new DateTime(2022, 5, 2, 10, 0, 14), 521)
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 0), 400),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 1), 420),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 2), 421),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 3), 440),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 4), 441),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 5), 460),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 6), 461),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 7), 480),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 8), 481),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 9), 440),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 10), 439),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 11), 500),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 12), 501),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 13), 520),
+            GetTick(new DateTime(2022, 8, 1, 10, 0, 14), 521)
         };
     }
 }

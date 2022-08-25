@@ -61,7 +61,7 @@ public class TickSet : ListBase<Tick>
         if (tick.IsDefaultValue())
             throw new ArgumentOutOfRangeException(nameof(tick));
 
-        if (!Session.InSession(tick.TickOn))
+        if (!Session.InSession(tick.TickOn.AsDateTime()))
             throw new ArgumentOutOfRangeException(nameof(tick));
 
         if (lastTickOn.HasValue && tick.TickOn < lastTickOn)
@@ -173,14 +173,14 @@ public class TickSet : ListBase<Tick>
                 var lastTick = First();
 
                 dataWriter.Write(lastTick.TickOn.Value.Ticks);
-                dataWriter.Write(lastTick.Bid.Value);
-                dataWriter.Write(lastTick.Ask.Value);
+                dataWriter.Write(lastTick.Bid.AsInt32());
+                dataWriter.Write(lastTick.Ask.AsInt32());
 
                 foreach (var tick in this.Skip(1))
                 {
                     var tickOnDelta = (int) (tick.TickOn.Value - lastTick.TickOn.Value).TotalMilliseconds;
-                    var bidDelta = tick.Bid.Value - lastTick.Bid.Value;
-                    var askDelta = tick.Ask.Value - lastTick.Ask.Value;
+                    var bidDelta = tick.Bid.AsInt32() - lastTick.Bid.AsInt32();
+                    var askDelta = tick.Ask.AsInt32() - lastTick.Ask.AsInt32();
 
                     if (tickOnDelta <= 64
                         && bidDelta is >= -7 and <= 7 && askDelta is >= -7 and <= 7)
@@ -365,9 +365,9 @@ public class TickSet : ListBase<Tick>
 
         var askDelta = (askData & mask) * ((askData & negative) == negative ? -1 : 1);
 
-        var bid = Rate.From(lastTick.Bid.Value + bidDelta);
+        var bid = Rate.From(lastTick.Bid.AsInt32() + bidDelta);
 
-        var ask = Rate.From(lastTick.Ask.Value + askDelta);
+        var ask = Rate.From(lastTick.Ask.AsInt32() + askDelta);
 
         return (bid, ask);
     }
@@ -379,10 +379,10 @@ public class TickSet : ListBase<Tick>
     }
 
     private static Rate ReadBid(BinaryReader reader, byte header, Tick lastTick) =>
-        Rate.From(lastTick.Bid.Value + ReadValue(reader, header, 0b0000_1100, 2));
+        Rate.From(lastTick.Bid.AsInt32() + ReadValue(reader, header, 0b0000_1100, 2));
 
     private static Rate ReadAsk(BinaryReader reader, byte header, Tick lastTick) =>
-        Rate.From(lastTick.Ask.Value + ReadValue(reader, header, 0b0000_0011, 0));
+        Rate.From(lastTick.Ask.AsInt32() + ReadValue(reader, header, 0b0000_0011, 0));
 
     private static byte GetTickOnFlags(int value) =>
         GetFlags(value, TickOn1, TickOn2, TickOn4);
@@ -431,9 +431,8 @@ public class TickSet : ListBase<Tick>
 
         var pair = Known.Pairs[symbol];
 
-        var session = new Session(
-            new TradeDate(DateOnly.ParseExact(fields[2], "yyyyMMdd", null)),
-            fields[3].ToMarket());
+        var session = new Session(TradeDate.From(DateOnly.ParseExact(
+            fields[2], "yyyyMMdd", null)), fields[3].ToMarket());
 
         if (fields[4] != "EST")
             throw new ArgumentOutOfRangeException(nameof(fileName));

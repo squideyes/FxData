@@ -54,7 +54,7 @@ internal class Fetcher
 
         var ticks = new List<Tick>();
 
-        var minTickOn = TickSet.Session.TradeDate.Value.ToDateTime(TimeOnly.MinValue);
+        var minTickOn = TickSet.Session.TradeDate.ToDateTime();
 
         while (reader.BaseStream.Position != reader.BaseStream.Length)
         {
@@ -77,8 +77,7 @@ internal class Fetcher
     {
         var sb = new StringBuilder();
 
-        var mto = TickSet.Session.TradeDate.Value.ToDateTime(
-            TimeOnly.MinValue).AddHours(hour).ToUtcFromEastern();
+        var mto = TickSet.Session.TradeDate.ToDateTime().AddHours(hour).ToUtcFromEastern();
 
         sb.Append("https://datafeed.dukascopy.com/datafeed");
         sb.AppendDelimited(TickSet.Pair, '/');

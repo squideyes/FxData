@@ -18,17 +18,19 @@ public class Bundle : ListBase<TickSet>
 {
     public static readonly MajorMinor Version = new(1, 0);
 
-    private readonly HashSet<TradeDate> tradeDates = new();
+    private readonly SortedSet<TradeDate> tradeDates;
 
     public Bundle(Source source, Pair pair, int year, int month, Market market)
     {
         Source = source.Validated(nameof(source), v => v.IsEnumValue());
-        Pair = pair.Validated(nameof(pair), v => Known.Pairs.ContainsKey(v.Symbol));
-        Year = year = year.Validated(nameof(year), v => v >= Known.MinYear);
+        Pair = pair.Validated(nameof(pair), 
+            v => Known.Pairs.ContainsKey(v.Symbol));
+        Year = year = year.Validated(nameof(year),
+            v => v.Between(TradeDate.MinValue.Year, TradeDate.MaxValue.Year));
         Month = month.Validated(nameof(month), v => v.Between(1, 12));
         Market = market.Validated(nameof(market), v => v.IsEnumValue());
 
-        tradeDates = Known.GetTradeDates(Year, Month);
+        tradeDates = Known.GetTradeDates(year, month);
     }
 
     public Source Source { get; }

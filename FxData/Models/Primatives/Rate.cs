@@ -7,7 +7,6 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
 using SquidEyes.FxData.Helpers;
 
 namespace SquidEyes.FxData.Models;
@@ -21,23 +20,23 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 
     private Rate(int value) => Value = value;
 
-    internal int Value { get; }
-
-    public bool IsEmpty => Value.IsDefaultValue();
+    private int Value { get; }
 
     public override string ToString() => Value.ToString();
+
+    public int AsInt32() => Value;
 
     public string ToString(int digits)
     {
         return digits switch
         {
-            5 => AsFloat(digits).ToString("N5"),
-            3 => AsFloat(digits).ToString("N3"),
+            5 => ToFloat(digits).ToString("N5"),
+            3 => ToFloat(digits).ToString("N3"),
             _ => throw new ArgumentOutOfRangeException(nameof(digits))
         };
     }
 
-    public float AsFloat(int digits) =>
+    public float ToFloat(int digits) =>
         FastMath.Round(Value / GetFactor(digits), digits);
 
     public bool Equals(Rate other) => Value == other.Value;
@@ -62,6 +61,9 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 
     public static Rate Parse(string value, int digits) =>
         From(float.Parse(value), digits);
+
+    public static bool TryParse(string value, int digits, out Rate rate) =>
+        Try.GetValue(() => Parse(value, digits), out rate);
 
     public static bool IsRate(float value, int digits)
     {
@@ -111,6 +113,4 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 
     public static bool operator >=(Rate lhs, Rate rhs) =>
         lhs.CompareTo(rhs) >= 0;
-
-    public static implicit operator int(Rate rate) => rate.Value;
 }

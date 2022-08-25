@@ -18,13 +18,13 @@ namespace SquidEyes.UnitTests;
 public class SessionTests
 {
     [Theory]
-    [InlineData(NewYork, "01/04/2016 08:00:00", "01/04/2016 16:59:59.999")]
-    [InlineData(London, "01/04/2016 03:00:00", "01/04/2016 11:59:59.999")]
-    [InlineData(Combined, "01/04/2016 03:00:00", "01/04/2016 16:59:59.999")]
+    [InlineData(NewYork, "01/04/2016 08:00:00.000", "01/04/2016 16:59:59.999")]
+    [InlineData(London, "01/04/2016 02:00:00.000", "01/04/2016 10:59:59.999")]
+    [InlineData(Combined, "01/04/2016 02:00:00.000", "01/04/2016 16:59:59.999")]
     public void ContructorWithGoodArgs(
         Market market, string minTickOnString, string maxTickOnString)
     {
-        var tradeDate = new TradeDate(2016, 1, 4);
+        var tradeDate = TradeDate.From(2016, 1, 4);
 
         var session = new Session(tradeDate, market);
 
@@ -36,29 +36,29 @@ public class SessionTests
         session.MinTickOn.Should().Be(minTickOn);
         session.MaxTickOn.Should().Be(maxTickOn);
 
-        session.InSession(session.MinTickOn).Should().BeTrue();
-        session.InSession(session.MaxTickOn).Should().BeTrue();
+        session.InSession(session.MinTickOn.AsDateTime()).Should().BeTrue();
+        session.InSession(session.MaxTickOn.AsDateTime()).Should().BeTrue();
 
         session.InSession(session.MinTickOn.Value).Should().BeTrue();
         session.InSession(session.MaxTickOn.Value).Should().BeTrue();
 
         session.ToString().Should().Be(
-            $"{tradeDate} ({market}: {minTickOn.Value:HH:mm:ss} to {maxTickOn.Value:HH:mm:ss.fff})");
+            $"{tradeDate} ({market}: {minTickOn.Value:HH:mm:ss.fff} to {maxTickOn.Value:HH:mm:ss.fff})");
     }
 
     [Fact]
     public void ConstructorWithBadMarket()
     {
-        FluentActions.Invoking(() => _ = new Session(new TradeDate(2016, 1, 4), 0))
+        FluentActions.Invoking(() => _ = new Session(TradeDate.From(2016, 1, 4), 0))
             .Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Fact]
     public void NewYorkAndLondonFallWithinCombined()
     {
-        var newYork = new Session(Known.MinTradeDate, NewYork);
-        var london = new Session(Known.MinTradeDate, London);
-        var combined = new Session(Known.MinTradeDate, Combined);
+        var newYork = new Session(TradeDate.MinValue, NewYork);
+        var london = new Session(TradeDate.MinValue, London);
+        var combined = new Session(TradeDate.MinValue, Combined);
 
         london.MinTickOn.Should().Be(combined.MinTickOn);
         newYork.MaxTickOn.Should().Be(combined.MaxTickOn);

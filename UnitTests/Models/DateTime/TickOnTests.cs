@@ -32,7 +32,10 @@ public class TickOnTests
                 var tickOn = TickOn.From(value, session);
 
                 tickOn.Value.Should().Be(value);
-                tickOn.ToTradeDate().Should().Be(tradeDate);
+
+                TradeDate.From(DateOnly.FromDateTime(
+                    tickOn.AsDateTime())).Should().Be(tradeDate);
+                
                 tickOn.ToString().Should().Be(value.ToDateTimeText());
             }
 
@@ -60,7 +63,6 @@ public class TickOnTests
         tickOn.Value.Kind.Should().Be(DateTimeKind.Unspecified);
         tickOn.Should().Be(default);
         tickOn.Value.Should().Be(default);
-        tickOn.IsEmpty.Should().Be(true);
     }
 
     //////////////////////////
@@ -71,9 +73,9 @@ public class TickOnTests
     [InlineData(Market.Combined)]
     public void ContructWithBadValue(Market market)
     {
-        var session = new Session(Known.MinTradeDate, market);
+        var session = new Session(TradeDate.MinValue, market);
 
-        var value = Known.MinTradeDate.Value.ToDateTime(new TimeOnly());
+        var value = TradeDate.MinValue.Value.ToDateTime(new TimeOnly());
 
         FluentActions.Invoking(() => _ = TickOn.From(value, session))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -87,7 +89,7 @@ public class TickOnTests
     [InlineData(Market.Combined)]
     public void ConstructWithBadSession(Market market)
     {
-        var session = new Session(Known.MinTradeDate, market);
+        var session = new Session(TradeDate.MinValue, market);
 
         FluentActions.Invoking(() => _ = TickOn.From(session.MinTickOn.Value, null!))
             .Should().Throw<ArgumentNullException>();
@@ -189,7 +191,7 @@ public class TickOnTests
     [InlineData(false, true)]
     public void NotEqualsOperatorWithDefault(bool lhsIsDefault, bool rhsIsDefault)
     {
-        var session = new Session(Known.MinTradeDate, Market.NewYork);
+        var session = new Session(TradeDate.MinValue, Market.NewYork);
 
         TickOn lhs = lhsIsDefault ? default : session.MinTickOn;
         TickOn rhs = rhsIsDefault ? default : session.MaxTickOn;
@@ -308,7 +310,7 @@ public class TickOnTests
 
     private static TickOn GetTickOn(Market market, int days)
     {
-        return new Session(new TradeDate(Known.MinTradeDate.Value.AddDays(days)), market)
+        return new Session(new TradeDate(TradeDate.MinValue.Value.AddDays(days)), market)
             .AsFunc(s => TickOn.From(s.MinTickOn.Value, s));
     }
 }

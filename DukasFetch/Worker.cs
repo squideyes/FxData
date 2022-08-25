@@ -44,10 +44,10 @@ internal class Worker : BackgroundService
         var date = DateOnly.FromDateTime(
             DateTime.UtcNow.ToEasternFromUtc().AddDays(-1).Date);
 
-        while (!Known.IsTradeDate(date))
+        while (!TradeDate.IsTradeDate(date))
             date = date.AddDays(-1);
 
-        var maxTradeDate = new TradeDate(date);
+        var maxTradeDate = TradeDate.From(date);
 
         if (await ProcessFetchJobsAsync(maxTradeDate, cancellationToken))
             await ProcessBundleJobsAsync(maxTradeDate, cancellationToken);
@@ -134,7 +134,7 @@ internal class Worker : BackgroundService
         if (cancellationToken.IsCancellationRequested)
             return (jobs, skipped);
 
-        var yms = GetTradeDates(maxTradeDate).Select(d => (d.Value.Year, d.Value.Month))
+        var yms = GetTradeDates(maxTradeDate).Select(d => (d.Year, d.Month))
             .Distinct().OrderBy(d => d).ToList().AsFunc(d => d.Take(d.Count - 1)).ToList();
 
         foreach (var (Year, Month) in yms)
@@ -159,7 +159,7 @@ internal class Worker : BackgroundService
     private List<TradeDate> GetTradeDates(TradeDate maxTradeDate)
     {
         return Known.TradeDates!.Where(
-            d => d.Value.Year >= settings.MinYear && d <= maxTradeDate).ToList();
+            d => d.Year >= settings.MinYear && d <= maxTradeDate).ToList();
     }
 
     private async Task<(List<FetchJob> Jobs, int Skipped)> GetFetchJobsAsync(

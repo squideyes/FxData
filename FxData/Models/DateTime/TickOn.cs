@@ -7,45 +7,40 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.FxData.Helpers;
 
 namespace SquidEyes.FxData.Models;
 
 public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 {
-    public TickOn() => throw new InvalidOperationException();
+    public TickOn()
+    {
+        throw new InvalidOperationException(
+            "A \"TickOn\" may not be directly constructed!");
+    }
+
+    public TimeSpan TimeOfDay => Value.TimeOfDay;
+    public long Ticks => Value.Ticks;
+    public int Year => Value.Year;
+    public int Month => Value.Month;
+    public int Day => Value.Day;
+    public int Hour => Value.Hour;
+    public int Minute => Value.Minute;
+    public int Second => Value.Second;
+    public int Millisecond => Value.Millisecond;
+    public DayOfWeek DayOfWeek => Value.DayOfWeek;
 
     internal TickOn(DateTime value) => Value = value;
 
-    internal DateTime Value { get; private set; }
+    internal DateTime Value { get; }
 
-    public int Day => Value.Day;
-    public DayOfWeek DayOfWeek => Value.DayOfWeek;
-    public int DayOfYear => Value.DayOfYear;
-    public int Hour => Value.Hour;
-    public int Millisecond => Value.Millisecond;
-    public int Minute => Value.Minute;
-    public int Month => Value.Month;
-    public int Second => Value.Second;
-    public long Ticks => Value.Ticks;
-    public TimeSpan TimeOfDay => Value.TimeOfDay;
-    public int Year => Value.Year;
-
-    public bool IsEmpty => Value.IsDefaultValue();
-
-    public DateTime ToDateTime() => Value;
-
-    public DateOnly ToDateOnly() => DateOnly.FromDateTime(Value);
-
-    public TimeOnly ToTimeOnly() => TimeOnly.FromDateTime(Value);
-
-    public TradeDate ToTradeDate() => new(ToDateOnly());
+    public DateTime AsDateTime() => Value;
 
     public override string ToString() => Value.ToDateTimeText();
 
-    public int CompareTo(TickOn other) => Value.CompareTo(other.Value);
-
     public bool Equals(TickOn other) => Value == other.Value;
+
+    public int CompareTo(TickOn other) => Value.CompareTo(other.Value);
 
     public override bool Equals(object? other) =>
         other is TickOn tickOn && Equals(tickOn);
@@ -54,10 +49,7 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     public static TickOn From(DateTime value, Session session)
     {
-        if (session.IsDefaultValue())
-            throw new ArgumentNullException(nameof(session));
-
-        if (!session.InSession(value))
+        if (!IsTickOn(value, session))
             throw new ArgumentOutOfRangeException(nameof(value));
 
         return new TickOn(value);
@@ -65,6 +57,20 @@ public struct TickOn : IEquatable<TickOn>, IComparable<TickOn>
 
     public static TickOn Parse(string value, Session session) =>
         From(DateTime.Parse(value), session);
+
+    public static bool TryParse(string value, Session session, out TickOn tickOn) =>
+        Try.GetValue(() => Parse(value, session), out tickOn);
+
+    public static bool IsTickOn(DateTime value, Session session)
+    {
+        if (value.Kind != DateTimeKind.Unspecified)
+            throw new ArgumentOutOfRangeException(nameof(value));
+
+        if (session is null)
+            throw new ArgumentNullException(nameof(session));
+
+        return session.InSession(value);
+    }
 
     public static bool operator ==(TickOn lhs, TickOn rhs) =>
         lhs.Equals(rhs);
