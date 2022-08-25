@@ -11,14 +11,14 @@ using SquidEyes.FxData.Helpers;
 
 namespace SquidEyes.FxData.Models;
 
-public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
+public readonly struct Rate1 : IEquatable<Rate1>, IComparable<Rate1>
 {
     public const int Minimum = 1;
     public const int Maximum = 999999;
 
-    public Rate() => Value = Minimum;
+    public Rate1() => Value = Minimum;
 
-    private Rate(int value) => Value = value;
+    private Rate1(int value) => Value = value;
 
     private int Value { get; }
 
@@ -39,30 +39,30 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
     public float ToFloat(int digits) =>
         FastMath.Round(Value / GetFactor(digits), digits);
 
-    public bool Equals(Rate other) => Value == other.Value;
+    public bool Equals(Rate1 other) => Value == other.Value;
 
     public override bool Equals(object? other) =>
-        other is Rate rate && Equals(rate);
+        other is Rate1 rate && Equals(rate);
 
     public override int GetHashCode() => Value.GetHashCode();
 
-    public int CompareTo(Rate other) => Value.CompareTo(other.Value);
+    public int CompareTo(Rate1 other) => Value.CompareTo(other.Value);
 
-    public static Rate From(int value)
+    public static Rate1 From(int value)
     {
         if (value < Minimum || value > Maximum)
             throw new ArgumentOutOfRangeException(nameof(value));
 
-        return new Rate(value);
+        return new Rate1(value);
     }
 
-    public static Rate From(float value, int digits) =>
+    public static Rate1 From(float value, int digits) =>
         From((int)FastMath.Round(value * GetFactor(digits)));
 
-    public static Rate Parse(string value, int digits) =>
+    public static Rate1 Parse(string value, int digits) =>
         From(float.Parse(value), digits);
 
-    public static bool TryParse(string value, int digits, out Rate rate) =>
+    public static bool TryParse(string value, int digits, out Rate1 rate) =>
         Try.GetValue(() => Parse(value, digits), out rate);
 
     public static bool IsRate(float value, int digits)
@@ -87,30 +87,30 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
         };
     }
 
-    public static Rate operator +(Rate lhs, Rate rhs) =>
+    public static Rate1 operator +(Rate1 lhs, Rate1 rhs) =>
         new(lhs.Value + rhs.Value);
 
-    public static Rate operator -(Rate lhs, Rate rhs) =>
+    public static Rate1 operator -(Rate1 lhs, Rate1 rhs) =>
         new(lhs.Value - rhs.Value);
 
-    public static Rate operator %(Rate lhs, Rate rhs) =>
+    public static Rate1 operator %(Rate1 lhs, Rate1 rhs) =>
         new(lhs.Value % rhs.Value);
 
-    public static bool operator ==(Rate lhs, Rate rhs) =>
+    public static bool operator ==(Rate1 lhs, Rate1 rhs) =>
         lhs.Equals(rhs);
 
-    public static bool operator !=(Rate lhs, Rate rhs) =>
+    public static bool operator !=(Rate1 lhs, Rate1 rhs) =>
         !(lhs == rhs);
 
-    public static bool operator <(Rate lhs, Rate rhs) =>
+    public static bool operator <(Rate1 lhs, Rate1 rhs) =>
         lhs.CompareTo(rhs) < 0;
 
-    public static bool operator <=(Rate lhs, Rate rhs) =>
+    public static bool operator <=(Rate1 lhs, Rate1 rhs) =>
         lhs.CompareTo(rhs) <= 0;
 
-    public static bool operator >(Rate lhs, Rate rhs) =>
+    public static bool operator >(Rate1 lhs, Rate1 rhs) =>
         lhs.CompareTo(rhs) > 0;
 
-    public static bool operator >=(Rate lhs, Rate rhs) =>
+    public static bool operator >=(Rate1 lhs, Rate1 rhs) =>
         lhs.CompareTo(rhs) >= 0;
 }

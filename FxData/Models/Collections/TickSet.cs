@@ -256,8 +256,8 @@ public class TickSet : ListBase<Tick>
             foreach (var fields in new CsvEnumerator(stream, 3))
             {
                 var tickOn = TickOn.From(DateTime.Parse(fields[0]), Session);
-                var bid = Rate.From(float.Parse(fields[1]), Pair.Digits);
-                var ask = Rate.From(float.Parse(fields[2]), Pair.Digits);
+                var bid = Rate1.From(float.Parse(fields[1]), Pair.Digits);
+                var ask = Rate1.From(float.Parse(fields[2]), Pair.Digits);
 
                 Add(new Tick(tickOn, bid, ask));
             }
@@ -301,8 +301,8 @@ public class TickSet : ListBase<Tick>
                 return;
 
             var tickOn = new TickOn(new DateTime(reader.ReadInt64()));
-            var bid = Rate.From(reader.ReadInt32());
-            var ask = Rate.From(reader.ReadInt32());
+            var bid = Rate1.From(reader.ReadInt32());
+            var ask = Rate1.From(reader.ReadInt32());
 
             var lastTick = new Tick(tickOn, bid, ask);
 
@@ -350,7 +350,7 @@ public class TickSet : ListBase<Tick>
         };
     }
 
-    private static (Rate, Rate) ReadMinimizedBidAndAsk(BinaryReader reader, Tick lastTick)
+    private static (Rate1, Rate1) ReadMinimizedBidAndAsk(BinaryReader reader, Tick lastTick)
     {
         const int negative = 0b000_1000;
         const int mask = 0b000_0111;
@@ -365,9 +365,9 @@ public class TickSet : ListBase<Tick>
 
         var askDelta = (askData & mask) * ((askData & negative) == negative ? -1 : 1);
 
-        var bid = Rate.From(lastTick.Bid.AsInt32() + bidDelta);
+        var bid = Rate1.From(lastTick.Bid.AsInt32() + bidDelta);
 
-        var ask = Rate.From(lastTick.Ask.AsInt32() + askDelta);
+        var ask = Rate1.From(lastTick.Ask.AsInt32() + askDelta);
 
         return (bid, ask);
     }
@@ -378,11 +378,11 @@ public class TickSet : ListBase<Tick>
             ReadValue(reader, header, 0b0011_0000, 4)));
     }
 
-    private static Rate ReadBid(BinaryReader reader, byte header, Tick lastTick) =>
-        Rate.From(lastTick.Bid.AsInt32() + ReadValue(reader, header, 0b0000_1100, 2));
+    private static Rate1 ReadBid(BinaryReader reader, byte header, Tick lastTick) =>
+        Rate1.From(lastTick.Bid.AsInt32() + ReadValue(reader, header, 0b0000_1100, 2));
 
-    private static Rate ReadAsk(BinaryReader reader, byte header, Tick lastTick) =>
-        Rate.From(lastTick.Ask.AsInt32() + ReadValue(reader, header, 0b0000_0011, 0));
+    private static Rate1 ReadAsk(BinaryReader reader, byte header, Tick lastTick) =>
+        Rate1.From(lastTick.Ask.AsInt32() + ReadValue(reader, header, 0b0000_0011, 0));
 
     private static byte GetTickOnFlags(int value) =>
         GetFlags(value, TickOn1, TickOn2, TickOn4);

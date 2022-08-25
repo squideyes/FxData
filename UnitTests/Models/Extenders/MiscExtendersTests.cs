@@ -54,7 +54,7 @@ public class MiscExtendersTests
     {
         var session = new Session(TradeDate.MinValue, Market.Combined);
 
-        var tick = new Tick(session.MinTickOn, Rate.From(1), Rate.From(2));
+        var tick = new Tick(session.MinTickOn, Rate1.From(1), Rate1.From(2));
 
         FluentActions.Invoking(() => tick.ToRate(0))
             .Should().Throw<ArgumentOutOfRangeException>();

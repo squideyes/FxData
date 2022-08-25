@@ -38,18 +38,18 @@ public class RenkoFeedTests
 
             TickOn GetTickOn(int seconds) => new(minTickOn.AddSeconds(seconds));
 
-            Rate Adjust(Rate value) => 
-                bidOrAsk == BidOrAsk.Bid ? value : value + Rate.From(2);
+            Rate1 Adjust(Rate1 value) => 
+                bidOrAsk == BidOrAsk.Bid ? value : value + Rate1.From(2);
 
             var rate = bidOrAsk == BidOrAsk.Bid ? args.Tick.Bid : args.Tick.Ask;
 
             closedBrickCount.Should().Be(expectedClosedBrickCount);
             args.Tick.TickOn.Should().Be(GetTickOn(tickSeconds));
-            rate.Should().Be(Adjust(Rate.From(tickRate)));
+            rate.Should().Be(Adjust(Rate1.From(tickRate)));
             args.Brick.Open.TickOn.Should().Be(GetTickOn(openSeconds));
-            args.Brick.Open.Rate.Should().Be(Adjust(Rate.From(openRate)));
+            args.Brick.Open.Rate.Should().Be(Adjust(Rate1.From(openRate)));
             args.Brick.Close.TickOn.Should().Be(GetTickOn(closeSeconds));
-            args.Brick.Close.Rate.Should().Be(Adjust(Rate.From(closeRate)));
+            args.Brick.Close.Rate.Should().Be(Adjust(Rate1.From(closeRate)));
             args.IsClosed.Should().Be(isClosed);
         }
 
@@ -157,7 +157,7 @@ public class RenkoFeedTests
 
         var session = new Session(tradeDate, Market.NewYork);
 
-        return new RenkoFeed(session, bidOrAsk, Rate.From(20), raiseOpenBricks);
+        return new RenkoFeed(session, bidOrAsk, Rate1.From(20), raiseOpenBricks);
     }
 
     private static List<Tick> GetTicks()
@@ -167,7 +167,7 @@ public class RenkoFeedTests
         var session = new Session(tradeDate, Market.NewYork);
 
         Tick GetTick(DateTime dateTime, int bid) =>
-            new(TickOn.From(dateTime, session), Rate.From(bid), Rate.From(bid + 2));
+            new(TickOn.From(dateTime, session), Rate1.From(bid), Rate1.From(bid + 2));
 
         return new List<Tick>
         {

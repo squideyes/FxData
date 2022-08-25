@@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
 
 namespace SquidEyes.FxData.Helpers;
 
-public class JsonStringRateConverter : JsonConverter<Rate>
+public class JsonStringRateConverter : JsonConverter<Rate1>
 {
     private readonly Pair pair;
 
@@ -22,14 +22,14 @@ public class JsonStringRateConverter : JsonConverter<Rate>
         this.pair = pair ?? throw new ArgumentNullException(nameof(pair));
     }
 
-    public override Rate Read(ref Utf8JsonReader reader,
+    public override Rate1 Read(ref Utf8JsonReader reader,
         Type _, JsonSerializerOptions options)
     {
-        return Rate.Parse(reader.GetString()!, pair.Digits);
+        return Rate1.Parse(reader.GetString()!, pair.Digits);
     }
 
     public override void Write(Utf8JsonWriter writer,
-        Rate value, JsonSerializerOptions options)
+        Rate1 value, JsonSerializerOptions options)
     {
         writer.WriteStringValue(pair.Format(value.ToFloat(pair.Digits)));
     }

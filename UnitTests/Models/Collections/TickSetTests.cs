@@ -232,7 +232,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         var tickOn = new TickOn(tickSet.First().TickOn.Value.AddDays(1));
 
         FluentActions.Invoking(() => tickSet.Add(new Tick(
-            tickOn, Rate.From(Rate.Minimum), Rate.From(Rate.Maximum))))
+            tickOn, Rate1.From(Rate1.Minimum), Rate1.From(Rate1.Maximum))))
                 .Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -378,7 +378,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
 
         Tick GetTick(int seconds, int bid, int ask) => new(new TickOn(
             session!.MinTickOn.Value.AddSeconds(seconds)), 
-                Rate.From(bid), Rate.From(ask));
+                Rate1.From(bid), Rate1.From(ask));
 
         var tickSet = new TickSet(Source.Dukascopy, pair, session)
         {
@@ -396,9 +396,9 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         var tickOn = new TickOn(
             tickSet.Session.MinTickOn.Value.AddMilliseconds(msOffset));
 
-        var bid = Rate.From(tickSet.Pair.MinValue, 5);
+        var bid = Rate1.From(tickSet.Pair.MinValue, 5);
 
-        var ask = Rate.From(tickSet.Pair.MaxValue, 5);
+        var ask = Rate1.From(tickSet.Pair.MaxValue, 5);
 
         return new Tick(tickOn, bid, ask);
     }

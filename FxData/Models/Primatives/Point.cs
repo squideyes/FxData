@@ -11,14 +11,14 @@ namespace SquidEyes.FxData.Models;
 
 public class Point
 {
-    internal Point(TickOn tickOn, Rate rate)
+    internal Point(TickOn tickOn, Rate1 rate)
     {
         TickOn = tickOn;
         Rate = rate;
     }
 
     public TickOn TickOn { get; }
-    public Rate Rate { get; }
+    public Rate1 Rate { get; }
 
     public string ToCsvString() => $"{TickOn},{Rate}";
 }

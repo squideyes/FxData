@@ -13,7 +13,7 @@ namespace SquidEyes.FxData.Models;
 
 public struct Tick : IEquatable<Tick>
 {
-    public Tick(TickOn tickOn, Rate bid, Rate ask)
+    public Tick(TickOn tickOn, Rate1 bid, Rate1 ask)
     {
         TickOn = tickOn.Validated(nameof(tickOn), v => !v.IsDefaultValue());
 
@@ -23,10 +23,10 @@ public struct Tick : IEquatable<Tick>
     }
 
     public TickOn TickOn { get; }
-    public Rate Bid { get; }
-    public Rate Ask { get; }
+    public Rate1 Bid { get; }
+    public Rate1 Ask { get; }
 
-    public Rate Spread => Rate.From(Ask.AsInt32() - Bid.AsInt32());
+    public Rate1 Spread => Rate1.From(Ask.AsInt32() - Bid.AsInt32());
 
     public bool IsEmpty => TickOn.IsDefaultValue();
 
@@ -76,8 +76,8 @@ public struct Tick : IEquatable<Tick>
             throw new ArgumentOutOfRangeException(nameof(value));
 
         var tickOn = TickOn.Parse(fields[0], session);
-        var bid = Rate.From(float.Parse(fields[1]), pair.Digits);
-        var ask = Rate.From(float.Parse(fields[2]), pair.Digits);
+        var bid = Rate1.From(float.Parse(fields[1]), pair.Digits);
+        var ask = Rate1.From(float.Parse(fields[2]), pair.Digits);
 
         return new Tick(tickOn, bid, ask);
     }
