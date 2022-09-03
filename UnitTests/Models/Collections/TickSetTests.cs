@@ -137,7 +137,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     public void TickSetMismatchOnLoadThrowsError(Source source, Symbol symbol, bool goodVersion)
     {
         var session = new Session(TradeDate.MinValue, Market.Combined);
-        
+
         var tickSet = new TickSet(source, Known.Pairs[symbol], session);
 
         var stream = Properties.TestData.DC_EURUSD_20160104_NYC_EST_STS.ToStream();
@@ -145,9 +145,9 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         if (!goodVersion)
         {
             var writer = new BinaryWriter(stream);
-            
+
             new MajorMinor(2, 0).Write(writer);
-            
+
             writer.Flush();
 
             stream.Position = 0;
@@ -190,7 +190,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         var tick2 = GetTick(tickSet, 1);
         var tick3 = GetTick(tickSet, 2);
 
-        tickSet.AddRange(new List<Tick> {tick1, tick2, tick3});
+        tickSet.AddRange(new List<Tick> { tick1, tick2, tick3 });
 
         tickSet.Count.Should().Be(3);
 
@@ -231,8 +231,8 @@ public class TickSetTests : IClassFixture<TickSetFixture>
 
         var tickOn = new TickOn(tickSet.First().TickOn.Value.AddDays(1));
 
-        FluentActions.Invoking(() => tickSet.Add(new Tick(
-            tickOn, Rate1.From(Rate1.Minimum), Rate1.From(Rate1.Maximum))))
+        FluentActions.Invoking(() => tickSet.Add(new Tick(tickOn, 
+            Rate2.From(Rate2.MinInt32, 5), Rate2.From(Rate2.MaxInt32, 5))))
                 .Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -377,8 +377,8 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         var (pair, session) = TestHelper.GetPairAndSession(4);
 
         Tick GetTick(int seconds, int bid, int ask) => new(new TickOn(
-            session!.MinTickOn.Value.AddSeconds(seconds)), 
-                Rate1.From(bid), Rate1.From(ask));
+            session!.MinTickOn.Value.AddSeconds(seconds)),
+                Rate2.From(bid, 5), Rate2.From(ask, 5));
 
         var tickSet = new TickSet(Source.Dukascopy, pair, session)
         {
@@ -396,9 +396,9 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         var tickOn = new TickOn(
             tickSet.Session.MinTickOn.Value.AddMilliseconds(msOffset));
 
-        var bid = Rate1.From(tickSet.Pair.MinValue, 5);
+        var bid = Rate2.From(tickSet.Pair.MinValue, 5);
 
-        var ask = Rate1.From(tickSet.Pair.MaxValue, 5);
+        var ask = Rate2.From(tickSet.Pair.MaxValue, 5);
 
         return new Tick(tickOn, bid, ask);
     }

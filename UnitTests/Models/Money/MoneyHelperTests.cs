@@ -44,7 +44,7 @@ public class MoneyHelperTests
             MoneyData.GetUsdValueOf(BidOrAsk.Ask), new MinMargin());
 
         var actual = helper.GetPNL(Known.Pairs[symbol], side, 
-            100000, Rate1.From(entry), Rate1.From(exit));
+            100000, Rate2.From(entry, 5), Rate2.From(exit, 5));
 
         actual.Should().Be(expected);
     }

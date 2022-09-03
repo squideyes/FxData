@@ -20,7 +20,7 @@ namespace SquidEyes.FxData.Helpers
 
         private readonly Session session;
         private readonly BidOrAsk bidOrAsk;
-        private readonly Rate1 ticksPerBrick;
+        private readonly Rate2 ticksPerBrick;
         private readonly bool raiseOpenBricks;
 
         private Point firstPoint = null!;
@@ -28,7 +28,7 @@ namespace SquidEyes.FxData.Helpers
         public event EventHandler<BrickArgs>? OnBrick;
 
         public RenkoFeed(Session session, BidOrAsk bidOrAsk,
-            Rate1 ticksPerBrick, bool raiseOpenBricks = false, int bufferSize = 100)
+            Rate2 ticksPerBrick, bool raiseOpenBricks = false, int bufferSize = 100)
         {
             this.session = session ??
                 throw new ArgumentNullException(nameof(session));
@@ -59,7 +59,7 @@ namespace SquidEyes.FxData.Helpers
 
             var point = new Point(tick.TickOn, rate);
 
-            Rate1 GetRate(Rate1 source, out Rate1 target) => target = source;
+            Rate2 GetRate(Rate2 source, out Rate2 target) => target = source;
 
             void AddClosedBricks()
             {
@@ -68,13 +68,13 @@ namespace SquidEyes.FxData.Helpers
 
                 var last = bricks[0];
 
-                while (rate > GetRate(last.High.Rate + ticksPerBrick, out Rate1 closeAt))
+                while (rate > GetRate(last.High.Rate + ticksPerBrick, out Rate2 closeAt))
                 {
                     last = AddAndRaiseClosedBrick(
                         new Brick(last.High, new Point(tick.TickOn, closeAt)), tick);
                 }
 
-                while (rate < GetRate(last.Low.Rate - ticksPerBrick, out Rate1 closeAt))
+                while (rate < GetRate(last.Low.Rate - ticksPerBrick, out Rate2 closeAt))
                 {
                     last = AddAndRaiseClosedBrick(
                         new Brick(last.Low, new Point(tick.TickOn, closeAt)), tick);
@@ -87,7 +87,7 @@ namespace SquidEyes.FxData.Helpers
             }
             else if (Count == 0)
             {
-                if (rate > GetRate(firstPoint.Rate + ticksPerBrick, out Rate1 closeAt))
+                if (rate > GetRate(firstPoint.Rate + ticksPerBrick, out Rate2 closeAt))
                 {
                     AddAndRaiseClosedBrick(
                         new Brick(firstPoint, new Point(tick.TickOn, closeAt)), tick);

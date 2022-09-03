@@ -50,8 +50,8 @@ internal static class TestHelper
             foreach (var fields in new CsvEnumerator(csv.ToStream(), 3))
             {
                 var tickOn = TickOn.From(DateTime.Parse(fields[0]), tickSet.Session);
-                var bid = Rate1.From(float.Parse(fields[1]), pair.Digits);
-                var ask = Rate1.From(float.Parse(fields[2]), pair.Digits);
+                var bid = Rate2.From(float.Parse(fields[1]), pair.Digits);
+                var ask = Rate2.From(float.Parse(fields[2]), pair.Digits);
 
                 tickSet.Add(new Tick(tickOn, bid, ask));
             }

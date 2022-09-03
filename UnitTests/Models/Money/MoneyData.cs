@@ -28,7 +28,7 @@ internal static class MoneyData
 
             void Update(Pair pair, int bid, int ask) =>
                 usdValueOf!.Update(pair, new Tick(
-                    session.MinTickOn, Rate1.From(bid), Rate1.From(ask)));
+                    session.MinTickOn, Rate2.From(bid, 5), Rate2.From(ask, 5)));
 
             Update(Known.Pairs[Symbol.EURUSD], 113460, 113480);
             Update(Known.Pairs[Symbol.GBPUSD], 135370, 135380);

@@ -4,8 +4,9 @@ namespace SquidEyes.FxData.Models;
 
 public struct Rate2 : IEquatable<Rate2>, IComparable<Rate2>
 {
-    private const int MinInt32 = 1;
-    private const int MaxInt32 = 999999;
+    public const int MinInt32 = 1;
+    public const int MaxInt32 = 999999;
+
     private const float FiveZeros = 100000.0f;
     private const float ThreeZeros = 1000.0f;
 
@@ -20,6 +21,8 @@ public struct Rate2 : IEquatable<Rate2>, IComparable<Rate2>
     {
         Value = value;
     }
+
+    public int Digits => Value > 0 ? 5 : 3;
 
     public float AsFloat() => Value > 0 ?
         Value / FiveZeros : Value * -1 / ThreeZeros;
@@ -68,7 +71,7 @@ public struct Rate2 : IEquatable<Rate2>, IComparable<Rate2>
     public static bool TryParse(string value, int digits, out Rate2 rate) =>
         Try.GetValue(() => From(float.Parse(value), digits), out rate);
 
-    public static bool IsRate(float value, int digits)
+    public static bool IsRateValue(float value, int digits)
     {
         bool IsRounded() => value == FastMath.Round(value, digits);
 

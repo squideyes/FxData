@@ -15,7 +15,7 @@ namespace SquidEyes.FxData.Helpers;
 
 public class UsdValueOf
 {
-    private readonly ConcurrentDictionary<Pair, Rate1> rates = new();
+    private readonly ConcurrentDictionary<Pair, Rate2> rates = new();
 
     private readonly BidOrAsk bidOrAsk;
 
@@ -39,19 +39,19 @@ public class UsdValueOf
         rates.AddOrUpdate(pair, rate, (p, v) => rate);
     }
 
-    public Rate1 GetRateInUsd(Currency currency)
+    public Rate2 GetRateInUsd(Currency currency)
     {
-        Rate1 GetRate(Symbol symbol) => rates.GetOrAdd(Known.Pairs[symbol], p => default);
+        Rate2 GetRate(Symbol symbol) => rates.GetOrAdd(Known.Pairs[symbol], p => default);
 
-        Rate1 GetReciprocal(Symbol symbol) => Known.Pairs[symbol].AsFunc(
-            p => Rate1.From(1.0f / GetRate(symbol).ToFloat(p.Digits), p.Digits));
+        Rate2 GetReciprocal(Symbol symbol) => Known.Pairs[symbol].AsFunc(
+            p => Rate2.From(1.0f / GetRate(symbol).AsFloat(), p.Digits));
 
         return currency switch
         {
             Currency.JPY => GetReciprocal(Symbol.USDJPY),
             Currency.EUR => GetRate(Symbol.EURUSD),
             Currency.GBP => GetRate(Symbol.GBPUSD),
-            Currency.USD => Rate1.From(100000),
+            Currency.USD => Rate2.From(100000, 5),
             _ => throw new ArgumentOutOfRangeException(nameof(currency))
         };
     }
