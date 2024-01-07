@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 
 namespace SquidEyes.FxData.Models;
 
@@ -15,11 +15,9 @@ public struct Tick : IEquatable<Tick>
 {
     public Tick(TickOn tickOn, Rate2 bid, Rate2 ask)
     {
-        TickOn = tickOn.Validated(nameof(tickOn), v => !v.IsDefaultValue());
-
-        Bid = bid.Validated(nameof(bid), v => !v.IsDefaultValue());
-
-        Ask = ask.Validated(nameof(ask), v => !v.IsDefaultValue() && v >= bid);
+        TickOn = tickOn.MayNotBe().Default();
+        Bid = bid.MayNotBe().Default();
+        Ask = ask.MustBe().True(v => !v.IsDefault() && ask > bid);
     }
 
     public TickOn TickOn { get; }
@@ -28,7 +26,7 @@ public struct Tick : IEquatable<Tick>
 
     public Rate2 Spread => Ask - Bid;
 
-    public bool IsEmpty => TickOn.IsDefaultValue();
+    public bool IsEmpty => TickOn.IsDefault();
 
     public bool InSession(Session session) => session.InSession(TickOn.AsDateTime());
 

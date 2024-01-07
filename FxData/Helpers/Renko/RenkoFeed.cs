@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
 using System.Collections;
 using System.Text;
@@ -33,10 +33,10 @@ namespace SquidEyes.FxData.Helpers
             this.session = session ??
                 throw new ArgumentNullException(nameof(session));
 
-            this.bidOrAsk = bidOrAsk.Validated(nameof(bidOrAsk), v => v.IsEnumValue());
+            this.bidOrAsk = bidOrAsk.MustBe().EnumValue();
 
-            this.ticksPerBrick = ticksPerBrick
-                .Validated(nameof(ticksPerBrick), v => v.IsTicksPerBrick());
+            this.ticksPerBrick = ticksPerBrick.MustBe()
+                .True(v => v.IsTicksPerBrick());
 
             this.raiseOpenBricks = raiseOpenBricks;
 
@@ -49,7 +49,7 @@ namespace SquidEyes.FxData.Helpers
 
         public void HandleTick(Tick tick)
         {
-            if (tick.IsDefaultValue())
+            if (tick.IsDefault())
                 throw new ArgumentNullException(nameof(tick));
 
             if (!session.InSession(tick.TickOn.AsDateTime()))
@@ -81,7 +81,7 @@ namespace SquidEyes.FxData.Helpers
                 }
             }
 
-            if (firstPoint.IsDefaultValue())
+            if (firstPoint.IsDefault())
             {
                 firstPoint = point;
             }

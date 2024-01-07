@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 
 namespace SquidEyes.FxData.Models;
 
@@ -17,8 +17,8 @@ public class Pair : IEquatable<Pair>
 
     public Pair(Symbol symbol, int digits)
     {
-        Symbol = symbol.Validated(nameof(symbol), v => v.IsEnumValue());
-        Digits = digits.Validated(nameof(digits), v => v.In(3, 5));
+        Symbol = symbol.MustBe().EnumValue();
+        Digits = digits.MustBe().True(v => v.In(3, 5));
 
         format = "N" + digits;
 

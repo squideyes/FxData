@@ -8,7 +8,7 @@
 // ********************************************************
 
 using Be.IO;
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
 using System.Text;
 

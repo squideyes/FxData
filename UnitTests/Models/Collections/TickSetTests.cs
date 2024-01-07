@@ -8,7 +8,8 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
+using SquidEyes.FxData;
 using SquidEyes.FxData.Models;
 using SquidEyes.UnitTests.Testing;
 using System;

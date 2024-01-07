@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
 
 namespace SquidEyes.FxData.Helpers;
@@ -71,7 +71,7 @@ public class MoneyHelper
         if (!leverage.IsEnumValue())
             throw new ArgumentOutOfRangeException(nameof(leverage));
 
-        if (!cushion.Between(0.0, 1.0))
+        if (!cushion.IsBetween(0.0, 1.0))
             throw new ArgumentOutOfRangeException(nameof(cushion));
 
         var margin = units * Math.Max(1.0 / (int)leverage, minMargin[pair]);

@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Helpers;
 using System.IO.Compression;
 using System.Text;
@@ -35,12 +35,12 @@ public class TickSet : ListBase<Tick>
 
     public TickSet(Source source, Pair pair, Session session)
     {
-        Source = source.Validated(nameof(source), v => v.IsEnumValue());
+        Source = source.MustBe().EnumValue();
 
-        Pair = pair.Validated(
-            nameof(pair), v => Known.Pairs.ContainsKey(pair.Symbol));
+        Pair = pair.MustBe().True(
+            v => Known.Pairs.ContainsKey(pair.Symbol));
 
-        Session = session ?? throw new ArgumentNullException(nameof(session));
+        Session = session.MayNotBe().Null();
     }
 
     public Source Source { get; }
@@ -58,7 +58,7 @@ public class TickSet : ListBase<Tick>
 
     public void Add(Tick tick)
     {
-        if (tick.IsDefaultValue())
+        if (tick.IsDefault())
             throw new ArgumentOutOfRangeException(nameof(tick));
 
         if (!Session.InSession(tick.TickOn.AsDateTime()))
@@ -107,8 +107,7 @@ public class TickSet : ListBase<Tick>
         if (!basePath.IsFolderName())
             throw new ArgumentOutOfRangeException(nameof(basePath));
 
-        if (!dataKind.IsEnumValue())
-            throw new ArgumentOutOfRangeException(nameof(dataKind));
+        dataKind.MustBe().EnumValue();
 
         var sb = new StringBuilder();
 

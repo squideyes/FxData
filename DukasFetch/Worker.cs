@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
 using System.Text;
 using static SquidEyes.FxData.Models.Source;
@@ -135,7 +135,7 @@ internal class Worker : BackgroundService
             return (jobs, skipped);
 
         var yms = GetTradeDates(maxTradeDate).Select(d => (d.Year, d.Month))
-            .Distinct().OrderBy(d => d).ToList().AsFunc(d => d.Take(d.Count - 1)).ToList();
+            .Distinct().OrderBy(d => d).ToList().Convert(d => d.Take(d.Count - 1)).ToList();
 
         foreach (var (Year, Month) in yms)
         {

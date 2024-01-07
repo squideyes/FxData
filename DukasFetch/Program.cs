@@ -8,7 +8,7 @@
 // ********************************************************
 
 using Fclp;
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.DukasFetch;
 using SquidEyes.FxData.Models;
 

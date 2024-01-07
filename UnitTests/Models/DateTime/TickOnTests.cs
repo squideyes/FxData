@@ -8,7 +8,7 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
 using System;
 using Xunit;
@@ -311,6 +311,6 @@ public class TickOnTests
     private static TickOn GetTickOn(Market market, int days)
     {
         return new Session(new TradeDate(TradeDate.MinValue.Value.AddDays(days)), market)
-            .AsFunc(s => TickOn.From(s.MinTickOn.Value, s));
+            .Convert(s => TickOn.From(s.MinTickOn.Value, s));
     }
 }

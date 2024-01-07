@@ -8,7 +8,7 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
 using System;
 using Xunit;
@@ -69,7 +69,7 @@ public class TickTests
     [InlineData(3, 1, 999999, "01/04/2016 08:00:00.000,0.001,999.999")]
     public void DigitsToCsvString(int digits, int bidValue, int askValue, string result)
     {
-        GetTick(digits, bidValue, askValue).AsFunc(x => x.ToCsvString().Should().Be(result));
+        GetTick(digits, bidValue, askValue).Convert(x => x.ToCsvString().Should().Be(result));
     }
 
     ////////////////////////////
@@ -80,7 +80,7 @@ public class TickTests
     public void PairToCsvString(
         int digits, int bidValue, int askValue, string result)
     {
-        GetTick(digits, bidValue, askValue).AsFunc(x => x.ToCsvString().Should().Be(result));
+        GetTick(digits, bidValue, askValue).Convert(x => x.ToCsvString().Should().Be(result));
     }
 
     ////////////////////////////
@@ -88,7 +88,7 @@ public class TickTests
     [Fact]
     public void OverriddenToString()
     {
-        GetTick(5, 1, 999999).AsFunc(x => x.ToString()
+        GetTick(5, 1, 999999).Convert(x => x.ToString()
             .Should().Be("01/04/2016 08:00:00.000,1,999999"));
     }
 
@@ -101,7 +101,7 @@ public class TickTests
     public void SpreadSetCorrectly(int bidValue, int askValue, int result)
     {
         GetTick(5, bidValue, askValue)
-            .AsFunc(x => x.Spread.Should().Be(Rate2.From(result, 5)));
+            .Convert(x => x.Spread.Should().Be(Rate2.From(result, 5)));
     }
 
     ////////////////////////////

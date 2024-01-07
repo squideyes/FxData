@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
 using System.Collections.Concurrent;
 
@@ -21,7 +21,7 @@ public class UsdValueOf
 
     public UsdValueOf(BidOrAsk bidOrAsk)
     {
-        this.bidOrAsk = bidOrAsk.Validated(nameof(bidOrAsk), v => v.IsEnumValue());
+        this.bidOrAsk = bidOrAsk.MustBe().EnumValue();
     }
 
     public void Update(Pair pair, Tick tick)
@@ -43,7 +43,7 @@ public class UsdValueOf
     {
         Rate2 GetRate(Symbol symbol) => rates.GetOrAdd(Known.Pairs[symbol], p => default);
 
-        Rate2 GetReciprocal(Symbol symbol) => Known.Pairs[symbol].AsFunc(
+        Rate2 GetReciprocal(Symbol symbol) => Known.Pairs[symbol].Convert(
             p => Rate2.From(1.0f / GetRate(symbol).AsFloat(), p.Digits));
 
         return currency switch
