@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 
 namespace SquidEyes.FxData.Models;
 
@@ -48,7 +48,7 @@ public struct Units : IEquatable<Units>, IComparable<Units>
     public static Units Parse(string value) => From(int.Parse(value));
 
     public static bool IsValue(int value) =>
-        value.Between(Minimum, Maximum) && value % Step == 0;
+        value.IsBetween(Minimum, Maximum) && value % Step == 0;
 
     public static bool operator ==(Units left, Units right) =>
         left.Equals(right);

@@ -7,11 +7,11 @@
 //// of the MIT License (https://opensource.org/licenses/MIT)
 //// ********************************************************
 
-//using FluentAssertions;
-//using SquidEyes.Basics;
-//using SquidEyes.FxData.Models;
-//using System;
-//using Xunit;
+using FluentAssertions;
+using SquidEyes.Fundamentals;
+using SquidEyes.FxData.Models;
+using System;
+using Xunit;
 
 //namespace SquidEyes.UnitTests;
 
@@ -64,41 +64,48 @@
 
 //    ////////////////////////////
 
-//    [Theory]
-//    [InlineData(5, 1, 999999, "01/04/2016 08:00:00.000,0.00001,9.99999")]
-//    [InlineData(3, 1, 999999, "01/04/2016 08:00:00.000,0.001,999.999")]
-//    public void DigitsToCsvString(int digits, int bidValue, int askValue, string result)
-//    {
-//        GetTick(digits, bidValue, askValue).AsFunc(x => x.ToCsvString().Should().Be(result));
-//    }
+    [Theory]
+    [InlineData(5, 1, 999999, "01/04/2016 08:00:00.000,0.00001,9.99999")]
+    [InlineData(3, 1, 999999, "01/04/2016 08:00:00.000,0.001,999.999")]
+    public void DigitsToCsvString(int digits, int bidValue, int askValue, string result)
+    {
+        GetTick(digits, bidValue, askValue).AsFunc(x => x.ToCsvString().Should().Be(result));
+    }
 
 //    ////////////////////////////
 
-//    [Theory]
-//    [InlineData(5, 1, 999999, "01/04/2016 08:00:00.000,0.00001,9.99999")]
-//    [InlineData(3, 1, 999999, "01/04/2016 08:00:00.000,0.001,999.999")]
-//    public void PairToCsvString(
-//        int digits, int bidValue, int askValue, string result)
-//    {
-//        GetTick(digits, bidValue, askValue).AsFunc(x => x.ToCsvString().Should().Be(result));
-//    }
+    [Theory]
+    [InlineData(5, 1, 999999, "01/04/2016 08:00:00.000,0.00001,9.99999")]
+    [InlineData(3, 1, 999999, "01/04/2016 08:00:00.000,0.001,999.999")]
+    public void PairToCsvString(
+        int digits, int bidValue, int askValue, string result)
+    {
+        GetTick(digits, bidValue, askValue).AsFunc(x => x.ToCsvString().Should().Be(result));
+    }
 
 //    ////////////////////////////
 
-//    [Theory]
-//    [InlineData(5)]
-//    [InlineData(3)]
-//    public void OverriddenToString(int digits)
-//    {
-//        string text;
+    [Fact]
+    public void OverriddenToString()
+    {
+        GetTick(5, 1, 999999).AsFunc(x => x.ToString()
+            .Should().Be("01/04/2016 08:00:00.000,1,999999"));
+    }
 
 //        if (digits == 3)
 //            text = "01/04/2016 08:00:00.000,0.001,999.999";
 //        else
 //            text = "01/04/2016 08:00:00.000,0.00001,9.99999";
 
-//        GetTick(digits, 1, 999999).AsFunc(x => x.ToString().Should().Be(text));
-//    }
+    [Theory]
+    [InlineData(1, 2, 1)]
+    [InlineData(1, 3, 2)]
+    [InlineData(1, 4, 3)]
+    public void SpreadSetCorrectly(int bidValue, int askValue, int result)
+    {
+        GetTick(5, bidValue, askValue)
+            .AsFunc(x => x.Spread.Should().Be(Rate2.From(result, 5)));
+    }
 
 //    ////////////////////////////
 

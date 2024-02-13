@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Helpers;
 using System.IO.Compression;
 using System.Text;
@@ -22,13 +22,12 @@ public class Bundle : ListBase<TickSet>
 
     public Bundle(Source source, Pair pair, int year, int month, Market market)
     {
-        Source = source.Validated(nameof(source), v => v.IsEnumValue());
-        Pair = pair.Validated(nameof(pair), 
-            v => Known.Pairs.ContainsKey(v.Symbol));
-        Year = year = year.Validated(nameof(year),
-            v => v.Between(TradeDate.MinValue.Year, TradeDate.MaxValue.Year));
-        Month = month.Validated(nameof(month), v => v.Between(1, 12));
-        Market = market.Validated(nameof(market), v => v.IsEnumValue());
+        Source = source.MustBe().EnumValue();
+        Pair = pair.MustBe().True(v => Known.Pairs.ContainsKey(v.Symbol));
+        Year = year = year.MustBe().Between(
+            TradeDate.MinValue.Year, TradeDate.MaxValue.Year);
+        Month = month.MustBe().Between(1, 12);
+        Market = market.MustBe().EnumValue();
 
         tradeDates = Known.GetTradeDates(year, month);
     }

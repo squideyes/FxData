@@ -7,13 +7,13 @@
 //// of the MIT License (https://opensource.org/licenses/MIT)
 //// ********************************************************
 
-//using SquidEyes.Basics;
-//using SquidEyes.FxData.Models;
+using SquidEyes.Fundamentals;
+using SquidEyes.FxData.Models;
 
 //namespace SquidEyes.FxData.Helpers;
 
-//public static class RateExtenders
-//{
-//    public static bool IsTicksPerBrick(this Rate value) => 
-//        value.AsInt32().Between(1, 200);
-//}
+public static class RateExtenders
+{
+    public static bool IsTicksPerBrick(this Rate2 value) => 
+        value.AsInt32().IsBetween(1, 200);
+}

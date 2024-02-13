@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>dotnet-DukasFetch-EBFB4BCC-B827-44F3-8AB3-7E4CA8EAC502</UserSecretsId>
@@ -18,12 +18,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
 		<PackageReference Include="Be.IO-netstandard" Version="1.0.3" />
 		<PackageReference Include="FluentCommandLineParser-netstandard" Version="1.4.3.13" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="SevenZip" Version="19.0.0" />
-		<PackageReference Include="SquidEyes.Basics" Version="1.0.22" />
 	</ItemGroup>
 
 	<ItemGroup>

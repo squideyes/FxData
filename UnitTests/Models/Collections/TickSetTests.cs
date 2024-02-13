@@ -7,15 +7,16 @@
 //// of the MIT License (https://opensource.org/licenses/MIT)
 //// ********************************************************
 
-//using FluentAssertions;
-//using SquidEyes.Basics;
-//using SquidEyes.FxData.Models;
-//using SquidEyes.UnitTests.Testing;
-//using System;
-//using System.Collections.Generic;
-//using System.Globalization;
-//using System.IO;
-//using Xunit;
+using FluentAssertions;
+using SquidEyes.Fundamentals;
+using SquidEyes.FxData;
+using SquidEyes.FxData.Models;
+using SquidEyes.UnitTests.Testing;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using Xunit;
 
 //namespace SquidEyes.UnitTests;
 

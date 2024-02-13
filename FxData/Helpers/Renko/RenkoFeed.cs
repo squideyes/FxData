@@ -7,10 +7,10 @@
 //// of the MIT License (https://opensource.org/licenses/MIT)
 //// ********************************************************
 
-//using SquidEyes.Basics;
-//using SquidEyes.FxData.Models;
-//using System.Collections;
-//using System.Text;
+using SquidEyes.Fundamentals;
+using SquidEyes.FxData.Models;
+using System.Collections;
+using System.Text;
 
 //namespace SquidEyes.FxData.Helpers
 //{
@@ -33,10 +33,10 @@
 //            this.session = session ??
 //                throw new ArgumentNullException(nameof(session));
 
-//            this.bidOrAsk = bidOrAsk.Validated(nameof(bidOrAsk), v => v.IsEnumValue());
+            this.bidOrAsk = bidOrAsk.Validated(nameof(bidOrAsk), v => v.IsEnumValue());
 
-//            this.ticksPerBrick = ticksPerBrick
-//                .Validated(nameof(ticksPerBrick), v => v.IsTicksPerBrick());
+            this.ticksPerBrick = ticksPerBrick
+                .Validated(nameof(ticksPerBrick), v => v.IsTicksPerBrick());
 
 //            this.raiseOpenBricks = raiseOpenBricks;
 
@@ -47,10 +47,10 @@
 
 //        public Brick this[int index] => bricks[index];
 
-//        public void HandleTick(Tick tick)
-//        {
-//            if (tick.IsDefaultValue())
-//                throw new ArgumentNullException(nameof(tick));
+        public void HandleTick(Tick tick)
+        {
+            if (tick.IsDefaultValue())
+                throw new ArgumentNullException(nameof(tick));
 
 //            if (!session.InSession(tick.TickOn.AsDateTime()))
 //                throw new ArgumentOutOfRangeException(nameof(tick));
@@ -81,22 +81,22 @@
 //                }
 //            }
 
-//            if (firstPoint.IsDefaultValue())
-//            {
-//                firstPoint = point;
-//            }
-//            else if (Count == 0)
-//            {
-//                if (rate > GetRate(firstPoint.Rate + ticksPerBrick, out Rate closeAt))
-//                {
-//                    AddAndRaiseClosedBrick(
-//                        new Brick(firstPoint, new Point(tick.TickOn, closeAt)), tick);
-//                }
-//                else if (rate < GetRate(firstPoint.Rate - ticksPerBrick, out closeAt))
-//                {
-//                    AddAndRaiseClosedBrick(
-//                        new Brick(firstPoint, new Point(tick.TickOn, closeAt)), tick);
-//                }
+            if (firstPoint.IsDefaultValue())
+            {
+                firstPoint = point;
+            }
+            else if (Count == 0)
+            {
+                if (rate > GetRate(firstPoint.Rate + ticksPerBrick, out Rate2 closeAt))
+                {
+                    AddAndRaiseClosedBrick(
+                        new Brick(firstPoint, new Point(tick.TickOn, closeAt)), tick);
+                }
+                else if (rate < GetRate(firstPoint.Rate - ticksPerBrick, out closeAt))
+                {
+                    AddAndRaiseClosedBrick(
+                        new Brick(firstPoint, new Point(tick.TickOn, closeAt)), tick);
+                }
 
 //                AddClosedBricks();
 //            }

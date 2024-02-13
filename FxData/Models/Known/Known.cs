@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 using System;
 using System.Collections.Immutable;
 using static SquidEyes.FxData.Models.Symbol;
@@ -43,10 +43,10 @@ public static class Known
 
     public static SortedSet<TradeDate> GetTradeDates(int year, int month)
     {
-        if (!year.Between(TradeDate.MinValue.Year, TradeDate.MaxValue.Year))
+        if (!year.IsBetween(TradeDate.MinValue.Year, TradeDate.MaxValue.Year))
             throw new ArgumentOutOfRangeException(nameof(year));
 
-        if (!month.Between(1, 12))
+        if (!month.IsBetween(1, 12))
             throw new ArgumentOutOfRangeException(nameof(month));
 
         return new SortedSet<TradeDate>(
@@ -58,7 +58,7 @@ public static class Known
         var pairs = new Dictionary<Symbol, Pair>();
 
         void Add(Symbol symbol, int digits) =>
-            new Pair(symbol, digits).AsAction(p => pairs.Add(p.Symbol, p));
+            new Pair(symbol, digits).Do(p => pairs.Add(p.Symbol, p));
 
         Add(EURUSD, 5);
         Add(GBPUSD, 5);

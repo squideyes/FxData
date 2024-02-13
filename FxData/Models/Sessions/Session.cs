@@ -7,7 +7,7 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
-using SquidEyes.Basics;
+using SquidEyes.Fundamentals;
 
 namespace SquidEyes.FxData.Models;
 
@@ -15,6 +15,10 @@ public class Session : IEquatable<Session>
 {
     private Session(TradeDate tradeDate, Market market)
     {
+        TradeDate = tradeDate.MayNotBe().Default();
+
+        Market = market.MustBe().EnumValue();
+
         var (minDateTime, maxDateTime) =
             DateTimeHelper.GetMinAndMaxDateTimes(tradeDate, market);
 

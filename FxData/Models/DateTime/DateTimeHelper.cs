@@ -1,4 +1,4 @@
-﻿using SquidEyes.Basics;
+﻿using SquidEyes.Fundamentals;
 
 namespace SquidEyes.FxData.Models;
 
@@ -14,7 +14,7 @@ public static class DateTimeHelper
     {
         DateTime GetDateTime(TimeSpan offset)
         {
-            return tradeDate.AsFunc(d => new DateTime(d.Year, d.Month, d.Day,
+            return tradeDate.Convert(d => new DateTime(d.Year, d.Month, d.Day,
                 0, 0, 0, DateTimeKind.Utc)).Add(offset).ToEasternFromUtc();
         }
 

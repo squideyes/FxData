@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net8.0</TargetFramework>
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <Nullable>enable</Nullable>
 	  <AssemblyName>SquidEyes.FxData</AssemblyName>
@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SquidEyes.Basics" Version="1.0.22" />
+    <PackageReference Include="SquidEyes.Fundamentals" Version="2.4.0" />
   </ItemGroup>
 
 </Project>
