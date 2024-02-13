@@ -26,7 +26,7 @@ public struct Tick : IEquatable<Tick>
     public Rate Bid { get; }
     public Rate Ask { get; }
 
-    public Rate Spread => Ask - Bid;
+    //public Rate Spread => Ask - Bid;
 
     public bool IsEmpty => TickOn.IsDefaultValue();
 
