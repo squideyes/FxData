@@ -20,8 +20,8 @@ public class UsdValueOfTests
     [InlineData(Currency.EUR, BidOrAsk.Ask, 113480)]
     [InlineData(Currency.GBP, BidOrAsk.Bid, 135370)]
     [InlineData(Currency.GBP, BidOrAsk.Ask, 135380)]
-    [InlineData(Currency.JPY, BidOrAsk.Bid, 9)]
-    [InlineData(Currency.JPY, BidOrAsk.Ask, 9)]
+    [InlineData(Currency.JPY, BidOrAsk.Bid, 86437)]
+    [InlineData(Currency.JPY, BidOrAsk.Ask, 86422)]
     [InlineData(Currency.USD, BidOrAsk.Bid, 100000)]
     [InlineData(Currency.USD, BidOrAsk.Ask, 100000)]
     public void GetRateInUsdReturnedExpectedValue(

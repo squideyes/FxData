@@ -25,7 +25,7 @@ public class TickOnTests
     {
         foreach (var tradeDate in Known.TradeDates!)
         {
-            var session = new Session(tradeDate, market);
+            var session = Session.From(tradeDate, market);
 
             void Validate(DateTime value)
             {
@@ -73,7 +73,7 @@ public class TickOnTests
     [InlineData(Market.Combined)]
     public void ContructWithBadValue(Market market)
     {
-        var session = new Session(TradeDate.MinValue, market);
+        var session = Session.From(TradeDate.MinValue, market);
 
         var value = TradeDate.MinValue.Value.ToDateTime(new TimeOnly());
 
@@ -89,7 +89,7 @@ public class TickOnTests
     [InlineData(Market.Combined)]
     public void ConstructWithBadSession(Market market)
     {
-        var session = new Session(TradeDate.MinValue, market);
+        var session = Session.From(TradeDate.MinValue, market);
 
         FluentActions.Invoking(() => _ = TickOn.From(session.MinTickOn.Value, null!))
             .Should().Throw<ArgumentNullException>();
@@ -191,7 +191,7 @@ public class TickOnTests
     [InlineData(false, true)]
     public void NotEqualsOperatorWithDefault(bool lhsIsDefault, bool rhsIsDefault)
     {
-        var session = new Session(TradeDate.MinValue, Market.NewYork);
+        var session = Session.From(TradeDate.MinValue, Market.NewYork);
 
         TickOn lhs = lhsIsDefault ? default : session.MinTickOn;
         TickOn rhs = rhsIsDefault ? default : session.MaxTickOn;
@@ -310,7 +310,7 @@ public class TickOnTests
 
     private static TickOn GetTickOn(Market market, int days)
     {
-        return new Session(new TradeDate(TradeDate.MinValue.Value.AddDays(days)), market)
+        return Session.From(new TradeDate(TradeDate.MinValue.Value.AddDays(days)), market)
             .AsFunc(s => TickOn.From(s.MinTickOn.Value, s));
     }
 }

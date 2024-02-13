@@ -28,7 +28,7 @@ internal class Fetcher
     public async Task<(bool Success, List<Tick> Ticks)> GetTicksAsync(
         int hour, CancellationToken cancellationToken)
     {
-        Rate2 ToRate(int value) => Rate2.From(MathF.Round(
+        Rate ToRate(int value) => Rate.From(MathF.Round(
             value / TickSet.Pair.Factor, TickSet.Pair.Digits), TickSet.Pair.Digits);
 
         var response = await client.GetAsync(GetUri(hour), cancellationToken);

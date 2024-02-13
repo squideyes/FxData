@@ -26,7 +26,7 @@ public class MoneyHelper
             throw new ArgumentNullException(nameof(minMargin));
     }
 
-    public double GetPNL(Pair pair, Side side, int units, Rate2 entryRate, Rate2 exitRate)
+    public double GetPNL(Pair pair, Side side, int units, Rate entryRate, Rate exitRate)
     {
         ArgumentNullException.ThrowIfNull(pair);
 

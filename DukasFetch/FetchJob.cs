@@ -37,7 +37,7 @@ internal class FetchJob
     public async Task FetchUploadAndLogAsync(
         ILogger logger, AzureClient helper, CancellationToken cancellationToken)
     {
-        var session = new Session(TradeDate, Market.Combined);
+        var session = Session.From(TradeDate, Market.Combined);
 
         var combined = new TickSet(Source.Dukascopy, Pair, session);
 
@@ -67,7 +67,7 @@ internal class FetchJob
 
         TickSet GetTickSet(Market market)
         {
-            var session = new Session(TradeDate, market);
+            var session = Session.From(TradeDate, market);
 
             var tickSet = new TickSet(Source.Dukascopy, Pair, session);
 

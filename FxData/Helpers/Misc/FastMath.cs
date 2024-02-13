@@ -13,14 +13,11 @@ public static class FastMath
 {
     private static readonly float[] adjustments = GetAdjustments();
 
-    public static float Round(float value) =>
-        MathF.Floor(value + 0.5f);
-
     public static float Round(float value, int digits)
     {
         var adjustment = adjustments[digits];
 
-        return MathF.Floor(value * adjustment + 0.5f) / adjustments[digits];
+        return MathF.Floor(value * adjustment + 0.5f) / adjustment;
     }
 
     private static float[] GetAdjustments()

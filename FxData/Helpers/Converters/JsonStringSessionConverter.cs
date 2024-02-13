@@ -24,7 +24,7 @@ public class JsonStringSessionConverter : JsonConverter<Session>
         var tradeDate = new TradeDate(DateOnly.Parse(value[..10]));
         var market = value[12..^1].ToEnumValue<Market>();
 
-        return new Session(tradeDate, market);
+        return Session.From(tradeDate, market);
     }
 
     public override void Write(Utf8JsonWriter writer,

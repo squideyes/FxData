@@ -38,18 +38,18 @@ public class RenkoFeedTests
 
             TickOn GetTickOn(int seconds) => new(minTickOn.AddSeconds(seconds));
 
-            Rate2 Adjust(Rate2 value) => 
-                bidOrAsk == BidOrAsk.Bid ? value : value + Rate2.From(2, 5);
+            Rate Adjust(Rate value) => 
+                bidOrAsk == BidOrAsk.Bid ? value : value + Rate.From(2, 5);
 
             var rate = bidOrAsk == BidOrAsk.Bid ? args.Tick.Bid : args.Tick.Ask;
 
             closedBrickCount.Should().Be(expectedClosedBrickCount);
             args.Tick.TickOn.Should().Be(GetTickOn(tickSeconds));
-            rate.Should().Be(Adjust(Rate2.From(tickRate, 5)));
+            rate.Should().Be(Adjust(Rate.From(tickRate, 5)));
             args.Brick.Open.TickOn.Should().Be(GetTickOn(openSeconds));
-            args.Brick.Open.Rate.Should().Be(Adjust(Rate2.From(openRate, 5)));
+            args.Brick.Open.Rate.Should().Be(Adjust(Rate.From(openRate, 5)));
             args.Brick.Close.TickOn.Should().Be(GetTickOn(closeSeconds));
-            args.Brick.Close.Rate.Should().Be(Adjust(Rate2.From(closeRate, 5)));
+            args.Brick.Close.Rate.Should().Be(Adjust(Rate.From(closeRate, 5)));
             args.IsClosed.Should().Be(isClosed);
         }
 
@@ -155,19 +155,19 @@ public class RenkoFeedTests
     {
         var tradeDate = TradeDate.From(2022, 8, 1);
 
-        var session = new Session(tradeDate, Market.NewYork);
+        var session = Session.From(tradeDate, Market.NewYork);
 
-        return new RenkoFeed(session, bidOrAsk, Rate2.From(20, 5), raiseOpenBricks);
+        return new RenkoFeed(session, bidOrAsk, Rate.From(20, 5), raiseOpenBricks);
     }
 
     private static List<Tick> GetTicks()
     {
         var tradeDate = TradeDate.From(2022, 8, 1);
 
-        var session = new Session(tradeDate, Market.NewYork);
+        var session = Session.From(tradeDate, Market.NewYork);
 
         Tick GetTick(DateTime dateTime, int bid) =>
-            new(TickOn.From(dateTime, session), Rate2.From(bid, 5), Rate2.From(bid + 2, 5));
+            new(TickOn.From(dateTime, session), Rate.From(bid, 5), Rate.From(bid + 2, 5));
 
         return new List<Tick>
         {

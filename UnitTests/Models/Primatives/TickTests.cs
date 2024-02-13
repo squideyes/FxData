@@ -19,15 +19,15 @@ public class TickTests
 {
     [Fact]
     public void ConstructWithGoodArgs() =>
-        _ = new Tick(GetTickOn(), Rate2.From(1, 5), Rate2.From(2, 5));
+        _ = new Tick(GetTickOn(), Rate.From(1, 5), Rate.From(2, 5));
 
     ////////////////////////////
 
     [Theory]
-    [InlineData(false, Rate2.MinInt32, Rate2.MaxInt32)]
-    [InlineData(true, Rate2.MinInt32 - 1, Rate2.MaxInt32)]
-    [InlineData(true, Rate2.MinInt32, Rate2.MaxInt32 + 1)]
-    [InlineData(true, Rate2.MinInt32 + 1, Rate2.MinInt32)]
+    [InlineData(false, Rate.MinInt32, Rate.MaxInt32)]
+    [InlineData(true, Rate.MinInt32 - 1, Rate.MaxInt32)]
+    [InlineData(true, Rate.MinInt32, Rate.MaxInt32 + 1)]
+    [InlineData(true, Rate.MinInt32 + 1, Rate.MinInt32)]
     public void ConstructWithBadArgs(bool goodTickOn, int bid, int ask)
     {
         TickOn tickOn;
@@ -38,7 +38,7 @@ public class TickTests
             tickOn = default;
 
         FluentActions.Invoking(() => _ = new Tick(tickOn,
-            Rate2.From(bid, 5), Rate2.From(ask, 5)))
+            Rate.From(bid, 5), Rate.From(ask, 5)))
                 .Should().Throw<ArgumentException>();
     }
 
@@ -48,7 +48,7 @@ public class TickTests
     public void ConstructWithDefaultBid()
     {
         FluentActions.Invoking(() => _ = new Tick(GetTickOn(),
-            default, Rate2.From(Rate2.MinInt32, 5)))
+            default, Rate.From(Rate.MinInt32, 5)))
                 .Should().Throw<ArgumentException>();
     }
 
@@ -58,7 +58,7 @@ public class TickTests
     public void ConstructWithDefaultAsk()
     {
         FluentActions.Invoking(() => _ = new Tick(GetTickOn(),
-            Rate2.From(Rate2.MinInt32, 5), default))
+            Rate.From(Rate.MinInt32, 5), default))
                 .Should().Throw<ArgumentException>();
     }
 
@@ -85,11 +85,19 @@ public class TickTests
 
     ////////////////////////////
 
-    [Fact]
-    public void OverriddenToString()
+    [Theory]
+    [InlineData(5)]
+    [InlineData(3)]
+    public void OverriddenToString(int digits)
     {
-        GetTick(5, 1, 999999).AsFunc(x => x.ToString()
-            .Should().Be("01/04/2016 08:00:00.000,1,999999"));
+        string text;
+
+        if (digits == 3)
+            text = "01/04/2016 08:00:00.000,0.001,999.999";
+        else
+            text = "01/04/2016 08:00:00.000,0.00001,9.99999";
+
+        GetTick(digits, 1, 999999).AsFunc(x => x.ToString().Should().Be(text));
     }
 
     ////////////////////////////
@@ -101,7 +109,7 @@ public class TickTests
     public void SpreadSetCorrectly(int bidValue, int askValue, int result)
     {
         GetTick(5, bidValue, askValue)
-            .AsFunc(x => x.Spread.Should().Be(Rate2.From(result, 5)));
+            .AsFunc(x => x.Spread.Should().Be(Rate.From(result, 5)));
     }
 
     ////////////////////////////
@@ -180,18 +188,24 @@ public class TickTests
     ////////////////////////////
 
     [Theory]
-    [InlineData(5)]
-    [InlineData(3)]
-    public void ParseReturnsExpectedValue(int digits)
+    [InlineData(5, Symbol.EURUSD)]
+    [InlineData(3, Symbol.USDJPY)]
+    public void ParseReturnsExpectedValue(int digits, Symbol symbol)
     {
-        var session = new Session(TradeDate.MinValue, Market.Combined);
+        var session = Session.From(TradeDate.MinValue, Market.Combined);
 
-        var tick = Tick.Parse(
-            "01/04/2016 03:00:00.000,0.00001,9.99999", Known.Pairs[Symbol.EURUSD], session);
+        string value;
+
+        if (digits == 3)
+            value = "01/04/2016 03:00:00.000,0.001,999.999";
+        else
+            value = "01/04/2016 03:00:00.000,0.00001,9.99999";
+
+        var tick = Tick.Parse(value, Known.Pairs[symbol], session);
 
         tick.TickOn.Should().Be(TickOn.From(new DateTime(2016, 1, 4, 3, 0, 0, 0), session));
-        tick.Bid.Should().Be(Rate2.From(1, digits));
-        tick.Ask.Should().Be(Rate2.From(999999, digits));
+        tick.Bid.Should().Be(Rate.From(1, digits));
+        tick.Ask.Should().Be(Rate.From(999999, digits));
     }
 
     ////////////////////////////   
@@ -204,7 +218,7 @@ public class TickTests
     {
         var value = goodValue ? "01/04/2016 03:00:00.000,0.00001,9.99999" : "";
         var pair = goodPair ? Known.Pairs[Symbol.EURUSD] : null!;
-        var session = new Session(TradeDate.MinValue, goodSession ? Market.Combined : Market.NewYork);
+        var session = Session.From(TradeDate.MinValue, goodSession ? Market.Combined : Market.NewYork);
 
         FluentActions.Invoking(() => Tick.Parse(value, pair, session)).Should().Throw<Exception>();
     }
@@ -222,7 +236,7 @@ public class TickTests
 
         var tradeDate = new TradeDate(TradeDate.MinValue.Value.AddDays(days));
 
-        var session = new Session(tradeDate, Market.NewYork);
+        var session = Session.From(tradeDate, Market.NewYork);
 
         tick.InSession(session).Should().Be(expected);
     }
@@ -230,8 +244,8 @@ public class TickTests
     ////////////////////////////
 
     private static TickOn GetTickOn() =>
-        new Session(TradeDate.MinValue, Market.NewYork).MinTickOn;
+        Session.From(TradeDate.MinValue, Market.NewYork).MinTickOn;
 
     private static Tick GetTick(int digits, int bidValue, int askValue) =>
-        new(GetTickOn(), Rate2.From(bidValue, digits), Rate2.From(askValue, digits));
+        new(GetTickOn(), Rate.From(bidValue, digits), Rate.From(askValue, digits));
 }

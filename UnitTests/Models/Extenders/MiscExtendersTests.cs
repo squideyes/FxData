@@ -52,9 +52,9 @@ public class MiscExtendersTests
     [Fact]
     public void ToRateWithBadMidOrAskThrowsException()
     {
-        var session = new Session(TradeDate.MinValue, Market.Combined);
+        var session = Session.From(TradeDate.MinValue, Market.Combined);
 
-        var tick = new Tick(session.MinTickOn, Rate2.From(1, 5), Rate2.From(2, 5));
+        var tick = new Tick(session.MinTickOn, Rate.From(1, 5), Rate.From(2, 5));
 
         FluentActions.Invoking(() => tick.ToRate(0))
             .Should().Throw<ArgumentOutOfRangeException>();

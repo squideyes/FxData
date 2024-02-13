@@ -133,34 +133,19 @@
   <data name="BRICKFEED_BASELINES_8" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\testdata\brickfeedtests\brickfeed_baselines_8.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="DC_EURUSD_20160104_NYC_EST_CSV" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160104_nyc_est.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="DC_EURUSD_20160104_NYC_EST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TestData\TickSets\DC_EURUSD_20160104_NYC_EST.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="DC_EURUSD_20160104_NYC_EST_STS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160104_nyc_est.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="DC_EURUSD_20160105_NYC_EST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TestData\TickSets\DC_EURUSD_20160105_NYC_EST.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="DC_EURUSD_20160105_NYC_EST_CSV" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160105_nyc_est.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="DC_EURUSD_20160106_NYC_EST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TestData\TickSets\DC_EURUSD_20160106_NYC_EST.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="DC_EURUSD_20160105_NYC_EST_STS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160105_nyc_est.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="DC_EURUSD_20160107_NYC_EST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TestData\TickSets\DC_EURUSD_20160107_NYC_EST.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="DC_EURUSD_20160106_NYC_EST_CSV" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160106_nyc_est.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="DC_EURUSD_20160106_NYC_EST_STS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160106_nyc_est.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DC_EURUSD_20160107_NYC_EST_CSV" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160107_nyc_est.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="DC_EURUSD_20160107_NYC_EST_STS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160107_nyc_est.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DC_EURUSD_20160108_NYC_EST_CSV" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160108_nyc_est.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="DC_EURUSD_20160108_NYC_EST_STS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\testdata\ticksets\dc_eurusd_20160108_nyc_est.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="DC_EURUSD_20160108_NYC_EST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TestData\TickSets\DC_EURUSD_20160108_NYC_EST.sts;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

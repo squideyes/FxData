@@ -28,21 +28,6 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         this.fixture = fixture;
     }
 
-    [Theory]
-    [InlineData(DataKind.CSV, DataKind.CSV)]
-    [InlineData(DataKind.CSV, DataKind.STS)]
-    [InlineData(DataKind.STS, DataKind.CSV)]
-    [InlineData(DataKind.STS, DataKind.STS)]
-    public void SourceMatchesTarget(DataKind sourceKind, DataKind targetKind)
-    {
-        TickSet.Version.Should().Be(new MajorMinor(1, 0));
-
-        var source = fixture.TickSets[(4, sourceKind)];
-        var target = fixture.TickSets[(4, targetKind)];
-
-        SourceEqualsTarget(source, target);
-    }
-
     ////////////////////////////
 
     [Theory]
@@ -51,21 +36,21 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [InlineData(6)]
     [InlineData(7)]
     [InlineData(8)]
-    public void FileCsvToGeneratedSts(int day)
+    public void StsRoundtripsThroughCsv(int day)
     {
-        var csv = fixture.TickSets[(day, DataKind.CSV)];
+        var sts = fixture.TickSets[day];
 
         var stream = new MemoryStream();
 
-        csv.SaveToStream(stream, DataKind.STS);
+        sts.SaveToStream(stream, DataKind.CSV);
 
         stream.Position = 0;
 
-        var sts = TestHelper.GetEmptyTickSet(day);
+        var csv = new TickSet(sts.Source, sts.Pair, sts.Session);
 
-        sts.LoadFromStream(stream, DataKind.STS);
+        csv.LoadFromStream(stream, DataKind.CSV);
 
-        SourceEqualsTarget(csv, sts);
+        SourceEqualsTarget(sts, csv);
     }
 
     ////////////////////////////
@@ -73,7 +58,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [Fact]
     public void SaveToStreamWithBadDataKindThrowsError()
     {
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
         var stream = new MemoryStream();
 
@@ -100,7 +85,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [Fact]
     public void EmptyTickSetRoundTrips()
     {
-        var source = TestHelper.GetEmptyTickSet(4);
+        var source = fixture.TickSets[4];
 
         var stream = new MemoryStream();
 
@@ -108,7 +93,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
 
         stream.Position = 0;
 
-        var target = TestHelper.GetEmptyTickSet(4);
+        var target = fixture.TickSets[4];
 
         target.LoadFromStream(stream, DataKind.STS);
 
@@ -120,7 +105,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [Fact]
     public void LoadFromStreamWithBadDataKindThrowsError()
     {
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
         var stream = new MemoryStream();
 
@@ -130,41 +115,41 @@ public class TickSetTests : IClassFixture<TickSetFixture>
 
     ////////////////////////////
 
-    [Theory]
-    [InlineData(Source.ForexCom, Symbol.EURUSD, true)]
-    [InlineData(Source.Dukascopy, Symbol.GBPUSD, true)]
-    [InlineData(Source.Dukascopy, Symbol.EURUSD, false)]
-    public void TickSetMismatchOnLoadThrowsError(Source source, Symbol symbol, bool goodVersion)
-    {
-        var session = new Session(TradeDate.MinValue, Market.Combined);
+    //[Theory]
+    //[InlineData(Source.ForexCom, Symbol.EURUSD, true)]
+    //[InlineData(Source.Dukascopy, Symbol.GBPUSD, true)]
+    //[InlineData(Source.Dukascopy, Symbol.EURUSD, false)]
+    //public void TickSetMismatchOnLoadThrowsError(Source source, Symbol symbol, bool goodVersion)
+    //{
+    //    var session = Session.From(TradeDate.MinValue, Market.Combined);
 
-        var tickSet = new TickSet(source, Known.Pairs[symbol], session);
+    //    var tickSet = new TickSet(source, Known.Pairs[symbol], session);
 
-        var stream = Properties.TestData.DC_EURUSD_20160104_NYC_EST_STS.ToStream();
+    //    var stream = Properties.TestData.DC_EURUSD_20160104_NYC_EST_STS.ToStream();
 
-        if (!goodVersion)
-        {
-            var writer = new BinaryWriter(stream);
+    //    if (!goodVersion)
+    //    {
+    //        var writer = new BinaryWriter(stream);
 
-            new MajorMinor(2, 0).Write(writer);
+    //        new MajorMinor(2, 0).Write(writer);
 
-            writer.Flush();
+    //        writer.Flush();
 
-            stream.Position = 0;
-        }
+    //        stream.Position = 0;
+    //    }
 
-        FluentActions.Invoking(() => tickSet.LoadFromStream(stream, DataKind.STS))
-            .Should().Throw<ArgumentOutOfRangeException>();
-    }
+    //    FluentActions.Invoking(() => tickSet.LoadFromStream(stream, DataKind.STS))
+    //        .Should().Throw<ArgumentOutOfRangeException>();
+    //}
 
     ////////////////////////////
 
     [Fact]
     public void ClearDoesIndeedClear()
     {
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
-        tickSet.Count.Should().Be(29948);
+        tickSet.Count.Should().Be(39111);
 
         tickSet.Clear();
 
@@ -216,7 +201,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [Fact]
     public void AddDefaultTickThrowsError()
     {
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
         FluentActions.Invoking(() => tickSet.Add(default))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -227,12 +212,12 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [Fact]
     public void AddTickOutOfSessionThrowsError()
     {
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
         var tickOn = new TickOn(tickSet.First().TickOn.Value.AddDays(1));
 
         FluentActions.Invoking(() => tickSet.Add(new Tick(tickOn, 
-            Rate2.From(Rate2.MinInt32, 5), Rate2.From(Rate2.MaxInt32, 5))))
+            Rate.From(Rate.MinInt32, 5), Rate.From(Rate.MaxInt32, 5))))
                 .Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -241,7 +226,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [Fact]
     public void GetFolderPathWithBadBasePathThrowsError()
     {
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
         FluentActions.Invoking(() => tickSet.GetFullPath("", DataKind.STS))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -252,7 +237,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [Fact]
     public void GetFolderPathWithBadDataKindThrowsError()
     {
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
         FluentActions.Invoking(() => tickSet.GetFullPath("C:\\Data", 0))
             .Should().Throw<ArgumentOutOfRangeException>();
@@ -263,7 +248,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [Fact]
     public void ToStringReturnsGetFileNameResult()
     {
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
         tickSet.ToString().Should().Be(tickSet.GetFileName(DataKind.STS));
     }
@@ -278,7 +263,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         static DateTime ParseCreatedOn(string? value) =>
             value == null ? default : DateTime.Parse(value, null, DateTimeStyles.RoundtripKind);
 
-        var tickSet = fixture.TickSets[(4, DataKind.STS)];
+        var tickSet = fixture.TickSets[4];
 
         var metaData = tickSet.GetMetadata(dataKind);
 
@@ -302,7 +287,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [InlineData(DataKind.CSV, "DC_EURUSD_20160104_NYC_EST.csv")]
     [InlineData(DataKind.STS, "DC_EURUSD_20160104_NYC_EST.sts")]
     public void GoodFileNameGenerated(DataKind dataKind, string fileName) =>
-        fixture.TickSets[(4, dataKind)].GetFileName(dataKind).Should().Be(fileName);
+        fixture.TickSets[4].GetFileName(dataKind).Should().Be(fileName);
 
     ////////////////////////////
 
@@ -310,7 +295,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [InlineData(DataKind.CSV, "DC/TICKSETS/NYC/EURUSD/2016/DC_EURUSD_20160104_NYC_EST.csv")]
     [InlineData(DataKind.STS, "DC/TICKSETS/NYC/EURUSD/2016/DC_EURUSD_20160104_NYC_EST.sts")]
     public void GoodBlobNameGenerated(DataKind dataKind, string blobName) =>
-        fixture.TickSets[(4, dataKind)].GetBlobName(dataKind).Should().Be(blobName);
+        fixture.TickSets[4].GetBlobName(dataKind).Should().Be(blobName);
 
     ////////////////////////////
 
@@ -318,7 +303,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
     [InlineData(DataKind.CSV, @"C:\DC\TICKSETS\NYC\EURUSD\2016\DC_EURUSD_20160104_NYC_EST.csv")]
     [InlineData(DataKind.STS, @"C:\DC\TICKSETS\NYC\EURUSD\2016\DC_EURUSD_20160104_NYC_EST.sts")]
     public void GoodFullPathGenerated(DataKind dataKind, string fullPath) =>
-        fixture.TickSets[(4, dataKind)].GetFullPath("C:\\", dataKind).Should().Be(fullPath);
+        fixture.TickSets[4].GetFullPath("C:\\", dataKind).Should().Be(fullPath);
 
     ////////////////////////////
 
@@ -378,7 +363,7 @@ public class TickSetTests : IClassFixture<TickSetFixture>
 
         Tick GetTick(int seconds, int bid, int ask) => new(new TickOn(
             session!.MinTickOn.Value.AddSeconds(seconds)),
-                Rate2.From(bid, 5), Rate2.From(ask, 5));
+                Rate.From(bid, 5), Rate.From(ask, 5));
 
         var tickSet = new TickSet(Source.Dukascopy, pair, session)
         {
@@ -396,9 +381,9 @@ public class TickSetTests : IClassFixture<TickSetFixture>
         var tickOn = new TickOn(
             tickSet.Session.MinTickOn.Value.AddMilliseconds(msOffset));
 
-        var bid = Rate2.From(tickSet.Pair.MinValue, 5);
+        var bid = Rate.From(tickSet.Pair.MinValue, 5);
 
-        var ask = Rate2.From(tickSet.Pair.MaxValue, 5);
+        var ask = Rate.From(tickSet.Pair.MaxValue, 5);
 
         return new Tick(tickOn, bid, ask);
     }

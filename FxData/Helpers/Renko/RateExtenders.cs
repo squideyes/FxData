@@ -14,6 +14,6 @@ namespace SquidEyes.FxData.Helpers;
 
 public static class RateExtenders
 {
-    public static bool IsTicksPerBrick(this Rate2 value) => 
+    public static bool IsTicksPerBrick(this Rate value) => 
         value.AsInt32().Between(1, 200);
 }

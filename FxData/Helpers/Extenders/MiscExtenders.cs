@@ -13,7 +13,7 @@ namespace SquidEyes.FxData.Helpers;
 
 public static class MiscExtenders
 {
-    public static Rate2 ToRate(this Tick tick, BidOrAsk bidOrAsk)
+    public static Rate ToRate(this Tick tick, BidOrAsk bidOrAsk)
     {
         return bidOrAsk switch
         {
@@ -24,7 +24,7 @@ public static class MiscExtenders
     }
     
     public static bool IsRateValue(this float value, int digits) =>
-        Rate2.IsRateValue(value, digits);
+        Rate.IsRateValue(value, digits);
     
     public static string ToCode(this Source value)
     {

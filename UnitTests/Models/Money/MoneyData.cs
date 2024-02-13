@@ -23,12 +23,12 @@ internal static class MoneyData
         {
             var usdValueOf = new UsdValueOf(bidOrAsk);
 
-            var session = new Session(
-                TradeDate.From(2020, 1, 6), Market.NewYork);
+            var session = Session.From(
+                TradeDate.From(2016, 1, 4), Market.NewYork);
 
             void Update(Pair pair, int bid, int ask) =>
                 usdValueOf!.Update(pair, new Tick(
-                    session.MinTickOn, Rate2.From(bid, 5), Rate2.From(ask, 5)));
+                    session.MinTickOn, Rate.From(bid, 5), Rate.From(ask, 5)));
 
             Update(Known.Pairs[Symbol.EURUSD], 113460, 113480);
             Update(Known.Pairs[Symbol.GBPUSD], 135370, 135380);

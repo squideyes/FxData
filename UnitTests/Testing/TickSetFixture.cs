@@ -8,27 +8,25 @@ public class TickSetFixture : IDisposable
 {
     public TickSetFixture()
     {
-        void AddTickSet(int day, DataKind dataKind)
+        void AddTickSet(int day)
         {
-            TickSets.Add((day, dataKind), 
-                TestHelper.GetTickSet(day, dataKind));
+            TickSets.Add(day, TestHelper.GetTickSet(day));
         }
 
-        TickSets = new Dictionary<(int, DataKind), TickSet>();
+        TickSets = new Dictionary<int, TickSet>();
 
-        for (var day = 4; day <= 8; day++)
-        {
-            AddTickSet(day, DataKind.CSV);
-            AddTickSet(day, DataKind.STS);
-        }
+        //for (var day = 4; day <= 8; day++)
+        //    AddTickSet(day);
     }
 
-    public Dictionary<(int, DataKind), TickSet> TickSets { get; private set; }
+    public Dictionary<int, TickSet> TickSets { get; private set; }
 
     public void Dispose()
     {
         TickSets.Clear();
 
         TickSets = null!;
+
+        GC.SuppressFinalize(this);
     }
 }

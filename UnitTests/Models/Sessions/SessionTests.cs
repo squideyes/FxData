@@ -26,7 +26,7 @@ public class SessionTests
     {
         var tradeDate = TradeDate.From(2016, 1, 4);
 
-        var session = new Session(tradeDate, market);
+        var session = Session.From(tradeDate, market);
 
         var minTickOn = TickOn.From(DateTime.Parse(minTickOnString), session);
         var maxTickOn = TickOn.From(DateTime.Parse(maxTickOnString), session);
@@ -49,16 +49,16 @@ public class SessionTests
     [Fact]
     public void ConstructorWithBadMarket()
     {
-        FluentActions.Invoking(() => _ = new Session(TradeDate.From(2016, 1, 4), 0))
+        FluentActions.Invoking(() => _ = Session.From(TradeDate.From(2016, 1, 4), 0))
             .Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Fact]
     public void NewYorkAndLondonFallWithinCombined()
     {
-        var newYork = new Session(TradeDate.MinValue, NewYork);
-        var london = new Session(TradeDate.MinValue, London);
-        var combined = new Session(TradeDate.MinValue, Combined);
+        var newYork = Session.From(TradeDate.MinValue, NewYork);
+        var london = Session.From(TradeDate.MinValue, London);
+        var combined = Session.From(TradeDate.MinValue, Combined);
 
         london.MinTickOn.Should().Be(combined.MinTickOn);
         newYork.MaxTickOn.Should().Be(combined.MaxTickOn);

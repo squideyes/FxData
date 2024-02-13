@@ -256,8 +256,8 @@ public class TickSet : ListBase<Tick>
             foreach (var fields in new CsvEnumerator(stream, 3))
             {
                 var tickOn = TickOn.From(DateTime.Parse(fields[0]), Session);
-                var bid = Rate2.Parse(fields[1], Pair.Digits);
-                var ask = Rate2.Parse(fields[2], Pair.Digits);
+                var bid = Rate.Parse(fields[1], Pair.Digits);
+                var ask = Rate.Parse(fields[2], Pair.Digits);
 
                 Add(new Tick(tickOn, bid, ask));
             }
@@ -293,7 +293,7 @@ public class TickSet : ListBase<Tick>
 
             var market = reader.ReadString().ToEnumValue<Market>();
 
-            _ = new Session(tradeDate, market);
+            _ = Session.From(tradeDate, market);
 
             var count = reader.ReadInt32();
 
@@ -301,8 +301,8 @@ public class TickSet : ListBase<Tick>
                 return;
 
             var tickOn = new TickOn(new DateTime(reader.ReadInt64()));
-            var bid = Rate2.From(reader.ReadInt32(), Pair.Digits);
-            var ask = Rate2.From(reader.ReadInt32(), Pair.Digits);
+            var bid = Rate.From(reader.ReadInt32(), Pair.Digits);
+            var ask = Rate.From(reader.ReadInt32(), Pair.Digits);
 
             var lastTick = new Tick(tickOn, bid, ask);
 
@@ -350,7 +350,7 @@ public class TickSet : ListBase<Tick>
         };
     }
 
-    private (Rate2, Rate2) ReadMinimizedBidAndAsk(BinaryReader reader, Tick lastTick)
+    private (Rate, Rate) ReadMinimizedBidAndAsk(BinaryReader reader, Tick lastTick)
     {
         const int negative = 0b000_1000;
         const int mask = 0b000_0111;
@@ -365,9 +365,9 @@ public class TickSet : ListBase<Tick>
 
         var askDelta = (askData & mask) * ((askData & negative) == negative ? -1 : 1);
 
-        var bid = Rate2.From(lastTick.Bid.AsInt32() + bidDelta, Pair.Digits);
+        var bid = Rate.From(lastTick.Bid.AsInt32() + bidDelta, Pair.Digits);
 
-        var ask = Rate2.From(lastTick.Ask.AsInt32() + askDelta, Pair.Digits);
+        var ask = Rate.From(lastTick.Ask.AsInt32() + askDelta, Pair.Digits);
 
         return (bid, ask);
     }
@@ -378,11 +378,11 @@ public class TickSet : ListBase<Tick>
             ReadValue(reader, header, 0b0011_0000, 4)));
     }
 
-    private Rate2 ReadBid(BinaryReader reader, byte header, Tick lastTick) =>
-        Rate2.From(lastTick.Bid.AsInt32() + ReadValue(reader, header, 0b0000_1100, 2), Pair.Digits);
+    private Rate ReadBid(BinaryReader reader, byte header, Tick lastTick) =>
+        Rate.From(lastTick.Bid.AsInt32() + ReadValue(reader, header, 0b0000_1100, 2), Pair.Digits);
 
-    private Rate2 ReadAsk(BinaryReader reader, byte header, Tick lastTick) =>
-        Rate2.From(lastTick.Ask.AsInt32() + ReadValue(reader, header, 0b0000_0011, 0), Pair.Digits);
+    private Rate ReadAsk(BinaryReader reader, byte header, Tick lastTick) =>
+        Rate.From(lastTick.Ask.AsInt32() + ReadValue(reader, header, 0b0000_0011, 0), Pair.Digits);
 
     private static byte GetTickOnFlags(int value) =>
         GetFlags(value, TickOn1, TickOn2, TickOn4);
@@ -431,7 +431,7 @@ public class TickSet : ListBase<Tick>
 
         var pair = Known.Pairs[symbol];
 
-        var session = new Session(TradeDate.From(DateOnly.ParseExact(
+        var session = Session.From(TradeDate.From(DateOnly.ParseExact(
             fields[2], "yyyyMMdd", null)), fields[3].ToMarket());
 
         if (fields[4] != "EST")
