@@ -66,13 +66,15 @@ public class Session : IEquatable<Session>
 
     public static Session From(TradeDate tradeDate, Market market)
     {
-        if (tradeDate.IsDefaultValue())
-            throw new ArgumentOutOfRangeException(nameof(tradeDate));
+        //if (tradeDate.IsDefaultValue())
+        //    throw new ArgumentOutOfRangeException(nameof(tradeDate));
 
-        if (!market.IsEnumValue())
-            throw new ArgumentOutOfRangeException(nameof(market));
+        //if (!market.IsEnumValue())
+        //    throw new ArgumentOutOfRangeException(nameof(market));
 
-        return new Session(tradeDate, market);
+        //return new Session(tradeDate, market);
+
+        return default;
     }
 
     public static bool operator ==(Session lhs, Session rhs)
