@@ -31,6 +31,6 @@ public class JsonStringRateConverter : JsonConverter<Rate>
     public override void Write(Utf8JsonWriter writer,
         Rate value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.AsFloat().ToString());
+        writer.WriteStringValue(value.AsDouble().ToString());
     }
 }

@@ -46,9 +46,9 @@ public class UsdValueOf
 
         Rate GetJpyRate(Symbol symbol)
         {
-            var rate = GetUsdRate(symbol).AsFloat();
+            var rate = GetUsdRate(symbol).AsDouble();
 
-            return Known.Pairs[symbol].Convert(p => Rate.From(1.0f / rate, 5));
+            return Known.Pairs[symbol].Convert(p => Rate.Create(1.0 / rate, 5));
         }
 
         return currency switch
@@ -56,7 +56,7 @@ public class UsdValueOf
             Currency.JPY => GetJpyRate(Symbol.USDJPY),
             Currency.EUR => GetUsdRate(Symbol.EURUSD),
             Currency.GBP => GetUsdRate(Symbol.GBPUSD),
-            Currency.USD => Rate.From(100000, 5),
+            Currency.USD => Rate.Create(100000, 5),
             _ => throw new ArgumentOutOfRangeException(nameof(currency))
         };
     }

@@ -93,6 +93,9 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
         return new Rate(asInt32, digits);
     }
 
+    internal static Rate Parse(string input, int digits) =>
+        Create(double.Parse(input), digits);
+
     public static bool operator ==(Rate left, Rate right) =>
         left.Equals(right);
 
@@ -110,10 +113,4 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 
     public static bool operator <=(Rate left, Rate right) =>
         left.CompareTo(right) <= 0;
-
-    public static bool operator >(Rate left, Rate right) =>
-        left.CompareTo(right) > 0;
-
-    public static bool operator >=(Rate left, Rate right) =>
-        left.CompareTo(right) >= 0;
 }

@@ -148,9 +148,9 @@ namespace SquidEyes.UnitTests.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160104_NYC_EST {
+        internal static byte[] DC_EURUSD_20160104_NYC_EST_STS {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160104_NYC_EST", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160104_NYC_EST_STS", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -158,9 +158,9 @@ namespace SquidEyes.UnitTests.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160105_NYC_EST {
+        internal static byte[] DC_EURUSD_20160105_NYC_EST_STS {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160105_NYC_EST", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160105_NYC_EST_STS", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -168,9 +168,9 @@ namespace SquidEyes.UnitTests.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160106_NYC_EST {
+        internal static byte[] DC_EURUSD_20160106_NYC_EST_STS {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160106_NYC_EST", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160106_NYC_EST_STS", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -178,9 +178,9 @@ namespace SquidEyes.UnitTests.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160107_NYC_EST {
+        internal static byte[] DC_EURUSD_20160107_NYC_EST_STS {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160107_NYC_EST", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160107_NYC_EST_STS", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -188,9 +188,9 @@ namespace SquidEyes.UnitTests.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160108_NYC_EST {
+        internal static byte[] DC_EURUSD_20160108_NYC_EST_STS {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160108_NYC_EST", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160108_NYC_EST_STS", resourceCulture);
                 return ((byte[])(obj));
             }
         }
