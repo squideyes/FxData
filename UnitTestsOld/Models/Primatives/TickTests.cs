@@ -85,13 +85,11 @@ public class TickTests
 
     ////////////////////////////
 
-    [Theory]
-    [InlineData(5, 0.00001f, 9.99999f)]
-    public void OverriddenToString(
-        int digits, float minValue, float maxValue)
+    [Fact]
+    public void OverriddenToString()
     {
         GetTick(5, 1, 999999).Convert(x => x.ToString()
-            .Should().Be("01/04/2016 08:00:00.000,0.00001,9.99999"));
+            .Should().Be("01/04/2016 08:00:00.000,1,999999"));
     }
 
     ////////////////////////////

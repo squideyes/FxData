@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<AssemblyName>SquidEyes.UnitTests</AssemblyName>
+		<RootNamespace>SquidEyes.UnitTests</RootNamespace>
+		<Authors>Louis S. Berman</Authors>
+		<Company>SquidEyes, LLC</Company>
+		<Product>UnitTests</Product>
+		<Description>A set of unit-tests for the FxData project.</Description>
+		<Copyright>Copyright 2022 by by SquidEyes, LLC</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>forex;fx;trading;tick-data;candlesticks;c#;renko</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentAssertions" Version="6.12.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+		<PackageReference Include="xunit" Version="2.6.5" />
+		<PackageReference Include="xunit.categories" Version="2.0.8" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FxData\FxData.csproj" />
+	</ItemGroup>
+
+</Project>

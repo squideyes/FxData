@@ -8,7 +8,6 @@
 // ********************************************************
 
 using FluentAssertions;
-using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
 using System;
 using Xunit;
@@ -51,7 +50,7 @@ public class SessionTests
     public void ConstructorWithBadMarket()
     {
         FluentActions.Invoking(() => _ = new Session(TradeDate.From(2016, 1, 4), 0))
-            .Should().Throw<VerbException>();
+            .Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Fact]

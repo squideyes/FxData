@@ -10,6 +10,9 @@
 using FluentAssertions;
 using SquidEyes.FxData.Helpers;
 using SquidEyes.FxData.Models;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace SquidEyes.UnitTests;
 

@@ -7,8 +7,11 @@
 // of the MIT License (https://opensource.org/licenses/MIT)
 // ********************************************************
 
+using FluentAssertions;
 using SquidEyes.Fundamentals;
 using SquidEyes.FxData.Models;
+using System;
+using Xunit;
 using static SquidEyes.FxData.Models.Symbol;
 
 namespace SquidEyes.UnitTests;
@@ -51,7 +54,7 @@ public class PairTests
     public void ConstructorWithBadArgs(Symbol symbol, int digits)
     {
         FluentActions.Invoking(() => _ = new Pair(symbol, digits))
-            .Should().Throw<VerbException>();
+            .Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Theory]

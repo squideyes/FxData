@@ -28,7 +28,7 @@ public static class Known
     {
         var tradeDates = GetTradeDates();
 
-        TradeDates = tradeDates.ToImmutableSortedSet();
+        TradeDates = [.. tradeDates];
         Sessions = GetSessions(tradeDates);
         Pairs = GetPairs();
         ConvertWith = GetConvertWith();
