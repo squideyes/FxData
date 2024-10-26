@@ -1,4 +1,6 @@
-﻿namespace SquidEyes.FxData.Models;
+﻿using SquidEyes.FxData.Helpers;
+
+namespace SquidEyes.FxData.Models;
 
 public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 {
@@ -16,7 +18,7 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
             throw new ArgumentOutOfRangeException(nameof(value));
 
         if (digits == 5)
-            Value = value;
+        Value = value;
         else
             Value = value * -1;
     }
@@ -68,7 +70,7 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
     public int CompareTo(Rate other)
     {
         return Digits switch
-        {
+    {
             5 => Value.CompareTo(other.Value),
             3 => other.Value.CompareTo(Value),
             _ => throw new InvalidOperationException()
@@ -108,4 +110,10 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 
     public static bool operator <=(Rate left, Rate right) =>
         left.CompareTo(right) <= 0;
+
+    public static bool operator >(Rate left, Rate right) =>
+        left.CompareTo(right) > 0;
+
+    public static bool operator >=(Rate left, Rate right) =>
+        left.CompareTo(right) >= 0;
 }

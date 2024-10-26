@@ -146,156 +146,51 @@ namespace SquidEyes.UnitTests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 01/04/2016 08:00:00.062,1.11982,1.11983
-        ///01/04/2016 08:00:00.164,1.11984,1.11985
-        ///01/04/2016 08:00:00.576,1.11986,1.11988
-        ///01/04/2016 08:00:00.678,1.11987,1.11988
-        ///01/04/2016 08:00:00.779,1.11987,1.11989
-        ///01/04/2016 08:00:01.083,1.11987,1.11988
-        ///01/04/2016 08:00:01.337,1.11987,1.11989
-        ///01/04/2016 08:00:06.658,1.11987,1.11990
-        ///01/04/2016 08:00:06.760,1.11990,1.11992
-        ///01/04/2016 08:00:06.861,1.11991,1.11993
-        ///01/04/2016 08:00:06.963,1.11991,1.11994
-        ///01/04/2016 08:00:07.702,1.11990,1.11994
-        ///01/04/2016 08:00:08. [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DC_EURUSD_20160104_NYC_EST_CSV {
-            get {
-                return ResourceManager.GetString("DC_EURUSD_20160104_NYC_EST_CSV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160104_NYC_EST_STS {
+        internal static byte[] DC_EURUSD_20160104_NYC_EST {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160104_NYC_EST_STS", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160104_NYC_EST", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 01/05/2016 08:00:00.092,1.11746,1.11749
-        ///01/05/2016 08:00:00.345,1.11746,1.11748
-        ///01/05/2016 08:00:00.446,1.11746,1.11749
-        ///01/05/2016 08:00:00.791,1.11747,1.11749
-        ///01/05/2016 08:00:00.893,1.11747,1.11750
-        ///01/05/2016 08:00:01.789,1.11746,1.11748
-        ///01/05/2016 08:00:01.890,1.11746,1.11749
-        ///01/05/2016 08:00:02.042,1.11747,1.11749
-        ///01/05/2016 08:00:02.194,1.11746,1.11749
-        ///01/05/2016 08:00:02.397,1.11747,1.11750
-        ///01/05/2016 08:00:02.498,1.11746,1.11750
-        ///01/05/2016 08:00:03.060,1.11748,1.11750
-        ///01/05/2016 08:00:06. [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DC_EURUSD_20160105_NYC_EST_CSV {
-            get {
-                return ResourceManager.GetString("DC_EURUSD_20160105_NYC_EST_CSV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160105_NYC_EST_STS {
+        internal static byte[] DC_EURUSD_20160105_NYC_EST {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160105_NYC_EST_STS", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160105_NYC_EST", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 01/06/2016 08:00:00.403,1.11166,1.11167
-        ///01/06/2016 08:00:00.505,1.11165,1.11167
-        ///01/06/2016 08:00:00.606,1.11165,1.11168
-        ///01/06/2016 08:00:00.707,1.11165,1.11167
-        ///01/06/2016 08:00:00.852,1.11164,1.11167
-        ///01/06/2016 08:00:00.954,1.11165,1.11167
-        ///01/06/2016 08:00:01.119,1.11165,1.11168
-        ///01/06/2016 08:00:01.220,1.11166,1.11169
-        ///01/06/2016 08:00:01.322,1.11168,1.11170
-        ///01/06/2016 08:00:01.423,1.11172,1.11173
-        ///01/06/2016 08:00:01.525,1.11172,1.11174
-        ///01/06/2016 08:00:01.676,1.11173,1.11175
-        ///01/06/2016 08:00:01. [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DC_EURUSD_20160106_NYC_EST_CSV {
-            get {
-                return ResourceManager.GetString("DC_EURUSD_20160106_NYC_EST_CSV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160106_NYC_EST_STS {
+        internal static byte[] DC_EURUSD_20160106_NYC_EST {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160106_NYC_EST_STS", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160106_NYC_EST", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 01/07/2016 08:00:00.327,1.11135,1.11138
-        ///01/07/2016 08:00:00.985,1.11135,1.11136
-        ///01/07/2016 08:00:01.087,1.11134,1.11137
-        ///01/07/2016 08:00:01.189,1.11134,1.11135
-        ///01/07/2016 08:00:01.290,1.11132,1.11133
-        ///01/07/2016 08:00:01.393,1.11130,1.11134
-        ///01/07/2016 08:00:01.494,1.11130,1.11133
-        ///01/07/2016 08:00:02.047,1.11130,1.11134
-        ///01/07/2016 08:00:02.148,1.11131,1.11134
-        ///01/07/2016 08:00:02.300,1.11132,1.11135
-        ///01/07/2016 08:00:02.753,1.11134,1.11135
-        ///01/07/2016 08:00:02.805,1.11135,1.11136
-        ///01/07/2016 08:00:02. [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DC_EURUSD_20160107_NYC_EST_CSV {
-            get {
-                return ResourceManager.GetString("DC_EURUSD_20160107_NYC_EST_CSV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160107_NYC_EST_STS {
+        internal static byte[] DC_EURUSD_20160107_NYC_EST {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160107_NYC_EST_STS", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160107_NYC_EST", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 01/08/2016 08:00:00.409,1.10984,1.10986
-        ///01/08/2016 08:00:00.460,1.10982,1.10986
-        ///01/08/2016 08:00:00.613,1.10983,1.10986
-        ///01/08/2016 08:00:01.036,1.10982,1.10986
-        ///01/08/2016 08:00:01.240,1.10983,1.10986
-        ///01/08/2016 08:00:01.393,1.10982,1.10986
-        ///01/08/2016 08:00:02.525,1.10983,1.10986
-        ///01/08/2016 08:00:04.664,1.10982,1.10985
-        ///01/08/2016 08:00:07.554,1.10982,1.10984
-        ///01/08/2016 08:00:08.169,1.10982,1.10985
-        ///01/08/2016 08:00:08.270,1.10981,1.10984
-        ///01/08/2016 08:00:08.371,1.10982,1.10984
-        ///01/08/2016 08:00:09. [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DC_EURUSD_20160108_NYC_EST_CSV {
-            get {
-                return ResourceManager.GetString("DC_EURUSD_20160108_NYC_EST_CSV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DC_EURUSD_20160108_NYC_EST_STS {
+        internal static byte[] DC_EURUSD_20160108_NYC_EST {
             get {
-                object obj = ResourceManager.GetObject("DC_EURUSD_20160108_NYC_EST_STS", resourceCulture);
+                object obj = ResourceManager.GetObject("DC_EURUSD_20160108_NYC_EST", resourceCulture);
                 return ((byte[])(obj));
             }
         }

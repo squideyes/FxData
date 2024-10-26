@@ -112,7 +112,7 @@ public static class Known
         var dict = new Dictionary<TradeDate, Session>();
 
         foreach (var tradeDate in tradeDates)
-            dict.Add(tradeDate, new Session(tradeDate, market));
+            dict.Add(tradeDate, Session.From(tradeDate, market));
 
         return dict.ToImmutableSortedDictionary();
     }

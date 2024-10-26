@@ -13,7 +13,7 @@ namespace SquidEyes.FxData.Models;
 
 public class Session : IEquatable<Session>
 {
-    public Session(TradeDate tradeDate, Market market)
+    private Session(TradeDate tradeDate, Market market)
     {
         TradeDate = tradeDate.MayNotBe().Default();
 
@@ -22,6 +22,8 @@ public class Session : IEquatable<Session>
         var (minDateTime, maxDateTime) =
             DateTimeHelper.GetMinAndMaxDateTimes(tradeDate, market);
 
+        TradeDate = tradeDate;
+        Market = market;
         MinTickOn = new TickOn(minDateTime);
         MaxTickOn = new TickOn(maxDateTime);
     }
@@ -60,6 +62,19 @@ public class Session : IEquatable<Session>
         var max = MaxTickOn.Value.ToTimeText(true);
 
         return $"{TradeDate} ({Market}: {min} to {max})";
+    }
+
+    public static Session From(TradeDate tradeDate, Market market)
+    {
+        //if (tradeDate.IsDefaultValue())
+        //    throw new ArgumentOutOfRangeException(nameof(tradeDate));
+
+        //if (!market.IsEnumValue())
+        //    throw new ArgumentOutOfRangeException(nameof(market));
+
+        //return new Session(tradeDate, market);
+
+        return default;
     }
 
     public static bool operator ==(Session lhs, Session rhs)

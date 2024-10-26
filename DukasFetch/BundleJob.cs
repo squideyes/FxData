@@ -38,7 +38,7 @@ internal class BundleJob
         foreach (var tradeDate in tradeDates)
         {
             var tickSet = new TickSet(
-                Source.Dukascopy, Pair, new Session(tradeDate, Market));
+                Source.Dukascopy, Pair, Session.From(tradeDate, Market));
 
             if (cancellationToken.IsCancellationRequested)
                 return;

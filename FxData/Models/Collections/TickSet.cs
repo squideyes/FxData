@@ -169,58 +169,58 @@ public class TickSet : ListBase<Tick>
 
             if (Count > 0)
             {
-                var lastTick = First();
+                //var lastTick = First();
 
-                dataWriter.Write(lastTick.TickOn.Value.Ticks);
-                dataWriter.Write(lastTick.Bid.AsInt32());
-                dataWriter.Write(lastTick.Ask.AsInt32());
+                //dataWriter.Write(lastTick.TickOn.Value.Ticks);
+                //dataWriter.Write(lastTick.Bid.AsInt32());
+                //dataWriter.Write(lastTick.Ask.AsInt32());
 
-                foreach (var tick in this.Skip(1))
-                {
-                    var tickOnDelta = (int) (tick.TickOn.Value - lastTick.TickOn.Value).TotalMilliseconds;
-                    var bidDelta = tick.Bid.AsInt32() - lastTick.Bid.AsInt32();
-                    var askDelta = tick.Ask.AsInt32() - lastTick.Ask.AsInt32();
+                //foreach (var tick in this.Skip(1))
+                //{
+                //    var tickOnDelta = (int) (tick.TickOn.Value - lastTick.TickOn.Value).TotalMilliseconds;
+                //    var bidDelta = tick.Bid.AsInt32() - lastTick.Bid.AsInt32();
+                //    var askDelta = tick.Ask.AsInt32() - lastTick.Ask.AsInt32();
 
-                    if (tickOnDelta <= 64
-                        && bidDelta is >= -7 and <= 7 && askDelta is >= -7 and <= 7)
-                    {
-                        var bidData = (bidDelta >= 0 ? 0b0000_0000 : 0b1000_0000) | (Math.Abs(bidDelta) << 4);
+                //    if (tickOnDelta <= 64
+                //        && bidDelta is >= -7 and <= 7 && askDelta is >= -7 and <= 7)
+                //    {
+                //        var bidData = (bidDelta >= 0 ? 0b0000_0000 : 0b1000_0000) | (Math.Abs(bidDelta) << 4);
 
-                        var askData = (askDelta >= 0 ? 0b0000_0000 : 0b0000_1000) | (Math.Abs(askDelta));
+                //        var askData = (askDelta >= 0 ? 0b0000_0000 : 0b0000_1000) | (Math.Abs(askDelta));
 
-                        dataWriter.Write((byte) (0b1000_0000 | tickOnDelta));
-                        dataWriter.Write((byte) (bidData | askData));
-                    }
-                    else
-                    {
-                        var header = Packed;
+                //        dataWriter.Write((byte) (0b1000_0000 | tickOnDelta));
+                //        dataWriter.Write((byte) (bidData | askData));
+                //    }
+                //    else
+                //    {
+                //        var header = Packed;
 
-                        if (tickOnDelta != 0)
-                            header |= GetTickOnFlags(tickOnDelta);
+                //        if (tickOnDelta != 0)
+                //            header |= GetTickOnFlags(tickOnDelta);
 
-                        if (bidDelta != 0)
-                            header |= GetBidFlags(bidDelta);
+                //        if (bidDelta != 0)
+                //            header |= GetBidFlags(bidDelta);
 
-                        if (askDelta != 0)
-                            header |= GetAskFlags(askDelta);
+                //        if (askDelta != 0)
+                //            header |= GetAskFlags(askDelta);
 
-                        if (tickOnDelta != 0 || bidDelta != 0 || askDelta != 0)
-                        {
-                            dataWriter.Write(header);
+                //        if (tickOnDelta != 0 || bidDelta != 0 || askDelta != 0)
+                //        {
+                //            dataWriter.Write(header);
 
-                            if (tickOnDelta != 0)
-                                dataWriter.Write(GetBytes(tickOnDelta));
+                //            if (tickOnDelta != 0)
+                //                dataWriter.Write(GetBytes(tickOnDelta));
 
-                            if (bidDelta != 0)
-                                dataWriter.Write(GetBytes(bidDelta));
+                //            if (bidDelta != 0)
+                //                dataWriter.Write(GetBytes(bidDelta));
 
-                            if (askDelta != 0)
-                                dataWriter.Write(GetBytes(askDelta));
-                        }
-                    }
+                //            if (askDelta != 0)
+                //                dataWriter.Write(GetBytes(askDelta));
+                //        }
+                //    }
 
-                    lastTick = tick;
-                }
+                //    lastTick = tick;
+                //}
             }
 
             dataWriter.Flush();
@@ -255,8 +255,8 @@ public class TickSet : ListBase<Tick>
             foreach (var fields in new CsvEnumerator(stream, 3))
             {
                 var tickOn = TickOn.From(DateTime.Parse(fields[0]), Session);
-                var bid = Rate2.Parse(fields[1], Pair.Digits);
-                var ask = Rate2.Parse(fields[2], Pair.Digits);
+                var bid = Rate.Parse(fields[1], Pair.Digits);
+                var ask = Rate.Parse(fields[2], Pair.Digits);
 
                 Add(new Tick(tickOn, bid, ask));
             }
@@ -292,7 +292,7 @@ public class TickSet : ListBase<Tick>
 
             var market = reader.ReadString().ToEnumValue<Market>();
 
-            _ = new Session(tradeDate, market);
+            _ = Session.From(tradeDate, market);
 
             var count = reader.ReadInt32();
 
@@ -300,8 +300,8 @@ public class TickSet : ListBase<Tick>
                 return;
 
             var tickOn = new TickOn(new DateTime(reader.ReadInt64()));
-            var bid = Rate2.From(reader.ReadInt32(), Pair.Digits);
-            var ask = Rate2.From(reader.ReadInt32(), Pair.Digits);
+            var bid = Rate.From(reader.ReadInt32(), Pair.Digits);
+            var ask = Rate.From(reader.ReadInt32(), Pair.Digits);
 
             var lastTick = new Tick(tickOn, bid, ask);
 
@@ -325,10 +325,12 @@ public class TickSet : ListBase<Tick>
                 else
                 {
                     tickOn = ReadTickOn(reader, header, lastTick);
-                    bid = ReadBid(reader, header, lastTick);
-                    ask = ReadAsk(reader, header, lastTick);
+                    //bid = ReadBid(reader, header, lastTick);
+                    //ask = ReadAsk(reader, header, lastTick);
 
-                    tick = new Tick(tickOn, bid, ask);
+                    //tick = new Tick(tickOn, bid, ask);
+
+                    tick = default;
                 }
 
                 Items.Add(tick);
@@ -349,7 +351,7 @@ public class TickSet : ListBase<Tick>
         };
     }
 
-    private (Rate2, Rate2) ReadMinimizedBidAndAsk(BinaryReader reader, Tick lastTick)
+    private (Rate, Rate) ReadMinimizedBidAndAsk(BinaryReader reader, Tick lastTick)
     {
         const int negative = 0b000_1000;
         const int mask = 0b000_0111;
@@ -364,11 +366,13 @@ public class TickSet : ListBase<Tick>
 
         var askDelta = (askData & mask) * ((askData & negative) == negative ? -1 : 1);
 
-        var bid = Rate2.From(lastTick.Bid.AsInt32() + bidDelta, Pair.Digits);
+        //var bid = Rate.From(lastTick.Bid.AsInt32() + bidDelta, Pair.Digits);
 
-        var ask = Rate2.From(lastTick.Ask.AsInt32() + askDelta, Pair.Digits);
+        //var ask = Rate.From(lastTick.Ask.AsInt32() + askDelta, Pair.Digits);
 
-        return (bid, ask);
+        //return (bid, ask);
+
+        return default;
     }
 
     private static TickOn ReadTickOn(BinaryReader reader, byte header, Tick lastTick)
@@ -377,11 +381,11 @@ public class TickSet : ListBase<Tick>
             ReadValue(reader, header, 0b0011_0000, 4)));
     }
 
-    private Rate2 ReadBid(BinaryReader reader, byte header, Tick lastTick) =>
-        Rate2.From(lastTick.Bid.AsInt32() + ReadValue(reader, header, 0b0000_1100, 2), Pair.Digits);
+    //private Rate ReadBid(BinaryReader reader, byte header, Tick lastTick) =>
+    //    Rate.From(lastTick.Bid.AsInt32() + ReadValue(reader, header, 0b0000_1100, 2), Pair.Digits);
 
-    private Rate2 ReadAsk(BinaryReader reader, byte header, Tick lastTick) =>
-        Rate2.From(lastTick.Ask.AsInt32() + ReadValue(reader, header, 0b0000_0011, 0), Pair.Digits);
+    //private Rate ReadAsk(BinaryReader reader, byte header, Tick lastTick) =>
+    //    Rate.From(lastTick.Ask.AsInt32() + ReadValue(reader, header, 0b0000_0011, 0), Pair.Digits);
 
     private static byte GetTickOnFlags(int value) =>
         GetFlags(value, TickOn1, TickOn2, TickOn4);
@@ -430,7 +434,7 @@ public class TickSet : ListBase<Tick>
 
         var pair = Known.Pairs[symbol];
 
-        var session = new Session(TradeDate.From(DateOnly.ParseExact(
+        var session = Session.From(TradeDate.From(DateOnly.ParseExact(
             fields[2], "yyyyMMdd", null)), fields[3].ToMarket());
 
         if (fields[4] != "EST")

@@ -40,7 +40,7 @@
 
 //    private static Brick GetBrick(int bid = 1, int ask = 2)
 //    {
-//        return new Session(new TradeDate(2016, 1, 4), Market.Combined)
+//        return Session.From(new TradeDate(2016, 1, 4), Market.Combined)
 //            .AsFunc(s => new Brick(s.MinTickOn, bid, s.MaxTickOn, ask));
 //    }
 //}

@@ -180,7 +180,7 @@ internal class Worker : BackgroundService
             foreach (var market in EnumList.FromAll<Market>())
             {
                 var tickSet = new TickSet(
-                    Dukascopy, pair, new Session(tradeDate, market));
+                    Dukascopy, pair, Session.From(tradeDate, market));
 
                 if (!blobNames.Contains(tickSet.GetBlobName(DataKind.STS)))
                     return false;

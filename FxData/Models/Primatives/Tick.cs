@@ -13,7 +13,7 @@ namespace SquidEyes.FxData.Models;
 
 public struct Tick : IEquatable<Tick>
 {
-    public Tick(TickOn tickOn, Rate2 bid, Rate2 ask)
+    public Tick(TickOn tickOn, Rate bid, Rate ask)
     {
         TickOn = tickOn.MayNotBe().Default();
         Bid = bid.MayNotBe().Default();
@@ -21,23 +21,23 @@ public struct Tick : IEquatable<Tick>
     }
 
     public TickOn TickOn { get; }
-    public Rate2 Bid { get; }
-    public Rate2 Ask { get; }
+    public Rate Bid { get; }
+    public Rate Ask { get; }
 
-    public Rate2 Spread => Ask - Bid;
+    //public Rate Spread => Ask - Bid;
 
     public bool IsEmpty => TickOn.IsDefault();
 
-    public bool InSession(Session session) => session.InSession(TickOn.AsDateTime());
+    public readonly bool InSession(Session session) => session.InSession(TickOn.AsDateTime());
 
-    public override string ToString() => ToCsvString();
+    public override readonly string ToString() => ToCsvString();
 
-    public string ToCsvString() => $"{TickOn},{Bid},{Ask}";
+    public readonly string ToCsvString() => $"{TickOn},{Bid},{Ask}";
 
-    public bool Equals(Tick other) => TickOn == other.TickOn
+    public readonly bool Equals(Tick other) => TickOn == other.TickOn
         && Bid == other.Bid && Ask == other.Ask;
 
-    public override bool Equals(object? other) =>
+    public override readonly bool Equals(object? other) =>
         other is Tick tick && Equals(tick);
 
     public override int GetHashCode() =>
@@ -66,8 +66,8 @@ public struct Tick : IEquatable<Tick>
             throw new ArgumentOutOfRangeException(nameof(value));
 
         var tickOn = TickOn.Parse(fields[0], session);
-        var bid = Rate2.Parse(fields[1], pair.Digits);
-        var ask = Rate2.Parse(fields[2], pair.Digits);
+        var bid = Rate.Parse(fields[1], pair.Digits);
+        var ask = Rate.Parse(fields[2], pair.Digits);
 
         return new Tick(tickOn, bid, ask);
     }
