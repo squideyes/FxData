@@ -1,6 +1,4 @@
-﻿using SquidEyes.FxData.Helpers;
-
-namespace SquidEyes.FxData.Models;
+﻿namespace SquidEyes.FxData.Models;
 
 public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 {
@@ -17,10 +15,7 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
         if (value < MinInt32 || value > MaxInt32)
             throw new ArgumentOutOfRangeException(nameof(value));
 
-        if (digits == 5)
-        Value = value;
-        else
-            Value = value * -1;
+        Value = digits == 5 ? value : value * -1;
     }
 
     public int Value { get; }
@@ -40,12 +35,22 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
 
     public double AsDouble()
     {
-        return Digits switch
+        if (Digits == 5)
         {
-            5 => Math.Round(Value / Factor5, Digits),
-            3 => Math.Round(Value * -1 / Factor3, Digits),
-            _ => throw new InvalidOperationException()
-        };
+            var shifted = Value / Factor5;
+            var rounded = shifted >= 0 ? shifted + 0.5e-5 : shifted - 0.5e-5;
+            return ((long)(rounded * Factor5)) / Factor5;
+        }
+        else if (Digits == 3)
+        {
+            var shifted = Value * -1 / Factor3;
+            var rounded = shifted >= 0 ? shifted + 0.5e-3 : shifted - 0.5e-3;
+            return ((long)(rounded * Factor3)) / Factor3;
+        }
+        else
+        {
+            throw new InvalidOperationException();
+        }
     }
 
     public override string ToString()
@@ -70,7 +75,7 @@ public readonly struct Rate : IEquatable<Rate>, IComparable<Rate>
     public int CompareTo(Rate other)
     {
         return Digits switch
-    {
+        {
             5 => Value.CompareTo(other.Value),
             3 => other.Value.CompareTo(Value),
             _ => throw new InvalidOperationException()
