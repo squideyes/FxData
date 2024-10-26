@@ -1,90 +1,90 @@
-// ********************************************************
-// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
-//
-// This file is part of SquidEyes.FxData
-//
-// The use of this source code is licensed under the terms
-// of the MIT License (https://opensource.org/licenses/MIT)
-// ********************************************************
+//// ********************************************************
+//// Copyright (C) 2022 Louis S. Berman (louis@squideyes.com)
+////
+//// This file is part of SquidEyes.FxData
+////
+//// The use of this source code is licensed under the terms
+//// of the MIT License (https://opensource.org/licenses/MIT)
+//// ********************************************************
 
-using SquidEyes.Fundamentals;
+//using SquidEyes.Fundamentals;
 
-namespace SquidEyes.FxData.Models;
+//namespace SquidEyes.FxData.Models;
 
-public class Session : IEquatable<Session>
-{
-    private Session(TradeDate tradeDate, Market market)
-    {
-        TradeDate = tradeDate.MayNotBe().Default();
+//public class Session : IEquatable<Session>
+//{
+//    private Session(TradeDate tradeDate, Market market)
+//    {
+//        TradeDate = tradeDate.MayNotBe().Default();
 
-        Market = market.MustBe().EnumValue();
+//        Market = market.MustBe().EnumValue();
 
-        var (minDateTime, maxDateTime) =
-            DateTimeHelper.GetMinAndMaxDateTimes(tradeDate, market);
+//        var (minDateTime, maxDateTime) =
+//            DateTimeHelper.GetMinAndMaxDateTimes(tradeDate, market);
 
-        TradeDate = tradeDate;
-        Market = market;
-        MinTickOn = new TickOn(minDateTime);
-        MaxTickOn = new TickOn(maxDateTime);
-    }
+//        TradeDate = tradeDate;
+//        Market = market;
+//        MinTickOn = new TickOn(minDateTime);
+//        MaxTickOn = new TickOn(maxDateTime);
+//    }
 
-    public TradeDate TradeDate { get; }
-    public Market Market { get; }
-    public TickOn MinTickOn { get; }
-    public TickOn MaxTickOn { get; }
+//    public TradeDate TradeDate { get; }
+//    public Market Market { get; }
+//    public TickOn MinTickOn { get; }
+//    public TickOn MaxTickOn { get; }
 
-    public bool Equals(Session? other)
-    {
-        if (other is null)
-            return false;
+//    public bool Equals(Session? other)
+//    {
+//        if (other is null)
+//            return false;
 
-        return (TradeDate == other.TradeDate)
-            && (Market == other.Market);
-    }
+//        return (TradeDate == other.TradeDate)
+//            && (Market == other.Market);
+//    }
 
-    public override bool Equals(object? other) =>
-        other is Session session && Equals(session);
+//    public override bool Equals(object? other) =>
+//        other is Session session && Equals(session);
 
-    public override int GetHashCode() =>
-        HashCode.Combine(TradeDate, Market);
+//    public override int GetHashCode() =>
+//        HashCode.Combine(TradeDate, Market);
 
-    public bool InSession(DateTime value)
-    {
-        if (value.Kind != DateTimeKind.Unspecified)
-            throw new ArgumentOutOfRangeException(nameof(value));
+//    public bool InSession(DateTime value)
+//    {
+//        if (value.Kind != DateTimeKind.Unspecified)
+//            throw new ArgumentOutOfRangeException(nameof(value));
 
-        return value >= MinTickOn.Value && value <= MaxTickOn.Value;
-    }
+//        return value >= MinTickOn.Value && value <= MaxTickOn.Value;
+//    }
 
-    public override string ToString()
-    {
-        var min = MinTickOn.Value.ToTimeText(true);
-        var max = MaxTickOn.Value.ToTimeText(true);
+//    public override string ToString()
+//    {
+//        var min = MinTickOn.Value.ToTimeText(true);
+//        var max = MaxTickOn.Value.ToTimeText(true);
 
-        return $"{TradeDate} ({Market}: {min} to {max})";
-    }
+//        return $"{TradeDate} ({Market}: {min} to {max})";
+//    }
 
-    public static Session From(TradeDate tradeDate, Market market)
-    {
-        //if (tradeDate.IsDefaultValue())
-        //    throw new ArgumentOutOfRangeException(nameof(tradeDate));
+//    public static Session From(TradeDate tradeDate, Market market)
+//    {
+//        //if (tradeDate.IsDefaultValue())
+//        //    throw new ArgumentOutOfRangeException(nameof(tradeDate));
 
-        //if (!market.IsEnumValue())
-        //    throw new ArgumentOutOfRangeException(nameof(market));
+//        //if (!market.IsEnumValue())
+//        //    throw new ArgumentOutOfRangeException(nameof(market));
 
-        //return new Session(tradeDate, market);
+//        //return new Session(tradeDate, market);
 
-        return default;
-    }
+//        return default;
+//    }
 
-    public static bool operator ==(Session lhs, Session rhs)
-    {
-        if (lhs is null)
-            return rhs is null;
+//    public static bool operator ==(Session lhs, Session rhs)
+//    {
+//        if (lhs is null)
+//            return rhs is null;
 
-        return lhs.Equals(rhs);
-    }
+//        return lhs.Equals(rhs);
+//    }
 
-    public static bool operator !=(Session lhs, Session rhs) =>
-        !(lhs == rhs);
-}
+//    public static bool operator !=(Session lhs, Session rhs) =>
+//        !(lhs == rhs);
+//}
