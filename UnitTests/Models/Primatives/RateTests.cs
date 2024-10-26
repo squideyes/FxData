@@ -172,6 +172,26 @@ public class RateTests
         (rate1 != rate2).Should().Be(!expected);
     }
 
+    [Fact]
+    public void EqualsObject_ReturnsExpectedResult()
+    {
+        var rate = Rate.Create(123456);
+        
+        // Test with null
+        rate.Equals(null).Should().BeFalse("Rate should not equal null");
+        
+        // Test with different type
+        rate.Equals("123456").Should().BeFalse("Rate should not equal a string");
+        
+        // Test with same Rate boxed as object
+        object boxedRate = Rate.Create(123456);
+        rate.Equals(boxedRate).Should().BeTrue("Rate should equal same Rate boxed as object");
+        
+        // Test with different Rate boxed as object
+        object differentBoxedRate = Rate.Create(123457);
+        rate.Equals(differentBoxedRate).Should().BeFalse("Rate should not equal different Rate boxed as object");
+    }
+
     [Theory]
     [InlineData(123456, 123457, -1)]  
     [InlineData(123457, 123456, 1)]   
